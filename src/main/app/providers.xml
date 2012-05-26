@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd ">
+    <flow name="barbersParadiseStore" doc:name="barbersParadiseStore">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" doc:name="HTTP"/>
+        <scripting:component doc:name="Groovy">
+            <scripting:script engine="Groovy">
+                <scripting:text><![CDATA[def json = new groovy.json.JsonBuilder()
+
+def products = json([
+			json {
+			   	upc '1827349'
+				description 'Billy-boy forever-sharp razors'
+				price '9.95'
+			},
+			json {
+			   	upc '7727362'
+				description 'Mama Juana aftershave potion'
+				price '12.99'
+			},
+			json {
+			   	upc '1762738'
+				description 'Ultrasmooth shave foam'
+				price '3.50'
+			},
+			json {
+				upc '87668334'
+				description 'UltraQuickHeal scar tissues'
+				price '1.95'
+			}
+       ])
+
+return json.toPrettyString();]]></scripting:text>
+            </scripting:script>
+        </scripting:component>
+    </flow>
+    <flow name="vangoghPaintStore" doc:name="vangoghPaintStore">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="HTTP"/>
+        <cxf:jaxws-service serviceClass="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStore" doc:name="SOAP"/>
+        <component class="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStoreImpl" doc:name="Java"/>
+    </flow>
+</mule>

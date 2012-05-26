@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="providers">
+    <flow SubFlow="false" name="barbersParadiseStore">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="USE_TRANSACTION_ID"/>
+            <property name="tracking:transaction-id"/>
+        </properties>
+        <lane entity-id="3ab8213f-9874-4d74-952c-80afbeddfd67">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="af232d9e-cf3a-4d23-9424-6b9cb318044c">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="httpLabel"/>
+                    <property value="localhost" name="host"/>
+                    <property value="9080" name="port"/>
+                    <property value="barbersparadise/products" name="path"/>
+                    <property name="method"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="followRedirects"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="user"/>
+                    <property name="password"/>
+                    <property name="contentType"/>
+                    <property name="keep-alive"/>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Groovy" entity-id="b0775be3-ff6e-4416-a582-c736b1b25f63">
+                <properties>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                        <property value="def json = new groovy.json.JsonBuilder()&#xA;&#xA;def products = json([&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1827349'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Billy-boy forever-sharp razors'&#xA;&#x9;&#x9;&#x9;&#x9;price '9.95'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '7727362'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Mama Juana aftershave potion'&#xA;&#x9;&#x9;&#x9;&#x9;price '12.99'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1762738'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Ultrasmooth shave foam'&#xA;&#x9;&#x9;&#x9;&#x9;price '3.50'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;&#x9;upc '87668334'&#xA;&#x9;&#x9;&#x9;&#x9;description 'UltraQuickHeal scar tissues'&#xA;&#x9;&#x9;&#x9;&#x9;price '1.95'&#xA;&#x9;&#x9;&#x9;}&#xA;       ])&#xA;&#xA;return json.toPrettyString();" name="text"/>
+                        <property value="Groovy" name="engine"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="vangoghPaintStore">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="USE_TRANSACTION_ID"/>
+            <property name="tracking:transaction-id"/>
+        </properties>
+        <lane entity-id="8e51b558-9a4c-413b-a9ce-f8f35473bb8c">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="bd1b8167-88b9-4b1f-891b-73e931ea28dd">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="httpLabel"/>
+                    <property value="localhost" name="host"/>
+                    <property value="9081" name="port"/>
+                    <property value="vangoghpaintstore" name="path"/>
+                    <property name="method"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="followRedirects"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="user"/>
+                    <property name="password"/>
+                    <property name="contentType"/>
+                    <property name="keep-alive"/>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="SOAP" entity-id="293baf63-502a-4b7a-ab35-6eabe8a4e91b">
+                <properties>
+                    <property name="configuration-ref"/>
+                    <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="configuration-ref"/>
+                    <property name="bindingId"/>
+                    <property name="port"/>
+                    <property name="namespace"/>
+                    <property name="service"/>
+                    <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStore" name="serviceClass"/>
+                    <property name="validationEnabled"/>
+                    <property name="mtomEnabled"/>
+                    <property name="wsdlLocation"/>
+                    <property name="enableMuleSoapHeaders"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="7ae9096c-c0dc-4508-ae3f-3e47060ebe15">
+                <properties>
+                    <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStoreImpl" name="class"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
