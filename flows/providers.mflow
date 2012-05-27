@@ -38,13 +38,18 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Groovy" entity-id="b0775be3-ff6e-4416-a582-c736b1b25f63">
+            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Generate product list" entity-id="b0775be3-ff6e-4416-a582-c736b1b25f63">
                 <properties>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                    <property value="" name="ref"/>
+                    <property value="def json = new groovy.json.JsonBuilder()&#xA;&#xA;def products = json([&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1827349'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Billy-boy forever-sharp razors'&#xA;&#x9;&#x9;&#x9;&#x9;price '9.95'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '7727362'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Mama Juana aftershave potion'&#xA;&#x9;&#x9;&#x9;&#x9;price '12.99'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1762738'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Ultrasmooth shave foam'&#xA;&#x9;&#x9;&#x9;&#x9;price '3.50'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;&#x9;upc '87668334'&#xA;&#x9;&#x9;&#x9;&#x9;description 'UltraQuickHeal scar tissues'&#xA;&#x9;&#x9;&#x9;&#x9;price '1.95'&#xA;&#x9;&#x9;&#x9;}&#xA;       ])&#xA;&#xA;return json.toPrettyString();" name="text"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;72746199">
                         <property value="def json = new groovy.json.JsonBuilder()&#xA;&#xA;def products = json([&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1827349'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Billy-boy forever-sharp razors'&#xA;&#x9;&#x9;&#x9;&#x9;price '9.95'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '7727362'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Mama Juana aftershave potion'&#xA;&#x9;&#x9;&#x9;&#x9;price '12.99'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1762738'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Ultrasmooth shave foam'&#xA;&#x9;&#x9;&#x9;&#x9;price '3.50'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;&#x9;upc '87668334'&#xA;&#x9;&#x9;&#x9;&#x9;description 'UltraQuickHeal scar tissues'&#xA;&#x9;&#x9;&#x9;&#x9;price '1.95'&#xA;&#x9;&#x9;&#x9;}&#xA;       ])&#xA;&#xA;return json.toPrettyString();" name="text"/>
-                        <property value="Groovy" name="engine"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;727171450">
+                        <property value="" name="ref"/>
                     </property-collection>
                 </properties>
+                <description></description>
             </pattern>
         </lane>
     </flow>
@@ -86,21 +91,39 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="SOAP" entity-id="293baf63-502a-4b7a-ab35-6eabe8a4e91b">
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="293baf63-502a-4b7a-ab35-6eabe8a4e91b">
                 <properties>
-                    <property name="configuration-ref"/>
-                    <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                    <property name="configuration-ref"/>
-                    <property name="bindingId"/>
-                    <property name="port"/>
-                    <property name="namespace"/>
-                    <property name="service"/>
+                    <property value="" name="wsdlLocation"/>
+                    <property value="80" name="port"/>
                     <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStore" name="serviceClass"/>
-                    <property name="validationEnabled"/>
-                    <property name="mtomEnabled"/>
-                    <property name="wsdlLocation"/>
-                    <property name="enableMuleSoapHeaders"/>
+                    <property value="" name="configurationLocation"/>
+                    <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="" name="configuration-ref"/>
+                    <property value="true" name="initializeStaticBusInstance"/>
+                    <property value="" name="namespace"/>
+                    <property value="false" name="validationEnabled"/>
+                    <property value="" name="bindingId"/>
+                    <property value="" name="name"/>
+                    <property value="" name="service"/>
+                    <property value="false" name="mtomEnabled"/>
+                    <property value="true" name="enableMuleSoapHeaders"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/configuration-ref;1518530588">
+                        <property value="" name="configurationLocation"/>
+                        <property value="" name="name"/>
+                        <property value="true" name="enableMuleSoapHeaders"/>
+                        <property value="true" name="initializeStaticBusInstance"/>
+                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/configuration;1012437167">
+                            <property value="" name="configurationLocation"/>
+                            <property value="" name="name"/>
+                            <property value="true" name="enableMuleSoapHeaders"/>
+                            <property value="true" name="initializeStaticBusInstance"/>
+                        </property-collection>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/ws-security;1540238015">
+                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/mule-security-manager;1552663416"/>
+                    </property-collection>
                 </properties>
+                <description></description>
             </pattern>
             <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="7ae9096c-c0dc-4508-ae3f-3e47060ebe15">
                 <properties>

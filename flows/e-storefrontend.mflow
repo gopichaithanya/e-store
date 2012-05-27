@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="e-storeFrontend">
-    <global-element type="org.mule.tooling.ui.modules.core.global.activemq.config" name="Active MQ" entity-id="13c98cf1-e975-409b-89ed-956592a5ee7d">
+    <global-element type="org.mule.tooling.ui.modules.core.global.activemq.config" name="Active MQ" entity-id="f22d0a0e-7fe1-4eea-84bd-bb4e4310a067">
         <properties>
             <property value="Active_MQ" name="name"/>
             <property value="1.1" name="specification"/>
@@ -62,6 +62,21 @@
             <property value="http://www.mulesoft.org/schema/mule/jms/activemq-connector" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
         </properties>
     </global-element>
+    <global-element type="org.mule.tooling.ui.modules.core.global.ajaxConnector" name="Ajax" entity-id="68bce471-1f2c-4f1f-8597-895c76a90598">
+        <properties>
+            <property value="ajaxServer" name="name"/>
+            <property value="http://0.0.0.0:8090/estore" name="serverUrl"/>
+            <property value="${app.home}/docroot" name="resourceBase"/>
+            <property name="disableReplyTo"/>
+            <property name="logLevel"/>
+            <property name="refsThreshold"/>
+            <property name="jsonCommented"/>
+            <property name="timeout"/>
+            <property name="interval"/>
+            <property name="maxInterval"/>
+            <property name="multiFrameInterval"/>
+        </properties>
+    </global-element>
     <flow SubFlow="false" name="e-storeFrontendFlow1">
         <properties>
             <property name="processingStrategy2"/>
@@ -71,108 +86,74 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="92c47856-fd1a-4f6a-9fe5-492103f42a70">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="e7866306-2336-4f7d-a2bd-70c3b2b7328d">
+        <lane entity-id="7f9ef0e6-7aca-4bac-9da3-c30bc284654e">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="Ajax" entity-id="48dfdaf3-b6bf-4486-b80c-05016083f84f">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
-                    <property value="request-response" name="exchange-pattern"/>
-                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                    <property name="httpLabel"/>
-                    <property value="localhost" name="host"/>
-                    <property value="8081" name="port"/>
-                    <property value="e-store" name="path"/>
-                    <property name="method"/>
+                    <property value="/estore/listProducts" name="channel"/>
                     <property name="businessEventsLabel"/>
                     <property name="tracking:enable-default-events"/>
-                    <property name="address"/>
+                    <property value="10000" name="responseTimeout"/>
                     <property name="encoding"/>
                     <property name="disableTransportTransformer"/>
                     <property name="mimeType"/>
-                    <property name="responseTimeout"/>
-                    <property name="followRedirects"/>
-                    <property name="connector-ref"/>
+                    <property name="address"/>
+                    <property name="cacheMessages"/>
+                    <property name="messageCacheSize"/>
+                    <property value="ajaxServer" name="connector-ref"/>
                     <property name="ref"/>
                     <property name="transformer-refs"/>
-                    <property name="responseTransformer-refs"/>
-                    <property name="user"/>
-                    <property name="password"/>
-                    <property name="contentType"/>
-                    <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="fd69f785-02c0-41a1-8080-86eee29c51d6">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="2ec266aa-0f3a-43f0-9914-6941be89a1f4">
                 <properties>
                     <property name="message"/>
                     <property value="INFO" name="level"/>
                     <property name="category"/>
                 </properties>
             </pattern>
-            <response entity-id="4ca26b88-6d46-4297-9b24-2284be1c12d4">
-                <compartment entity-id="ab010668-2929-434f-b2a9-deac84267143">
-                    <lane entity-id="6ac3b390-98b4-404c-9f22-f65f01320fa4">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="2940a1ca-a22f-4ea3-b202-b4e9b1b0f237"/>
+            <response entity-id="a7cf031a-5abb-4096-8a2e-e0c6074862a7">
+                <compartment entity-id="96150f90-c92f-450f-bf45-ea2d7b7c7302">
+                    <lane entity-id="db4901b9-44d0-4147-a299-b2c8b25c5047">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="1bfc7249-2fc7-4bf1-8705-ee2f35c942d1">
+                            <properties>
+<property name="returnClass"/>
+<property name="ignoreBadInput"/>
+<property name="encoding"/>
+<property name="mimeType"/>
+                            </properties>
+                        </pattern>
                     </lane>
                 </compartment>
             </response>
-            <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="843ff820-1f9c-4650-b183-2b9f6562e059">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="999f6cb7-319a-4c54-b06c-efc29efe39eb">
                 <properties>
-                    <property-collection name="b5472f95-cf2d-45e6-b5fc-26f9edfb68bd">
-                        <property value="true" name="choice.otherwise"/>
-                    </property-collection>
-                    <property-collection name="89242822-279f-4ac6-a9db-f22201c63518">
-                        <property value="message.inboundProperties['http.method'] == 'GET'" name="choice.expression"/>
-                    </property-collection>
+                    <property value="listproducts" name="message"/>
+                    <property value="INFO" name="level"/>
+                    <property name="category"/>
                 </properties>
-                <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="afa29ca9-9e5c-4ddd-a0b7-ec190c2afb07">
-                    <properties>
-                        <property-collection name="b5472f95-cf2d-45e6-b5fc-26f9edfb68bd">
-                            <property value="true" name="choice.otherwise"/>
-                        </property-collection>
-                        <property-collection name="89242822-279f-4ac6-a9db-f22201c63518">
-                            <property value="message.inboundProperties['http.method'] == 'GET'" name="choice.expression"/>
-                        </property-collection>
-                    </properties>
-                </pattern>
-                <compartment entity-id="d5709c10-3dab-42a9-94ac-19adbf36aa7e">
-                    <lane entity-id="89242822-279f-4ac6-a9db-f22201c63518">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="0b1e1095-8bc9-48d9-9e74-f3feb2b7b39c">
-                            <properties>
-<property value="listproducts" name="message"/>
-<property value="INFO" name="level"/>
-<property name="category"/>
-                            </properties>
-                        </pattern>
-                        <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="378bda4a-0efe-4abf-91a5-ec17788619b2">
-                            <properties>
-<property value="estore.listProducts" name="queue"/>
-<property value="" name="businessEventsLabel"/>
-<property value="false" name="disableTransportTransformer"/>
-<property value="false" name="disableTemporaryReplyToDestinations"/>
-<property value="request-response" name="exchange-pattern"/>
-<property value="false" name="tracking:enable-default-events"/>
-<property value="" name="ref"/>
-<property value="" name="transformer-refs"/>
-<property value="" name="address"/>
-<property value="" name="encoding"/>
-<property value="" name="responseTransformer-refs"/>
-<property value="" name="mimeType"/>
-<property value="10000" name="responseTimeout"/>
-<property value="Active_MQ" name="connector-ref"/>
-                            </properties>
-                            <description></description>
-                        </endpoint>
-                    </lane>
-                    <lane entity-id="b5472f95-cf2d-45e6-b5fc-26f9edfb68bd">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="5444f9ba-2ed0-4ebb-af2c-4e52d003da68">
-                            <properties>
-<property value="otherwise" name="message"/>
-<property value="INFO" name="level"/>
-<property name="category"/>
-                            </properties>
-                        </pattern>
-                    </lane>
-                </compartment>
-            </splitter>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="Request product list to backend" entity-id="32926806-f1a8-4123-aa81-8400ebef0d71">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="estore.listProducts" name="queue"/>
+                    <property name="topic"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="encoding"/>
+                    <property name="durableName"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property value="Active_MQ" name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                </properties>
+            </endpoint>
         </lane>
     </flow>
     <description></description>

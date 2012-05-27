@@ -64,7 +64,8 @@
 
 // Transforms input record into output record.
 function integer transform() {
-	$out.0.providerId = "VANGOGHPS";
+	$out.0.providerId =  "Van Gogh's Paint Store";
+	
 	$out.0.productDescription =  $in.0.brand + " / " + $in.0.color;
 	$out.0.productId =  "UPC" + $in.0.upcCode;
 	

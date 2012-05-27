@@ -1,30 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd 
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd ">
     <jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="vm://localhost" validateConnections="true" doc:name="Active MQ"/>
+    <ajax:connector name="ajaxServer" serverUrl="http://0.0.0.0:8090/estore" resourceBase="${app.home}/docroot"/>
     <flow name="e-storeFrontendFlow1" doc:name="e-storeFrontendFlow1">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="e-store" doc:name="HTTP"/>
+        <ajax:inbound-endpoint connector-ref="ajaxServer" channel="/estore/listProducts" responseTimeout="10000" doc:name="Ajax"/>
         <logger level="INFO" doc:name="Logger"/>
         <response>
             <object-to-string-transformer doc:name="Object to String"/>
         </response>
-        <choice doc:name="Choice">
-            <when expression="message.inboundProperties['http.method'] == 'GET'">
-                <processor-chain>
-                    <logger message="listproducts" level="INFO" doc:name="Logger"/>
-                    <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ" doc:name="JMS"/>
-                </processor-chain>
-            </when>
-            <otherwise>
-                <processor-chain>
-                    <logger message="otherwise" level="INFO" doc:name="Logger"/>
-                </processor-chain>
-            </otherwise>
-        </choice>
+ 
+        <logger message="listproducts" level="INFO" doc:name="Logger"/>
+        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ" doc:name="Request product list to backend"/>
+ 
     </flow>
 </mule>

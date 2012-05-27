@@ -1,0 +1,72 @@
+<html>
+<head>
+  <link href="css/south-street/jquery-ui-1.8.20.custom.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
+  <script type="text/javascript" src="mule-resource/js/mule.js"></script>
+</head>
+<body>
+
+<h1>Mule e-store</h1>
+<div id="tabs">
+	<ul>
+        <li><a href="#welcome"><span>Welcome</span></a></li>
+        <li><a href="#listProducts"><span>Products</span></a></li>
+        <li><a href="#viewCart"><span>My Cart</span></a></li>
+        <li><a href="#checkout"><span>Checkout</span></a></li>
+    </ul>
+    <div id="welcome">
+	    <h2>Welcome to the mule e-store, please select an operation:</h2>
+		<ul>
+			<li><a id="link-listProducts">List all products</a></li>
+			<li><a id="link-viewCart">View my shopping cart</a></li>
+		</ul>
+    </div>
+    <div id="listProducts">
+   		<ul id="products">
+    	</ul>
+    </div>
+    <div id="viewCart">
+    	
+    </div>
+    <div id="checkout">
+    	
+    </div>
+    
+</div>
+
+
+<script>
+tabs = $("#tabs").tabs({selected: 0});
+$('#tabs').bind('tabsselect', function(event, ui) {
+
+	if (ui.tab.hash == "#listProducts") {
+		$("#products").empty();
+		$("#products").append("<li>Loading...</li>");
+		
+		mule.rpc("/estore/listProducts", "", listProductsResponse);
+	}
+    
+});
+
+$('#link-listProducts').click(function() { // bind click event to link
+    tabs.tabs('select', 1);
+    return false;
+});
+$('#link-viewCart').click(function() { // bind click event to link
+    tabs.tabs('select', 2);
+    return false;
+});
+
+
+function listProductsResponse(message) {
+	products = JSON.parse("[" + message.data + "]");
+	$("#products").empty();
+	for (i = 0; i < products.length; i++) {
+		$("#products").append("<li>" + products[i].productDescription + "</li>");
+	}
+}
+
+</script>
+</body>
+</html>
