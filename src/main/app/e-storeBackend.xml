@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jdbc="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd 
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd 
 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd 
 http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/3.2/mule-data-mapper.xsd 
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
@@ -10,15 +11,26 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd 
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd 
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd ">
+    <spring:beans>
+        <spring:bean id="Derby_Data_Source" class="org.enhydra.jdbc.standard.StandardXADataSource" destroy-method="shutdown">
+            <spring:property name="driverName" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+            <spring:property name="url" value="jdbc:derby:muleEmbeddedDB;create=true"/>
+        </spring:bean>
+    </spring:beans>
+    <jdbc:connector name="JDBCConnector" dataSource-ref="Derby_Data_Source" validateConnections="true" queryTimeout="-1" pollingFrequency="0" doc:name="JDBCConnector">
+        <jdbc:query key="query-addToCart" value="INSERT INTO cart (session_id, product_id, provider, quantity, price) VALUES (#[header:session:sessionId], #[json:productCode], #[json:provider], #[json:qty], #[json:price])"/>
+        <jdbc:query key="query-showCart" value="SELECT * FROM cart"/>
+        <jdbc:query key="query-showCart" value="DELETE FROM cart WHERE session_id = #[header:session:sessionId]"/>
+    </jdbc:connector>
     <data-mapper:config name="Barbers Paradise to canonical JSON" transformationGraphPath="barbers_paradise_to_canonical_json.grf" doc:name="Barbers Paradise to canonical JSON"/>
     <data-mapper:config name="Van Gogh Paint to canonical JSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"/>
-    <http:connector name="HttpConnector" enableCookies="true" keepAlive="true"/>
+    <http:connector name="HttpConnector" enableCookies="true" keepAlive="true" doc:name="HTTP\HTTPS"/>
     <flow name="listProducts" doc:name="listProducts">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ" doc:name="JMS"/>
         <set-variable variableName="allProducts" value="#[new java.util.LinkedList()]" doc:name="Initialize output list"/>
         <all doc:name="All">
             <processor-chain>
-               	<http:outbound-endpoint connector-ref="HttpConnector" exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" method="GET" doc:name="Fetch products from Barbers Paradise Store"/>
+                <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" method="GET" connector-ref="HttpConnector" doc:name="Fetch products from Barbers Paradise Store"/>
                 <splitter evaluator="json" expression="" doc:name="Split received products list"/>
                 <data-mapper:transform config-ref="Barbers Paradise to canonical JSON" doc:name="Transform to canonical JSON"/>
                 <object-to-string-transformer doc:name="Object to String"/>
@@ -36,6 +48,17 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
     <sub-flow name="fetchProductsFromVanGoghPaintStore" doc:name="fetchProductsFromVanGoghPaintStore">
         <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
-        <http:outbound-endpoint connector-ref="HttpConnector" exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" connector-ref="HttpConnector" doc:name="Invoke SOAP request"/>
     </sub-flow>
+    <flow name="addToCart" doc:name="addToCart">
+        <jms:inbound-endpoint queue="estore.addToCart" doc:name="JMS"/>
+        <logger level="INFO" doc:name="Logger"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <logger message="#[json:productCode]" level="INFO" doc:name="Logger"/>
+        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-addToCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Database (JDBC)"/>
+    </flow>
+    <flow name="showCart" doc:name="showCart">
+        <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.showCart" doc:name="JMS"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
 </mule>

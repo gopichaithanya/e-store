@@ -1,13 +1,14 @@
 <html>
 <head>
   <link href="css/south-street/jquery-ui-1.8.20.custom.css" rel="stylesheet" type="text/css"/>
+  <link href="css/estore.css" rel="stylesheet" type="text/css"/>
   <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
   <script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script>
   <script type="text/javascript" src="mule-resource/js/mule.js"></script>
 </head>
 <body>
 
-<h1>Mule e-store</h1>
+<h1>:: mule e-store :::::::::::::::::::::::::::::::::::</h1>
 <div id="tabs">
 	<ul>
         <li><a href="#welcome"><span>Welcome</span></a></li>
@@ -23,8 +24,22 @@
 		</ul>
     </div>
     <div id="listProducts">
-   		<ul id="products">
-    	</ul>
+   		<table>
+   			<tr>
+   				<td><div id="products"/></td>
+   				<td><div id="addToCart">Drag a product here to add it to your cart!</div></td>
+			</tr>
+    	</table>
+    	<div id="addProductToCartDialog" title="Add product to cart">
+    		<form id="addToCartForm">
+    			How many <div id="productDescription"></div> would you like to add to your cart? 
+	    		<input id="qty" name="qty" type="text"/>
+	    		<input id="productCode" name="productCode" type="hidden"/>
+	    		<input id="productProvider" name="productProvider" type="hidden"/>
+	    		<input id="price" name="price" type="hidden"/>
+    		</form>
+    		<a id="addProductToCartButton" class="button">Add to Cart</a>
+    	</div>
     </div>
     <div id="viewCart">
     	
@@ -37,17 +52,51 @@
 
 
 <script>
-tabs = $("#tabs").tabs({selected: 0});
-$('#tabs').bind('tabsselect', function(event, ui) {
 
+$.ajax({
+	url: "http://localhost:9080/populate"
+})
+
+tabs = $("#tabs").tabs({selected: 0});
+$('.button').button();
+
+$('#tabs').bind('tabsselect', function(event, ui) {
 	if (ui.tab.hash == "#listProducts") {
 		$("#products").empty();
-		$("#products").append("<li>Loading...</li>");
-		
+		$("#products").append("Loading products, please wait...");
 		mule.rpc("/estore/listProducts", "", listProductsResponse);
 	}
-    
 });
+
+$('#addToCart').droppable({
+	drop: function(event, ui) {
+		$('#productCode').val($('div.productCode',ui.draggable).html());
+		$('#productProvider').val($('div.productProvider',ui.draggable).html());
+		$('#qty').val(1);
+		$('#price').val($('div.productPrice',ui.draggable).html());
+		$('#productDescription').html($('div.productDescription',ui.draggable).html());
+		$('#addProductToCartDialog').dialog({modal: true, resizable: false });
+	},
+	activate: function(event, ui) { 
+		$('#addToCart').css('background-color', 'yellow');
+	},
+	deactivate: function(event, ui) { 
+		$('#addToCart').css('background-color', '#FFFFCC');
+	},
+	over: function(event, ui) { 
+		$('#addToCart').css('background-color', 'white');
+	}
+})
+
+
+$('#addProductToCartButton').click(function() {
+	var data = {};
+	data['productCode'] = $("#addToCartForm #productCode").val();
+	data['provider'] = $("#addToCartForm #productProvider").val();
+	data['qty'] = $("#addToCartForm #qty").val();
+	data['price'] = $("#addToCartForm #price").val();
+	mule.rpc("/estore/addToCart", JSON.stringify(data), addToCartResponse);
+})
 
 $('#link-listProducts').click(function() { // bind click event to link
     tabs.tabs('select', 1);
@@ -63,8 +112,29 @@ function listProductsResponse(message) {
 	products = JSON.parse("[" + message.data + "]");
 	$("#products").empty();
 	for (i = 0; i < products.length; i++) {
-		$("#products").append("<li>" + products[i].productDescription + "</li>");
+		$("#products").append("" +
+				"<table width='100%' class='product'>" +
+					"<tr>" +
+						"<td>" +
+							"<table width='100%'>" +
+								"<tr>" +	
+									"<td colspan='2'><h2><div class='productDescription'>" + products[i].productDescription + "</div></h2></td>" + 
+								"</tr><tr>" +
+									"<td class='productProvider'><h3>Provided by: <div class='productProvider'>" + products[i].providerId + "</div></h3></td>" + 
+									"<td class='productCode'><h3>Code: <div class='productCode'>" + products[i].productId + "</div></h3></td> " +		
+								"</tr>" +
+							"</table>" +
+						"</td>" +
+						"<td class='productPrice'><h1>$ <div class='productPrice'>" + parseFloat(products[i].price).toFixed(2) + "</div></h1></td>" +
+					"</tr>" +		
+				"</table>" +
+		"");
 	}
+	$('.product').draggable({ revert: true});
+}
+
+function addToCartResponse(message) {
+	$('#addProductToCartDialog').dialog('close');
 }
 
 </script>

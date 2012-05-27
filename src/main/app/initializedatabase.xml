@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:jdbc="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd ">
+    <flow name="databaseInitialisation" doc:name="databaseInitialisation">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="populate" doc:name="HTTP"/>
+        <scripting:component doc:name="Initialise Database">
+            <scripting:script engine="Groovy">
+                <scripting:text><![CDATA[jdbcConnector = muleContext.getRegistry().lookupConnector("JDBCConnector");
+qr = jdbcConnector.getQueryRunner();
+conn = jdbcConnector.getConnection();
+qr.update(conn, "CREATE TABLE cart (id int generated always as identity, session_id varchar(256), product_id varchar(256), provider varchar(256), quantity integer, price real)");
+return "db populated";]]></scripting:text>
+            </scripting:script>
+        </scripting:component>
+        <catch-exception-strategy>
+            <expression-transformer evaluator="string" expression="table already populated" doc:name="Expression"/>
+        </catch-exception-strategy>
+    </flow>
+</mule>

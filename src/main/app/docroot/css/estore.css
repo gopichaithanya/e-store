@@ -1,0 +1,61 @@
+h1 {
+	color: #459E00;
+	font-size: 40pt;
+	font-family: segoe ui,Arial,sans-serif;
+	margin-bottom: 0px;
+}
+
+td {
+	vertical-align: top;
+}
+
+#tabs {
+	width: 1000px;	
+}
+
+#products {
+	width: 800px;
+}
+
+#addToCart {
+	width: 150px;
+	background-color: #FFFFCC;
+	height: 200px;
+	padding: 10px;
+}
+
+#addProductToCartDialog {
+	display: none;
+}
+
+.product {
+	width: 700px;
+	height: 30px;
+	border: none;
+	padding: 2px;
+}
+
+.product h1 {
+	color: #FF9900;
+	font-size: 36pt;
+}
+
+.product h2 {
+	color: #336600;
+	font-size: 18pt;
+}
+
+.product h3 {
+	color: gray;
+	font-size: 10pt;
+}
+.product .productCode {
+	width: 40%;
+}
+.product .productProvider {
+	width: 60%;
+}
+.product .productPrice {
+	width: 200px;
+	text-align: right;
+}
