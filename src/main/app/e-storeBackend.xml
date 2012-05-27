@@ -1,23 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd 
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd 
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd 
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/3.2/mule-data-mapper.xsd 
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd ">
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd 
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd ">
+    <data-mapper:config name="Barbers Paradise to canonical JSON" transformationGraphPath="barbers_paradise_to_canonical_json.grf" doc:name="Barbers Paradise to canonical JSON"/>
+    <data-mapper:config name="Van Gogh Paint to canonical JSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"/>
     <flow name="listProducts" doc:name="listProducts">
-        <vm:inbound-endpoint exchange-pattern="request-response" path="estore.listProducts" doc:name="VM"/>
+        <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ" doc:name="JMS"/>
+        <set-variable variableName="allProducts" value="#[new java.util.LinkedList()]" doc:name="Initialize output list"/>
         <all doc:name="All">
             <processor-chain>
                 <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" method="GET" doc:name="Fetch products from Barbers Paradise Store"/>
+                <splitter evaluator="json" expression="" doc:name="Split received products list"/>
+                <data-mapper:transform config-ref="Barbers Paradise to canonical JSON" doc:name="Transform to canonical JSON"/>
+                <object-to-string-transformer doc:name="Object to String"/>
+                <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('allProducts').add(payload)" doc:name="Add product to output list"/>
             </processor-chain>
             <processor-chain>
-                <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStoreService" enableMuleSoapHeaders="true" doc:name="SOAP"/>
-                <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" doc:name="Fetch products from VanGogh's Paint Store"/>
+                <flow-ref name="fetchProductsFromVanGoghPaintStore" doc:name="Fetch products from Van Gogh Paint Store"/>
+                <collection-splitter doc:name="Split received collection"/>
+                <data-mapper:transform config-ref="Van Gogh Paint to canonical JSON" doc:name="Transform to canonical JSON"/>
+                <object-to-string-transformer doc:name="Object to String"/>
+                <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('allProducts').add(payload)" doc:name="Add product to output list"/>
             </processor-chain>
         </all>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
-        <collection-aggregator failOnTimeout="true" doc:name="Collection Aggregator"/>
+        <expression-transformer expression="allProducts" doc:name="Set payload to output list"/>
     </flow>
+    <sub-flow name="fetchProductsFromVanGoghPaintStore" doc:name="fetchProductsFromVanGoghPaintStore">
+        <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
+    </sub-flow>
 </mule>
