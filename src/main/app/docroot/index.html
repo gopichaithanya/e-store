@@ -47,7 +47,37 @@
     	<a id="goToCheckoutButton" class="button">Proceed to checkout! &gt;&gt;</a>
     </div>
     <div id="checkout">
-    	
+    	<table width='100%' class='cartProduct'>
+			<tr>
+				<td class='grandTotal'><h2>Grand total:</h2></td>
+				<td class='grandTotalAmount'><h1>$ <div id="checkoutTotal"></div></h1></td>
+			</tr>
+		</table>
+		<p>Enter your payment information to finish checkout:</p>
+		<form id="checkoutForm">
+			<table width='100%' class='payment'>
+				<tr>
+					<td class="title">Credit card number:</td>
+					<td class="field"><input size="50" maxlength="16" name="creditCardNumber" type="text"/></td>
+				</tr>
+				<tr>
+					<td class="title">Security code:</td>
+					<td class="field"><input size="3" maxlength="3" name="securityCode" type="text"/><div class="comment">Must match the last 3-digits of the credit card number!</div></td>
+					
+				</tr>
+				<tr>
+					<td class="title">Name printed on the card:</td>
+					<td class="field"><input size="50" maxlength="100" name="cardholderName" type="text"/></td>
+				</tr>
+				<tr>
+					<td class="title">Delivery address:</td>
+					<td class="field"><input size="50" maxlength="100" name="deliveryAddress" type="text"/></td>
+				</tr>
+			</table>
+			<div id="checkoutComments"></div>
+			<a id="doCheckoutButton" class="button">Verify payment and submit order &gt;&gt;</a>
+			
+		</form>
     </div>
     
 </div>
@@ -71,6 +101,13 @@ $('#tabs').bind('tabsselect', function(event, ui) {
 		$("#cartProducts").empty();
 		$("#cartProducts").append("Loading cart contents, please wait...");
 		mule.rpc("/estore/showCart", "", showCartResponse);
+	} else if (ui.tab.hash == "#checkout") {
+		$("#checkoutTotal").html("0.00");
+		$("#checkoutComments").html("<p>You don't have any items on your cart yet! Add some on the products tab before checkout!</p>");
+		$("#checkoutForm :input").val("");
+		$("#checkoutForm :input").attr("disabled", true);
+		$("#doCheckoutButton").button({ disabled: true});
+		mule.rpc("/estore/getCartTotal", "", prepareCheckoutResponse);
 	}
 });
 
@@ -114,6 +151,9 @@ $('#clearCartButton').click(function() { // bind click event to link
 });
 $('#goToCheckoutButton').click(function() { // bind click event to link
 	tabs.tabs('select', 3);
+});
+$('#doCheckoutButton').click(function() { // bind click event to link
+	alert("checkout!");
 });
 
 $('#listProductsButton').click(function() { // bind click event to link
@@ -195,8 +235,8 @@ function showCartResponse(message) {
 	$("#cartProducts").append("" +
 			"<table width='100%' class='cartProduct'>" +
 				"<tr>" +
-					"<td id='grandTotal'><h2>Grand total:</h2></td>" +
-					"<td id='grandTotalAmount'><h1>$ " + grandTotal.toFixed(2) + "</h1></td>" +
+					"<td class='grandTotal'><h2>Grand total:</h2></td>" +
+					"<td class='grandTotalAmount'><h1>$ " + grandTotal.toFixed(2) + "</h1></td>" +
 				"</tr>" +
 			"</table>" +
 	"");
@@ -204,9 +244,14 @@ function showCartResponse(message) {
 	
 }
 
-function clearCartResponse(message) {
-	alert("before");
-	alert("after");
+function prepareCheckoutResponse(message) {
+	var grandTotal = parseFloat(message.data);
+	if (grandTotal > 0) {
+		$("#checkoutTotal").html(grandTotal.toFixed(2));
+		$("#checkoutComments").html("<p>Please enter your payment and delivery details and hit the button to place your order!</p>");
+		$("#checkoutForm :input").attr("disabled", false);
+		$("#doCheckoutButton").button({ disabled: false});
+	}
 }
 
 </script>

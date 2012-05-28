@@ -38,7 +38,7 @@ td {
 
 #addToCart {
 	width: 150px;
-	height: 400px;
+	height: 800px;
 	padding: 10px;
 	text-align: center;
 	padding: 3px;
@@ -161,20 +161,31 @@ td {
 	display: inline;
 }
 
-#grandTotal {
+.grandTotal {
 	width: 70%;
 }
-#grandTotalAmount {
+.grandTotalAmount {
 	width: 30%;
 }
 
-#grandTotal h2 {
+.grandTotal h2 {
 	color: #336600;
 	font-size: 14pt;
 	text-align: right;
 }
-#grandTotalAmount h1 {
+.grandTotalAmount h1 {
 	color: #FF9900;
 	font-size: 24pt;
 	text-align: right;
+}
+
+#checkoutTotal {
+	display: inline;	
+}
+
+.comment {
+	color: silver;
+	font-size: 9pt;
+	display: inline;
+	padding: 3px;
 }
