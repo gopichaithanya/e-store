@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph author="jdeoliveira" created="Mon May 28 14:49:34 GMT-03:00 2012" guiVersion="3.3.0.M2" id="1338230370675" licenseCode="Unlicensed" licenseType="Unknown" modified="Mon May 28 14:49:34 GMT-03:00 2012" modifiedBy="jdeoliveira" name="consolidateProductDetailsOnCart" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __sourcePath="{}/inputMetadata" _dataStructure="OBJECT" _id="__id" _type="Input" id="95ef9e00-b040-4dc9-ac70-a02c7d6274d8">
+<Record fieldDelimiter="|" label="inputMetadata" name="inputMetadata" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{=}/inputMetadata/QUANTITY" containerType="" label="QUANTITY" name="QUANTITY" type="integer"/>
+</Record>
+</Metadata>
+<Metadata __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Output" id="Metadata0">
+<Record fieldDelimiter="|" name="object" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{}/object/productId" label="productId" name="productId" type="string"/>
+<Field __sourcePath="{}/object/productDescription" label="productDescription" name="productDescription" type="string"/>
+<Field __sourcePath="{}/object/providerId" label="providerId" name="providerId" type="string"/>
+<Field __sourcePath="{}/object/price" label="price" name="price" type="string"/>
+<Field __sourcePath="{}/object/qty" label="qty" name="qty" type="string"/>
+<Field __sourcePath="{}/object/subtotal" label="subtotal" name="subtotal" type="string"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+<Entry id="DictionaryEntry2" input="true" name="product_id" output="false" type="string"/>
+<Entry id="DictionaryEntry3" input="true" name="product_id" output="false" type="string"/>
+<Entry id="DictionaryEntry4" input="true" name="product_id" output="false" type="string"/>
+<Entry id="DictionaryEntry5" input="true" name="productDescription" output="false" type="string"/>
+<Entry id="DictionaryEntry6" input="true" name="providerId" output="false" type="string"/>
+<Entry id="DictionaryEntry7" input="true" name="price" output="false" type="string"/>
+<Entry id="DictionaryEntry8" input="true" name="product_id" output="false" type="string"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:inputPayload" guiHeight="0" guiName="MAP Reader" guiWidth="0" guiX="20" guiY="20" id="BEAN_READER0" type="BEAN_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath=".">
+  <Mapping cloverField="QUANTITY" trim="true" xpath="QUANTITY"/>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[MAP]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:outputPayload" guiHeight="0" guiName="JSON Writer" guiWidth="0" guiX="460" guiY="20" id="JSON_WRITER0" type="JSON_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<object xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <productId>$0.productId</productId>
+  <productDescription>$0.productDescription</productDescription>
+  <providerId>$0.providerId</providerId>
+  <price>$0.price</price>
+  <qty>$0.qty</qty>
+  <subtotal>$0.subtotal</subtotal>
+</object>]]></attr>
+<attr name="_data_format"><![CDATA[JSON]]></attr>
+</Node>
+<Node enabled="enabled" guiHeight="0" guiName="inputMetadata_to_object" guiWidth="0" guiX="240" guiY="20" id="REFORMAT0" type="REFORMAT">
+<attr name="transform"><![CDATA[//#CTL2
+
+// Transforms input record into output record.
+function integer transform() {
+	$out.0.productId = dictionary.product_id;
+	$out.0.subtotal = num2str($in.0.QUANTITY * str2decimal(dictionary.price));
+	$out.0.qty = (isnull($in.0.QUANTITY) ? "" : num2str($in.0.QUANTITY));
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	$out.0.price = dictionary.price;
+	$out.0.providerId = dictionary.providerId;
+	$out.0.productDescription = dictionary.productDescription;
+	
+$out.0.__id=$in.0.__id;
+		return ALL;
+}
+
+// Called during component initialization.
+// function boolean init() {}
+
+// Called during each graph run before the transform is executed. May be used to allocate and initialize resources
+// required by the transform. All resources allocated within this method should be released
+// by the postExecute() method.
+// function void preExecute() {}
+
+// Called only if transform() throws an exception.
+// function integer transformOnError(string errorMessage, string stackTrace) {}
+
+// Called during each graph run after the entire transform was executed. Should be used to free any resources
+// allocated within the preExecute() method.
+// function void postExecute() {}
+
+// Called to return a user-defined error message when an error occurs.
+// function string getMessage() {}
+]]></attr>
+</Node>
+<Edge fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="95ef9e00-b040-4dc9-ac70-a02c7d6274d8" outPort="Port 0 (out)" toNode="REFORMAT0:0"/>
+<Edge fromNode="REFORMAT0:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="Metadata0" outPort="Port 0 (out)" toNode="JSON_WRITER0:0"/>
+</Phase>
+</Graph>

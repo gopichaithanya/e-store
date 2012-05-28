@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="e-storeFrontend">
-    <global-element type="org.mule.tooling.ui.modules.core.global.activemq.config" name="Active MQ" entity-id="c677e812-a8bf-4ad6-91b9-69437d8ccab3">
+    <global-element type="org.mule.tooling.ui.modules.core.global.activemq.config" name="Active MQ" entity-id="1b1f8a12-7634-40e8-a1dd-9d0392eae783">
         <properties>
             <property value="Active_MQ" name="name"/>
             <property value="1.1" name="specification"/>
@@ -62,7 +62,7 @@
             <property value="http://www.mulesoft.org/schema/mule/jms/activemq-connector" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
         </properties>
     </global-element>
-    <global-element type="org.mule.tooling.ui.modules.core.global.ajaxConnector" name="Ajax" entity-id="3cf4d5a7-3484-440d-8379-146fceacb0bb">
+    <global-element type="org.mule.tooling.ui.modules.core.global.ajaxConnector" name="Ajax" entity-id="29a56e8e-5458-4917-a270-80c6b915fbfc">
         <properties>
             <property value="ajaxServer" name="name"/>
             <property value="http://0.0.0.0:8090/estore" name="serverUrl"/>
@@ -77,7 +77,7 @@
             <property name="multiFrameInterval"/>
         </properties>
     </global-element>
-    <flow SubFlow="false" name="e-storeFrontendFlow1">
+    <flow SubFlow="false" name="e-storeFrontend-listProducts">
         <properties>
             <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
@@ -86,8 +86,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="b433c998-7499-4396-8881-f4255a0d6ede">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="/estore/listProducts" entity-id="c7eeb758-3f3d-4245-815c-96325b569fd2">
+        <lane entity-id="978354e2-fb76-4574-8b74-143a1da57ba0">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="/estore/listProducts" entity-id="ee630f6a-3b7a-402d-b468-43e4010ba777">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="/estore/listProducts" name="channel"/>
@@ -105,10 +105,10 @@
                     <property name="transformer-refs"/>
                 </properties>
             </endpoint>
-            <response entity-id="6b9877ec-8b61-4cb1-a284-db5e9405bfc5">
-                <compartment entity-id="8695580d-7105-4068-b695-d0e6d06412a8">
-                    <lane entity-id="084447e7-9ac4-441a-88fa-3e51a66a73d0">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="679b0419-4324-40c5-bc0f-985a1602d886">
+            <response entity-id="fa600d09-f323-449b-8afd-2a439aa67144">
+                <compartment entity-id="c4f6698b-0dbb-4d49-a99b-6680f74393ef">
+                    <lane entity-id="58bc811a-53fa-475e-8ac3-19eefb9c34a1">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="43cddcb6-a186-4c0a-9334-c3f5a0453f71">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>
@@ -119,7 +119,7 @@
                     </lane>
                 </compartment>
             </response>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="Request product list to backend" entity-id="68259404-6b97-4a5e-b6d0-b4f3f7eb1aed">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="Request product list to backend" entity-id="2dd7fa06-395b-4bb1-83c7-3a8710f45a27">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -142,7 +142,7 @@
             </endpoint>
         </lane>
     </flow>
-    <flow SubFlow="false" name="e-storeFrontendFlow2">
+    <flow SubFlow="false" name="e-storeFrontend-addToCart">
         <properties>
             <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
@@ -151,8 +151,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="0cf3d4d6-d5b6-4bfb-9c0c-cd5a1ae8d781">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="/estore/addToCart" entity-id="33966508-b9a4-4af1-8e15-cc9c7e15813d">
+        <lane entity-id="077e60a3-c5e5-4dc5-a10c-6640bcaccfd3">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="/estore/addToCart" entity-id="12148b29-8743-47d5-a19d-7331cc6b963a">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="/estore/addToCart" name="channel"/>
@@ -170,21 +170,7 @@
                     <property name="transformer-refs"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="036d0f89-71e1-46ac-995b-65cc9c77d4dc">
-                <properties>
-                    <property name="message"/>
-                    <property value="INFO" name="level"/>
-                    <property name="category"/>
-                </properties>
-            </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="ef80d629-f35c-4bbd-856d-15d92cff0398">
-                <properties>
-                    <property value="Add to cart: #[payload.toString()]" name="message"/>
-                    <property value="INFO" name="level"/>
-                    <property name="category"/>
-                </properties>
-            </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/properties-transformer" name="Property" entity-id="5c0aba4a-e38b-487b-83c5-9909f204cf43">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/properties-transformer" name="Set session id from AJAX client id" entity-id="4ba7f9d6-816c-4913-bac9-888baa23f9a1">
                 <properties>
                     <property value="http://www.mulesoft.org/schema/mule/core/set-property" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
                     <property name="nameProp"/>
@@ -193,18 +179,84 @@
                     <property value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" name="value"/>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="831638e9-2517-4ffc-b35e-49ea348f235d">
-                <properties>
-                    <property name="message"/>
-                    <property value="INFO" name="level"/>
-                    <property name="category"/>
-                </properties>
-            </pattern>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="Request add product to cart to backend" entity-id="762f4a29-6bc3-45f0-b5a1-2c5ff8a3b01e">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="Request add product to cart to backend" entity-id="56c3fe6b-bdfd-4cba-8d94-ee9b284a1e8b">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property name="exchange-pattern"/>
                     <property value="estore.addToCart" name="queue"/>
+                    <property name="topic"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="encoding"/>
+                    <property name="durableName"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property value="Active_MQ" name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="e-storeFrontend-showCart">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="USE_TRANSACTION_ID"/>
+            <property name="tracking:transaction-id"/>
+        </properties>
+        <lane entity-id="10b11227-4924-4e5b-bbe7-4abe688f4618">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="/estore/showCart" entity-id="977c9817-8772-4952-ae14-5e2ae96cd56d">
+                <properties>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property value="" name="address"/>
+                    <property value="" name="businessEventsLabel"/>
+                    <property value="" name="encoding"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="/estore/showCart" name="channel"/>
+                    <property value="" name="mimeType"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property value="false" name="tracking:enable-default-events"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="ajaxServer" name="connector-ref"/>
+                </properties>
+                <description></description>
+            </endpoint>
+            <response entity-id="cc4f6fb5-295b-45b2-b451-036687da9113">
+                <compartment entity-id="59dcc2d4-0f8c-445c-a329-0272a645fbcc">
+                    <lane entity-id="fe057570-aa4c-48c7-a0c7-502489ab1689">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="3bd497ad-0dd1-48bc-9e5f-aef671e04b38">
+                            <properties>
+<property name="returnClass"/>
+<property name="ignoreBadInput"/>
+<property name="encoding"/>
+<property name="mimeType"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </response>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/properties-transformer" name="Set session id from AJAX client id" entity-id="826f08e9-7eaa-4cee-97b4-003efa55c375">
+                <properties>
+                    <property value="http://www.mulesoft.org/schema/mule/core/set-property" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="nameProp"/>
+                    <property value="sessionId" name="propertyNameForSet"/>
+                    <property name="propertyValue"/>
+                    <property value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" name="value"/>
+                </properties>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="Request cart contents to backend" entity-id="e2aa36f6-2178-46c9-8f28-a535465c6d06">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="estore.showCart" name="queue"/>
                     <property name="topic"/>
                     <property name="businessEventsLabel"/>
                     <property name="tracking:enable-default-events"/>

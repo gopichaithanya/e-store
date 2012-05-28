@@ -7,12 +7,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd ">
     <flow name="barbersParadiseStore" doc:name="barbersParadiseStore">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" doc:name="HTTP">
-            <response> 
-                <logger level="INFO" message="#[payload.toString()]" doc:name="Logger"/> 
-            </response>
-        </http:inbound-endpoint>
-        <logger level="INFO" doc:name="Logger"/>
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" doc:name="HTTP"/>
         <scripting:component doc:name="Generate product list">
             <scripting:script engine="Groovy">
                 <scripting:text><![CDATA[def json = new groovy.json.JsonBuilder()

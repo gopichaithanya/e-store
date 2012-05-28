@@ -9,8 +9,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="c77bd9be-f6de-477d-964d-6f1b8e0ae098">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="0c6e6c67-4265-42d7-8f1c-06c3db40181f">
+        <lane entity-id="6855da6c-5811-4de5-a382-4bc60422f882">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="84b08dd4-884a-43ee-a0c2-c530082a30e5">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -38,23 +38,28 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Initialise Database" entity-id="13a8fa00-ed69-4c4c-b8a5-f5e21c83e78a">
+            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Initialise Database" entity-id="e91f5ce4-5586-4f90-8b0a-b32a98fe21a2">
                 <properties>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
-                        <property value="jdbcConnector = muleContext.getRegistry().lookupConnector(&quot;JDBCConnector&quot;);&#xA;qr = jdbcConnector.getQueryRunner();&#xA;conn = jdbcConnector.getConnection();&#xA;qr.update(conn, &quot;CREATE TABLE cart (id int generated always as identity, session_id varchar(256), product_id varchar(256), provider varchar(256), quantity integer, price real)&quot;);&#xA;return &quot;db populated&quot;;" name="text"/>
-                        <property value="Groovy" name="engine"/>
+                    <property value="" name="ref"/>
+                    <property value="jdbcConnector = muleContext.getRegistry().lookupConnector(&quot;JDBCConnector&quot;);&#xA;qr = jdbcConnector.getQueryRunner();&#xA;conn = jdbcConnector.getConnection();&#xA;qr.update(conn, &quot;CREATE TABLE cart (id int generated always as identity, session_id varchar(256), product_id varchar(256), provider varchar(256), quantity integer)&quot;);&#xA;return &quot;db populated&quot;;" name="text"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;444507014">
+                        <property value="" name="ref"/>
+                    </property-collection>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;1773645803">
+                        <property value="jdbcConnector = muleContext.getRegistry().lookupConnector(&quot;JDBCConnector&quot;);&#xA;qr = jdbcConnector.getQueryRunner();&#xA;conn = jdbcConnector.getConnection();&#xA;qr.update(conn, &quot;CREATE TABLE cart (id int generated always as identity, session_id varchar(256), product_id varchar(256), provider varchar(256), quantity integer)&quot;);&#xA;return &quot;db populated&quot;;" name="text"/>
                     </property-collection>
                 </properties>
+                <description></description>
             </pattern>
-            <scope type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" name="Catch Exception Strategy" entity-id="11ecdfa7-cd1e-49d8-9bd6-9c56b2fae86d">
+            <scope type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" name="Catch Exception Strategy" entity-id="b981b0e8-a0c7-4bce-b4c1-dcae77222734">
                 <properties>
                     <property name=""/>
                     <property name="when"/>
                     <property name="enableNotifications"/>
                 </properties>
-                <compartment entity-id="cf8ca067-768e-4820-8f30-8ef2672f4ddb">
-                    <lane entity-id="bd83d632-f902-4c54-a423-a74f2ef324a2">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Expression" entity-id="1b8f843a-bf54-4add-89bd-44c5258ce3a0">
+                <compartment entity-id="9d44f9c1-1317-49bb-8cc8-a5c2f56531d0">
+                    <lane entity-id="c933313c-cc90-4c18-a2f1-76831eae261d">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Expression" entity-id="4d54305a-3f2e-480a-b29e-f2e109aa76e7">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>

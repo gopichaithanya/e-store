@@ -18,12 +18,13 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         </spring:bean>
     </spring:beans>
     <jdbc:connector name="JDBCConnector" dataSource-ref="Derby_Data_Source" validateConnections="true" queryTimeout="-1" pollingFrequency="0" doc:name="JDBCConnector">
-        <jdbc:query key="query-addToCart" value="INSERT INTO cart (session_id, product_id, provider, quantity, price) VALUES (#[header:inbound:sessionId], #[json:productCode], #[json:provider], #[json:qty], #[json:price])"/>
+        <jdbc:query key="query-addToCart" value="INSERT INTO cart (session_id, product_id, provider, quantity) VALUES (#[header:inbound:sessionId], #[json:productCode], #[json:provider], #[json:qty])"/>
         <jdbc:query key="query-showCart" value="SELECT * FROM cart WHERE session_id = #[header:inbound:sessionId]"/>
         <jdbc:query key="query-clearCart" value="DELETE FROM cart WHERE session_id = #[header:inbound:sessionId]"/>
     </jdbc:connector>
-    <data-mapper:config name="Barbers Paradise to canonical JSON" transformationGraphPath="barbers_paradise_to_canonical_json.grf" doc:name="Barbers Paradise to canonical JSON"/>
-    <data-mapper:config name="Van Gogh Paint to canonical JSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"/>
+    <data-mapper:config name="barbersParadiseToCanonicalJSON" transformationGraphPath="barbers_paradise_to_canonical_json.grf" doc:name="Barbers Paradise to canonical JSON"/>
+    <data-mapper:config name="vanGoghPaintToCanonicalJSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"/>
+    <data-mapper:config name="consolidateProductDetailsOnCart" transformationGraphPath="consolidateproductdetailsoncart.grf" doc:name="consolidateProductDetailsOnCart"/>
     <http:connector name="HttpConnector" enableCookies="true" keepAlive="true" doc:name="HTTP\HTTPS"/>
     <flow name="listProducts" doc:name="listProducts">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ" doc:name="JMS"/>
@@ -32,14 +33,14 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <processor-chain>
                 <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" method="GET" connector-ref="HttpConnector" doc:name="Fetch products from Barbers Paradise Store"/>
                 <splitter evaluator="json" expression="" doc:name="Split received products list"/>
-                <data-mapper:transform config-ref="Barbers Paradise to canonical JSON" doc:name="Transform to canonical JSON"/>
+                <data-mapper:transform config-ref="barbersParadiseToCanonicalJSON" doc:name="Transform to canonical JSON"/>
                 <object-to-string-transformer doc:name="Object to String"/>
                 <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('allProducts').add(payload)" doc:name="Add product to output list"/>
             </processor-chain>
             <processor-chain>
                 <flow-ref name="fetchProductsFromVanGoghPaintStore" doc:name="Fetch products from Van Gogh Paint Store"/>
                 <collection-splitter doc:name="Split received collection"/>
-                <data-mapper:transform config-ref="Van Gogh Paint to canonical JSON" doc:name="Transform to canonical JSON"/>
+                <data-mapper:transform config-ref="vanGoghPaintToCanonicalJSON" doc:name="Transform to canonical JSON"/>
                 <object-to-string-transformer doc:name="Object to String"/>
                 <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('allProducts').add(payload)" doc:name="Add product to output list"/>
             </processor-chain>
@@ -48,15 +49,59 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
     <sub-flow name="fetchProductsFromVanGoghPaintStore" doc:name="fetchProductsFromVanGoghPaintStore">
         <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
-        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" connector-ref="HttpConnector" doc:name="Invoke SOAP request"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
     </sub-flow>
     <flow name="addToCart" doc:name="addToCart">
         <jms:inbound-endpoint queue="estore.addToCart" doc:name="JMS"/>
-        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-addToCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Database (JDBC)"/>
+        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-addToCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Store product on cart table"/>
     </flow>
     <flow name="showCart" doc:name="showCart">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.showCart" doc:name="JMS"/>
-        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-showCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Database (JDBC)"/>
-        <set-variable variableName="cartProducts" value="#[new java.util.LinkedList()]" doc:name="Variable"/>
+        <jdbc:outbound-endpoint exchange-pattern="request-response" queryKey="query-showCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Fetch cart contents from database"/>
+        <logger message="#[payload.toString()] #[payload.getClass()]" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="cartItems" value="#[new java.util.LinkedList()]" doc:name="Initialize cart items list"/>
+        <foreach doc:name="Foreach">
+            <logger message="ITEM: #[payload.toString()]" level="INFO" doc:name="Logger"/>
+            <choice doc:name="Choice">
+                <when expression="payload['PROVIDER'].equals('Barber\'s Paradise Store')" evaluator="groovy">
+                    <processor-chain>
+                        <enricher target="#[header:outbound:productDetails]" doc:name="Store product details as message property (enrich)">
+                            <core:processor-chain doc:name="Processor Chain">
+                                <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products/#[groovy:payload['PRODUCT_ID']]" doc:name="Fetch product info from Barber's Paradise Store"/>
+                                <data-mapper:transform config-ref="barbersParadiseToCanonicalJSON" doc:name="Transform to canonical JSON"/>
+                                <core:object-to-string-transformer doc:name="Object to String"/>
+                            </core:processor-chain>
+                        </enricher>
+                    </processor-chain>
+                </when>
+                <when expression="payload['PROVIDER'].equals('Van Gogh\'s Paint Store')" evaluator="groovy">
+                    <processor-chain>
+                        <enricher target="#[header:outbound:productDetails]" doc:name="Store product details as message property (enrich)">
+                            <core:processor-chain doc:name="Processor Chain">
+                                <core:expression-transformer expression="payload['PRODUCT_ID']" doc:name="Assing product id to payload"/>
+                                <core:flow-ref name="fetchProductDetailsFromVanGoghPaintStore" doc:name="Fetch product info from Van Gogh Paint Store"/>
+                                <data-mapper:transform config-ref="vanGoghPaintToCanonicalJSON" doc:name="Transform to canonical JSON"/>
+                                <core:object-to-string-transformer doc:name="Object to String"/>
+                            </core:processor-chain>
+                        </enricher>
+                    </processor-chain>
+                </when>
+            </choice>
+            <data-mapper:transform config-ref="consolidateProductDetailsOnCart" doc:name="Consolidate cart item info and subtotal">
+                <data-mapper:input-arguments>
+                    <data-mapper:input-argument key="price">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).price]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="productDescription">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productDescription]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="product_id">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="providerId">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).providerId]</data-mapper:input-argument>
+                </data-mapper:input-arguments>
+            </data-mapper:transform>
+            <object-to-string-transformer doc:name="Object to String"/>
+            <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('cartItems').add(payload)" doc:name="Add cart item to list"/>
+        </foreach>
+        <expression-transformer expression="cartItems" doc:name="Set payload to cart items list"/>
     </flow>
+    <sub-flow name="fetchProductDetailsFromVanGoghPaintStore" doc:name="fetchProductDetailsFromVanGoghPaintStore">
+        <cxf:jaxws-client operation="getProductInfo" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
+    </sub-flow>
 </mule>

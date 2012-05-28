@@ -25,9 +25,11 @@ import javax.xml.namespace.QName;
 public class ObjectFactory {
 
     private final static QName _OrderProduct_QNAME = new QName("http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", "orderProduct");
+    private final static QName _GetProductInfoResponse_QNAME = new QName("http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", "getProductInfoResponse");
     private final static QName _ListProducts_QNAME = new QName("http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", "listProducts");
     private final static QName _OrderProductResponse_QNAME = new QName("http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", "orderProductResponse");
     private final static QName _ListProductsResponse_QNAME = new QName("http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", "listProductsResponse");
+    private final static QName _GetProductInfo_QNAME = new QName("http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", "getProductInfo");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.mulesoft.example.estore.clients.provider.vangoghpaintstore
@@ -37,19 +39,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ListProducts }
+     * Create an instance of {@link GetProductInfo }
      * 
      */
-    public ListProducts createListProducts() {
-        return new ListProducts();
-    }
-
-    /**
-     * Create an instance of {@link OrderProductResponse }
-     * 
-     */
-    public OrderProductResponse createOrderProductResponse() {
-        return new OrderProductResponse();
+    public GetProductInfo createGetProductInfo() {
+        return new GetProductInfo();
     }
 
     /**
@@ -61,6 +55,22 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link Product }
+     * 
+     */
+    public Product createProduct() {
+        return new Product();
+    }
+
+    /**
+     * Create an instance of {@link ListProducts }
+     * 
+     */
+    public ListProducts createListProducts() {
+        return new ListProducts();
+    }
+
+    /**
      * Create an instance of {@link OrderProduct }
      * 
      */
@@ -69,11 +79,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link Product }
+     * Create an instance of {@link GetProductInfoResponse }
      * 
      */
-    public Product createProduct() {
-        return new Product();
+    public GetProductInfoResponse createGetProductInfoResponse() {
+        return new GetProductInfoResponse();
+    }
+
+    /**
+     * Create an instance of {@link OrderProductResponse }
+     * 
+     */
+    public OrderProductResponse createOrderProductResponse() {
+        return new OrderProductResponse();
     }
 
     /**
@@ -83,6 +101,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", name = "orderProduct")
     public JAXBElement<OrderProduct> createOrderProduct(OrderProduct value) {
         return new JAXBElement<OrderProduct>(_OrderProduct_QNAME, OrderProduct.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetProductInfoResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", name = "getProductInfoResponse")
+    public JAXBElement<GetProductInfoResponse> createGetProductInfoResponse(GetProductInfoResponse value) {
+        return new JAXBElement<GetProductInfoResponse>(_GetProductInfoResponse_QNAME, GetProductInfoResponse.class, null, value);
     }
 
     /**
@@ -110,6 +137,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", name = "listProductsResponse")
     public JAXBElement<ListProductsResponse> createListProductsResponse(ListProductsResponse value) {
         return new JAXBElement<ListProductsResponse>(_ListProductsResponse_QNAME, ListProductsResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetProductInfo }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", name = "getProductInfo")
+    public JAXBElement<GetProductInfo> createGetProductInfo(GetProductInfo value) {
+        return new JAXBElement<GetProductInfo>(_GetProductInfo_QNAME, GetProductInfo.class, null, value);
     }
 
 }

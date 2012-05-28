@@ -9,8 +9,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="00a95336-071c-4d44-b903-21b5f72d8a70">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="9ad053da-ba98-4d35-93a7-e966bb1989e5">
+        <lane entity-id="58b016fe-3cea-4863-9a3c-aa327798bc07">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="63af7535-7bd6-4698-b32c-bf24de8f2791">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -38,85 +38,75 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="682dea23-5421-4a09-a427-0e0b54f8554d">
+            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Generate product list" entity-id="e2552787-df9d-444f-8c7e-8f06fa928867">
                 <properties>
-                    <property name="message"/>
-                    <property value="INFO" name="level"/>
-                    <property name="category"/>
-                </properties>
-            </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Generate product list" entity-id="a89c8606-90aa-4252-9eb2-13e24cc5efc3">
-                <properties>
-                    <property value="" name="ref"/>
-                    <property value="def json = new groovy.json.JsonBuilder()&#xA;&#xA;def products = json([&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1827349'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Billy-boy forever-sharp razors'&#xA;&#x9;&#x9;&#x9;&#x9;price '9.95'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '7727362'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Mama Juana aftershave potion'&#xA;&#x9;&#x9;&#x9;&#x9;price '12.99'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1762738'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Ultrasmooth shave foam'&#xA;&#x9;&#x9;&#x9;&#x9;price '3.50'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;&#x9;upc '87668334'&#xA;&#x9;&#x9;&#x9;&#x9;description 'UltraQuickHeal scar tissues'&#xA;&#x9;&#x9;&#x9;&#x9;price '1.95'&#xA;&#x9;&#x9;&#x9;}&#xA;       ])&#xA;&#xA;return json.toPrettyString();" name="text"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;294139840">
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
                         <property value="def json = new groovy.json.JsonBuilder()&#xA;&#xA;def products = json([&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1827349'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Billy-boy forever-sharp razors'&#xA;&#x9;&#x9;&#x9;&#x9;price '9.95'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '7727362'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Mama Juana aftershave potion'&#xA;&#x9;&#x9;&#x9;&#x9;price '12.99'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1762738'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Ultrasmooth shave foam'&#xA;&#x9;&#x9;&#x9;&#x9;price '3.50'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;&#x9;upc '87668334'&#xA;&#x9;&#x9;&#x9;&#x9;description 'UltraQuickHeal scar tissues'&#xA;&#x9;&#x9;&#x9;&#x9;price '1.95'&#xA;&#x9;&#x9;&#x9;}&#xA;       ])&#xA;&#xA;return json.toPrettyString();" name="text"/>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;100935486">
-                        <property value="" name="ref"/>
+                        <property value="Groovy" name="engine"/>
                     </property-collection>
                 </properties>
-                <description></description>
             </pattern>
-            <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="b933c1dc-fe43-489a-b565-15d2e091d792">
+            <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="fb4c1ac8-07fc-4950-bed0-99b94be4416d">
                 <properties>
-                    <property-collection name="49a6b2fd-2ddd-4b19-b960-c4e66680f716">
+                    <property-collection name="9fa092d6-c436-4d4d-9cd6-82ab7a26d915">
                         <property value="! message.getInboundProperty('http.relative.path').isEmpty()" name="choice.expression"/>
                         <property value="groovy" name="choice.evaluator"/>
                     </property-collection>
-                    <property-collection name="b28abc38-41cb-410e-8aaa-866c499f5a74">
+                    <property-collection name="60eef13e-8cfc-4ae3-b62b-11e4b67b077d">
                         <property value="true" name="choice.otherwise"/>
                     </property-collection>
                 </properties>
-                <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="33ae6d90-d335-4054-91e8-0c1f8c32e91a">
+                <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="7bcc36f5-3bdd-4441-8ea8-6f14149398d2">
                     <properties>
-                        <property-collection name="49a6b2fd-2ddd-4b19-b960-c4e66680f716">
+                        <property-collection name="9fa092d6-c436-4d4d-9cd6-82ab7a26d915">
                             <property value="! message.getInboundProperty('http.relative.path').isEmpty()" name="choice.expression"/>
                             <property value="groovy" name="choice.evaluator"/>
                         </property-collection>
-                        <property-collection name="b28abc38-41cb-410e-8aaa-866c499f5a74">
+                        <property-collection name="60eef13e-8cfc-4ae3-b62b-11e4b67b077d">
                             <property value="true" name="choice.otherwise"/>
                         </property-collection>
                     </properties>
                 </pattern>
-                <compartment entity-id="b6a158cf-98d1-4547-810b-4afd0fbcb17e">
-                    <lane entity-id="49a6b2fd-2ddd-4b19-b960-c4e66680f716">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="f9ad4ffe-e23b-4b00-b56f-ea5d9a086ddb">
+                <compartment entity-id="80549d42-7d68-44eb-bda4-516de221ec25">
+                    <lane entity-id="9fa092d6-c436-4d4d-9cd6-82ab7a26d915">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="6bb78276-96ff-4c49-bddb-cf10c08b8134">
                             <properties>
 <property value="Requesting specific product: #[header:inbound:http.relative.path]" name="message"/>
+<property value="" name="category"/>
 <property value="INFO" name="level"/>
-<property name="category"/>
                             </properties>
+                            <description></description>
                         </pattern>
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Set requestedUpc" entity-id="3ea32f44-669b-4467-b1a7-e390a13d6ce2">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Set requestedUpc" entity-id="2db2d2bc-908c-4103-a607-88466b5cce9f">
                             <properties>
-<property value="requestedUpc" name="variableNameForSet"/>
-<property value="#[header:inbound:http.relative.path]" name="value"/>
 <property value="http://www.mulesoft.org/schema/mule/core/set-variable" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+<property name="nameVar"/>
+<property value="requestedUpc" name="variableNameForSet"/>
+<property name="variableValue"/>
+<property value="#[header:inbound:http.relative.path]" name="value"/>
                             </properties>
-                            <description></description>
                         </pattern>
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/splitter" name="Split products list" entity-id="1c85503d-b657-456d-a6da-96f78687f2f2">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/splitter" name="Split products list" entity-id="53b158eb-e94a-4e2e-8fc4-caecb01b370b">
                             <properties>
-<property value="" name="expression"/>
-<property value="" name="businessEventsLabel"/>
-<property value="IF_NOT_SET" name="enableCorrelation"/>
+<property name="enableCorrelation"/>
 <property value="json" name="evaluator"/>
-<property value="false" name="tracking:enable-default-events"/>
+<property value="" name="expression"/>
+<property name="custom-evaluator"/>
+<property name="businessEventsLabel"/>
+<property name="tracking:enable-default-events"/>
                             </properties>
-                            <description></description>
                         </pattern>
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-filter" name="Filter matching product" entity-id="b71367e3-38c2-49f5-a223-e0140f141936">
+                        <pattern type="org.mule.tooling.ui.modules.core.filter.Expression" name="Filter matching product" entity-id="17aeb973-8807-48d9-8b18-029ce6d6ba3b">
                             <properties>
-<property value="(new groovy.json.JsonSlurper().parseText(payload.toString())).upc.equals(message.getInvocationProperty('requestedUpc'))" name="expression"/>
 <property value="groovy" name="evaluator"/>
-<property value="false" name="nullReturnsTrue"/>
+<property value="(new groovy.json.JsonSlurper().parseText(payload.toString())).upc.equals(message.getInvocationProperty('requestedUpc'))" name="expression"/>
+<property name="customEvaluator"/>
+<property name="nullReturnsTrue"/>
                             </properties>
-                            <description></description>
                         </pattern>
                     </lane>
-                    <lane entity-id="b28abc38-41cb-410e-8aaa-866c499f5a74">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="a857e4a1-50f4-4068-890f-bf4c82ad3852">
+                    <lane entity-id="60eef13e-8cfc-4ae3-b62b-11e4b67b077d">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="837dde59-eb70-4a27-afc4-c188df93a34b">
                             <properties>
 <property value="Requesting all products" name="message"/>
 <property value="INFO" name="level"/>
@@ -137,8 +127,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="5763c0a5-56e5-4eac-b187-303386d30221">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="5fd8c7c4-22fc-43bc-b6fd-642f83987abc">
+        <lane entity-id="c7a0f824-84d1-4f0a-a692-3efbb9a101da">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="4be2b0d7-1acb-4e4f-b901-3576a728b37f">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -166,7 +156,7 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="97d376f3-8474-438e-8a18-b681a26137c8">
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="99d716ef-358d-4264-8249-411dd88ba25d">
                 <properties>
                     <property name="configuration-ref"/>
                     <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
@@ -182,15 +172,10 @@
                     <property name="enableMuleSoapHeaders"/>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="3b9422df-6495-4150-9872-ebb1e44c153b">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="0ab56af6-2003-4ec4-b47c-729479ce8cf5">
                 <properties>
-                    <property value="" name="ref"/>
                     <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStoreImpl" name="class"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;1226514264">
-                        <property value="" name="ref"/>
-                    </property-collection>
                 </properties>
-                <description></description>
             </pattern>
         </lane>
     </flow>

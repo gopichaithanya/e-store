@@ -20,7 +20,7 @@ td {
 #addToCart {
 	width: 150px;
 	background-color: #FFFFCC;
-	height: 200px;
+	height: 400px;
 	padding: 10px;
 }
 
@@ -52,10 +52,72 @@ td {
 .product .productCode {
 	width: 40%;
 }
+.product .productCode DIV.productCode{
+	display:inline;
+}
 .product .productProvider {
 	width: 60%;
 }
 .product .productPrice {
 	width: 200px;
 	text-align: right;
+}
+.product .productPrice DIV.productPrice{
+	display:inline;
+}
+
+
+.cartProduct {
+	width: 700px;
+	height: 30px;
+	border: none;
+	padding: 2px;
+}
+
+.cartProduct thead {
+	color: silver;
+	font-weight: bold;
+	font-size: 10pt;
+	text-align: center;
+			
+}
+
+
+.cartProduct h1 {
+	color: #FF9900;
+	font-size: 24pt;
+}
+
+.cartProduct h2 {
+	color: #336600;
+	font-size: 14pt;
+}
+
+.cartProduct h3 {
+	color: gray;
+	font-size: 9pt;
+}
+
+.cartProduct .productCode {
+	width: 40%;
+}
+.cartProduct .productCode DIV.productCode{
+	display:inline;
+}
+
+.cartProduct .productProvider {
+	width: 60%;
+}
+
+.cartProduct .productQty {
+	width: 50px;
+	text-align: right;
+}
+
+.cartProduct .productPrice {
+	width: 200px;
+	text-align: right;
+}
+.cartProduct .productPrice DIV.productPrice {
+	display: inline;
 }

@@ -13,7 +13,7 @@
 	<ul>
         <li><a href="#welcome"><span>Welcome</span></a></li>
         <li><a href="#listProducts"><span>Products</span></a></li>
-        <li><a href="#viewCart"><span>My Cart</span></a></li>
+        <li><a href="#showCart"><span>My Cart</span></a></li>
         <li><a href="#checkout"><span>Checkout</span></a></li>
     </ul>
     <div id="welcome">
@@ -26,7 +26,7 @@
     <div id="listProducts">
    		<table>
    			<tr>
-   				<td><div id="products"/></td>
+   				<td><div id="products"></div></td>
    				<td><div id="addToCart">Drag a product here to add it to your cart!</div></td>
 			</tr>
     	</table>
@@ -41,8 +41,8 @@
     		<a id="addProductToCartButton" class="button">Add to Cart</a>
     	</div>
     </div>
-    <div id="viewCart">
-    	
+    <div id="showCart">
+    	<div id="cartProducts"></div>
     </div>
     <div id="checkout">
     	
@@ -65,6 +65,10 @@ $('#tabs').bind('tabsselect', function(event, ui) {
 		$("#products").empty();
 		$("#products").append("Loading products, please wait...");
 		mule.rpc("/estore/listProducts", "", listProductsResponse);
+	} else if (ui.tab.hash == "#showCart") {
+		$("#cartProducts").empty();
+		$("#cartProducts").append("Loading cart contents, please wait...");
+		mule.rpc("/estore/showCart", "", showCartResponse);
 	}
 });
 
@@ -73,7 +77,6 @@ $('#addToCart').droppable({
 		$('#productCode').val($('div.productCode',ui.draggable).html());
 		$('#productProvider').val($('div.productProvider',ui.draggable).html());
 		$('#qty').val(1);
-		$('#price').val($('div.productPrice',ui.draggable).html());
 		$('#productDescription').html($('div.productDescription',ui.draggable).html());
 		$('#addProductToCartDialog').dialog({modal: true, resizable: false });
 	},
@@ -135,6 +138,41 @@ function listProductsResponse(message) {
 
 function addToCartResponse(message) {
 	$('#addProductToCartDialog').dialog('close');
+}
+
+
+function showCartResponse(message) {
+	products = JSON.parse("[" + message.data + "]");
+	$("#cartProducts").empty();
+	for (i = 0; i < products.length; i++) {
+		$("#cartProducts").append("" +
+				"<table width='100%' class='cartProduct'>" +
+					"<thead>" +
+						"<tr>" +
+								"<td>Qty</td>" +
+								"<td>Description</td>" +
+								"<td>Price</td>" +
+								"<td>Subtotal</td>" +
+						"</tr>" +
+					"</thead>" +
+					"<tr>" +
+						"<td class='productQty'><h1>" + products[i].qty + " x </h1></td>" +
+						"<td>" +
+							"<table width='100%'>" +
+								"<tr>" +	
+									"<td colspan='2'><h2>" + products[i].productDescription + "</h2></td>" + 
+								"</tr><tr>" +
+									"<td class='productProvider'><h3>Provided by: " + products[i].providerId + "</h3></td>" + 
+									"<td class='productCode'><h3>Code: " + products[i].productId + "</h3></td> " +		
+								"</tr>" +
+							"</table>" +
+						"</td>" +
+						"<td class='productPrice'><h1>$ " + parseFloat(products[i].price).toFixed(2) + "</h1></td>" +
+						"<td class='productPrice'><h1>$ " + parseFloat(products[i].subtotal).toFixed(2) + "</h1></td>" +
+					"</tr>" +		
+				"</table>" +
+		"");
+	}
 }
 
 </script>
