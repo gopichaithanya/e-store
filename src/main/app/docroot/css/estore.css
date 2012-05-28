@@ -1,3 +1,7 @@
+p {
+	color: gray;
+}
+
 h1 {
 	color: #459E00;
 	font-size: 40pt;
@@ -5,9 +9,24 @@ h1 {
 	margin-bottom: 0px;
 }
 
+h2 {
+	color: gray;
+	font-size: 18pt;
+	text-align: center;
+}
+
 td {
 	vertical-align: top;
 }
+
+#frontButtons {
+	text-align: center;
+}
+
+#frontButtons a {
+	margin: 15px;
+}
+
 
 #tabs {
 	width: 1000px;	
@@ -19,10 +38,28 @@ td {
 
 #addToCart {
 	width: 150px;
-	background-color: #FFFFCC;
 	height: 400px;
 	padding: 10px;
+	text-align: center;
+	padding: 3px;
+	margin: 2px;
 }
+
+#addToCart.addToCartOFF {
+	color: gray;
+	background-color: #DBD9C8;
+}
+
+#addToCart.addToCartON {
+	color: #FF9C0A;
+	background-color: #FFFEE9; 
+}
+
+#addToCart.addToCartDROP {
+	color: #FFFFFF;
+	background-color: #B7B5A7;
+}
+
 
 #addProductToCartDialog {
 	display: none;
@@ -41,6 +78,7 @@ td {
 }
 
 .product h2 {
+	text-align: left;
 	color: #336600;
 	font-size: 18pt;
 }
@@ -91,6 +129,7 @@ td {
 .cartProduct h2 {
 	color: #336600;
 	font-size: 14pt;
+	text-align: left;
 }
 
 .cartProduct h3 {
@@ -110,7 +149,7 @@ td {
 }
 
 .cartProduct .productQty {
-	width: 50px;
+	width: 80px;
 	text-align: right;
 }
 
@@ -120,4 +159,22 @@ td {
 }
 .cartProduct .productPrice DIV.productPrice {
 	display: inline;
+}
+
+#grandTotal {
+	width: 70%;
+}
+#grandTotalAmount {
+	width: 30%;
+}
+
+#grandTotal h2 {
+	color: #336600;
+	font-size: 14pt;
+	text-align: right;
+}
+#grandTotalAmount h1 {
+	color: #FF9900;
+	font-size: 24pt;
+	text-align: right;
 }

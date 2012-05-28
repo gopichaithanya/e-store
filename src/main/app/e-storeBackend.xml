@@ -58,10 +58,8 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     <flow name="showCart" doc:name="showCart">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.showCart" doc:name="JMS"/>
         <jdbc:outbound-endpoint exchange-pattern="request-response" queryKey="query-showCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Fetch cart contents from database"/>
-        <logger message="#[payload.toString()] #[payload.getClass()]" level="INFO" doc:name="Logger"/>
         <set-variable variableName="cartItems" value="#[new java.util.LinkedList()]" doc:name="Initialize cart items list"/>
         <foreach doc:name="Foreach">
-            <logger message="ITEM: #[payload.toString()]" level="INFO" doc:name="Logger"/>
             <choice doc:name="Choice">
                 <when expression="payload['PROVIDER'].equals('Barber\'s Paradise Store')" evaluator="groovy">
                     <processor-chain>
@@ -104,4 +102,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <cxf:jaxws-client operation="getProductInfo" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
     </sub-flow>
+    <flow name="clearCart" doc:name="clearCart">
+        <jms:inbound-endpoint queue="estore.clearCart" doc:name="JMS"/>
+        <logger level="INFO" doc:name="Logger"/>
+        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-clearCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Delete cart contents"/>
+    </flow>
 </mule>

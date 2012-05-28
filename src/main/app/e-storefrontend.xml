@@ -29,4 +29,9 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
         <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ" doc:name="Request cart contents to backend"/>
     </flow>
+    <flow name="e-storeFrontend-clearCart" doc:name="e-storeFrontend-clearCart">
+        <ajax:inbound-endpoint channel="/estore/clearCart" responseTimeout="10000" doc:name="/estore/clearCart"/>
+        <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
+        <jms:outbound-endpoint queue="estore.clearCart" connector-ref="Active_MQ" doc:name="Request clear cart to backend"/>
+    </flow>
 </mule>
