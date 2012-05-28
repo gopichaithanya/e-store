@@ -7,7 +7,12 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd ">
     <flow name="barbersParadiseStore" doc:name="barbersParadiseStore">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" doc:name="HTTP"/>
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" doc:name="HTTP">
+            <response> 
+                <logger level="INFO" message="#[payload.toString()]" doc:name="Logger"/> 
+            </response>
+        </http:inbound-endpoint>
+        <logger level="INFO" doc:name="Logger"/>
         <scripting:component doc:name="Generate product list">
             <scripting:script engine="Groovy">
                 <scripting:text><![CDATA[def json = new groovy.json.JsonBuilder()
@@ -38,6 +43,21 @@ def products = json([
 return json.toPrettyString();]]></scripting:text>
             </scripting:script>
         </scripting:component>
+        <choice doc:name="Choice">
+            <when expression="! message.getInboundProperty('http.relative.path').isEmpty()" evaluator="groovy">
+                <processor-chain>
+                    <logger message="Requesting specific product: #[header:inbound:http.relative.path]" level="INFO" doc:name="Logger"/>
+                    <set-variable variableName="requestedUpc" value="#[header:inbound:http.relative.path]" doc:name="Set requestedUpc"/>
+                    <splitter evaluator="json" expression="" doc:name="Split products list"/>
+                    <expression-filter evaluator="groovy" expression="(new groovy.json.JsonSlurper().parseText(payload.toString())).upc.equals(message.getInvocationProperty('requestedUpc'))" doc:name="Filter matching product"/>
+                </processor-chain>
+            </when>
+            <otherwise>
+                <processor-chain>
+                    <logger message="Requesting all products" level="INFO" doc:name="Logger"/>
+                </processor-chain>
+            </otherwise>
+        </choice>
     </flow>
     <flow name="vangoghPaintStore" doc:name="vangoghPaintStore">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="HTTP"/>

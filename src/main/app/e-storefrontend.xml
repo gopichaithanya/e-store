@@ -20,9 +20,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <ajax:inbound-endpoint channel="/estore/addToCart" responseTimeout="10000" doc:name="/estore/addToCart"/>
         <logger level="INFO" doc:name="Logger"/>
         <logger message="Add to cart: #[payload.toString()]" level="INFO" doc:name="Logger"/>
-        <message-properties-transformer overwrite="true" scope="session" doc:name="Message Properties">
-            <add-message-property key="sessionId" value="#[header:invocation:cometd.client]"/>
-        </message-properties-transformer>
+        <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Property"/>
         <logger level="INFO" doc:name="Logger"/>
         <jms:outbound-endpoint queue="estore.addToCart" connector-ref="Active_MQ" doc:name="Request add product to cart to backend"/>
     </flow>

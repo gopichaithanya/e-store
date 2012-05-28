@@ -18,9 +18,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         </spring:bean>
     </spring:beans>
     <jdbc:connector name="JDBCConnector" dataSource-ref="Derby_Data_Source" validateConnections="true" queryTimeout="-1" pollingFrequency="0" doc:name="JDBCConnector">
-        <jdbc:query key="query-addToCart" value="INSERT INTO cart (session_id, product_id, provider, quantity, price) VALUES (#[header:session:sessionId], #[json:productCode], #[json:provider], #[json:qty], #[json:price])"/>
-        <jdbc:query key="query-showCart" value="SELECT * FROM cart"/>
-        <jdbc:query key="query-showCart" value="DELETE FROM cart WHERE session_id = #[header:session:sessionId]"/>
+        <jdbc:query key="query-addToCart" value="INSERT INTO cart (session_id, product_id, provider, quantity, price) VALUES (#[header:inbound:sessionId], #[json:productCode], #[json:provider], #[json:qty], #[json:price])"/>
+        <jdbc:query key="query-showCart" value="SELECT * FROM cart WHERE session_id = #[header:inbound:sessionId]"/>
+        <jdbc:query key="query-clearCart" value="DELETE FROM cart WHERE session_id = #[header:inbound:sessionId]"/>
     </jdbc:connector>
     <data-mapper:config name="Barbers Paradise to canonical JSON" transformationGraphPath="barbers_paradise_to_canonical_json.grf" doc:name="Barbers Paradise to canonical JSON"/>
     <data-mapper:config name="Van Gogh Paint to canonical JSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"/>
@@ -47,18 +47,16 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <expression-transformer expression="allProducts" doc:name="Set payload to output list"/>
     </flow>
     <sub-flow name="fetchProductsFromVanGoghPaintStore" doc:name="fetchProductsFromVanGoghPaintStore">
-        <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
+        <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" connector-ref="HttpConnector" doc:name="Invoke SOAP request"/>
     </sub-flow>
     <flow name="addToCart" doc:name="addToCart">
         <jms:inbound-endpoint queue="estore.addToCart" doc:name="JMS"/>
-        <logger level="INFO" doc:name="Logger"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
-        <logger message="#[json:productCode]" level="INFO" doc:name="Logger"/>
         <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-addToCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Database (JDBC)"/>
     </flow>
     <flow name="showCart" doc:name="showCart">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.showCart" doc:name="JMS"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-showCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Database (JDBC)"/>
+        <set-variable variableName="cartProducts" value="#[new java.util.LinkedList()]" doc:name="Variable"/>
     </flow>
 </mule>

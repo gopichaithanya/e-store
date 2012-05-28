@@ -51,9 +51,10 @@
 
 // Transforms input record into output record.
 function integer transform() {
+	$out.0.productId = $in.0.upc;
 	$out.0.providerId =  "Barber's Paradise Store";
 	
-	$out.0.productId = "UPC" + $in.0.upc;
+	
 	$out.0.productDescription = $in.0.description;
 	
 $out.0.__id=$in.0.__id;

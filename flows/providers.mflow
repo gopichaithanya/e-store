@@ -9,8 +9,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="3ab8213f-9874-4d74-952c-80afbeddfd67">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="af232d9e-cf3a-4d23-9424-6b9cb318044c">
+        <lane entity-id="00a95336-071c-4d44-b903-21b5f72d8a70">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="9ad053da-ba98-4d35-93a7-e966bb1989e5">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -38,19 +38,94 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Generate product list" entity-id="b0775be3-ff6e-4416-a582-c736b1b25f63">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="682dea23-5421-4a09-a427-0e0b54f8554d">
+                <properties>
+                    <property name="message"/>
+                    <property value="INFO" name="level"/>
+                    <property name="category"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Generate product list" entity-id="a89c8606-90aa-4252-9eb2-13e24cc5efc3">
                 <properties>
                     <property value="" name="ref"/>
                     <property value="def json = new groovy.json.JsonBuilder()&#xA;&#xA;def products = json([&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1827349'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Billy-boy forever-sharp razors'&#xA;&#x9;&#x9;&#x9;&#x9;price '9.95'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '7727362'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Mama Juana aftershave potion'&#xA;&#x9;&#x9;&#x9;&#x9;price '12.99'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1762738'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Ultrasmooth shave foam'&#xA;&#x9;&#x9;&#x9;&#x9;price '3.50'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;&#x9;upc '87668334'&#xA;&#x9;&#x9;&#x9;&#x9;description 'UltraQuickHeal scar tissues'&#xA;&#x9;&#x9;&#x9;&#x9;price '1.95'&#xA;&#x9;&#x9;&#x9;}&#xA;       ])&#xA;&#xA;return json.toPrettyString();" name="text"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;72746199">
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;294139840">
                         <property value="def json = new groovy.json.JsonBuilder()&#xA;&#xA;def products = json([&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1827349'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Billy-boy forever-sharp razors'&#xA;&#x9;&#x9;&#x9;&#x9;price '9.95'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '7727362'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Mama Juana aftershave potion'&#xA;&#x9;&#x9;&#x9;&#x9;price '12.99'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1762738'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Ultrasmooth shave foam'&#xA;&#x9;&#x9;&#x9;&#x9;price '3.50'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;&#x9;upc '87668334'&#xA;&#x9;&#x9;&#x9;&#x9;description 'UltraQuickHeal scar tissues'&#xA;&#x9;&#x9;&#x9;&#x9;price '1.95'&#xA;&#x9;&#x9;&#x9;}&#xA;       ])&#xA;&#xA;return json.toPrettyString();" name="text"/>
                     </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;727171450">
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;100935486">
                         <property value="" name="ref"/>
                     </property-collection>
                 </properties>
                 <description></description>
             </pattern>
+            <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="b933c1dc-fe43-489a-b565-15d2e091d792">
+                <properties>
+                    <property-collection name="49a6b2fd-2ddd-4b19-b960-c4e66680f716">
+                        <property value="! message.getInboundProperty('http.relative.path').isEmpty()" name="choice.expression"/>
+                        <property value="groovy" name="choice.evaluator"/>
+                    </property-collection>
+                    <property-collection name="b28abc38-41cb-410e-8aaa-866c499f5a74">
+                        <property value="true" name="choice.otherwise"/>
+                    </property-collection>
+                </properties>
+                <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="33ae6d90-d335-4054-91e8-0c1f8c32e91a">
+                    <properties>
+                        <property-collection name="49a6b2fd-2ddd-4b19-b960-c4e66680f716">
+                            <property value="! message.getInboundProperty('http.relative.path').isEmpty()" name="choice.expression"/>
+                            <property value="groovy" name="choice.evaluator"/>
+                        </property-collection>
+                        <property-collection name="b28abc38-41cb-410e-8aaa-866c499f5a74">
+                            <property value="true" name="choice.otherwise"/>
+                        </property-collection>
+                    </properties>
+                </pattern>
+                <compartment entity-id="b6a158cf-98d1-4547-810b-4afd0fbcb17e">
+                    <lane entity-id="49a6b2fd-2ddd-4b19-b960-c4e66680f716">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="f9ad4ffe-e23b-4b00-b56f-ea5d9a086ddb">
+                            <properties>
+<property value="Requesting specific product: #[header:inbound:http.relative.path]" name="message"/>
+<property value="INFO" name="level"/>
+<property name="category"/>
+                            </properties>
+                        </pattern>
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Set requestedUpc" entity-id="3ea32f44-669b-4467-b1a7-e390a13d6ce2">
+                            <properties>
+<property value="requestedUpc" name="variableNameForSet"/>
+<property value="#[header:inbound:http.relative.path]" name="value"/>
+<property value="http://www.mulesoft.org/schema/mule/core/set-variable" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/splitter" name="Split products list" entity-id="1c85503d-b657-456d-a6da-96f78687f2f2">
+                            <properties>
+<property value="" name="expression"/>
+<property value="" name="businessEventsLabel"/>
+<property value="IF_NOT_SET" name="enableCorrelation"/>
+<property value="json" name="evaluator"/>
+<property value="false" name="tracking:enable-default-events"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-filter" name="Filter matching product" entity-id="b71367e3-38c2-49f5-a223-e0140f141936">
+                            <properties>
+<property value="(new groovy.json.JsonSlurper().parseText(payload.toString())).upc.equals(message.getInvocationProperty('requestedUpc'))" name="expression"/>
+<property value="groovy" name="evaluator"/>
+<property value="false" name="nullReturnsTrue"/>
+                            </properties>
+                            <description></description>
+                        </pattern>
+                    </lane>
+                    <lane entity-id="b28abc38-41cb-410e-8aaa-866c499f5a74">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="a857e4a1-50f4-4068-890f-bf4c82ad3852">
+                            <properties>
+<property value="Requesting all products" name="message"/>
+<property value="INFO" name="level"/>
+<property name="category"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </splitter>
         </lane>
     </flow>
     <flow SubFlow="false" name="vangoghPaintStore">
@@ -62,8 +137,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="8e51b558-9a4c-413b-a9ce-f8f35473bb8c">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="bd1b8167-88b9-4b1f-891b-73e931ea28dd">
+        <lane entity-id="5763c0a5-56e5-4eac-b187-303386d30221">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="5fd8c7c4-22fc-43bc-b6fd-642f83987abc">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -91,44 +166,31 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="293baf63-502a-4b7a-ab35-6eabe8a4e91b">
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="97d376f3-8474-438e-8a18-b681a26137c8">
                 <properties>
-                    <property value="" name="wsdlLocation"/>
-                    <property value="80" name="port"/>
-                    <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStore" name="serviceClass"/>
-                    <property value="" name="configurationLocation"/>
+                    <property name="configuration-ref"/>
                     <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                    <property value="" name="configuration-ref"/>
-                    <property value="true" name="initializeStaticBusInstance"/>
-                    <property value="" name="namespace"/>
-                    <property value="false" name="validationEnabled"/>
-                    <property value="" name="bindingId"/>
-                    <property value="" name="name"/>
-                    <property value="" name="service"/>
-                    <property value="false" name="mtomEnabled"/>
-                    <property value="true" name="enableMuleSoapHeaders"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/configuration-ref;1518530588">
-                        <property value="" name="configurationLocation"/>
-                        <property value="" name="name"/>
-                        <property value="true" name="enableMuleSoapHeaders"/>
-                        <property value="true" name="initializeStaticBusInstance"/>
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/configuration;1012437167">
-                            <property value="" name="configurationLocation"/>
-                            <property value="" name="name"/>
-                            <property value="true" name="enableMuleSoapHeaders"/>
-                            <property value="true" name="initializeStaticBusInstance"/>
-                        </property-collection>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/ws-security;1540238015">
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/mule-security-manager;1552663416"/>
+                    <property name="configuration-ref"/>
+                    <property name="bindingId"/>
+                    <property value="80" name="port"/>
+                    <property name="namespace"/>
+                    <property name="service"/>
+                    <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStore" name="serviceClass"/>
+                    <property name="validationEnabled"/>
+                    <property name="mtomEnabled"/>
+                    <property name="wsdlLocation"/>
+                    <property name="enableMuleSoapHeaders"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="3b9422df-6495-4150-9872-ebb1e44c153b">
+                <properties>
+                    <property value="" name="ref"/>
+                    <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStoreImpl" name="class"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;1226514264">
+                        <property value="" name="ref"/>
                     </property-collection>
                 </properties>
                 <description></description>
-            </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="7ae9096c-c0dc-4508-ae3f-3e47060ebe15">
-                <properties>
-                    <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStoreImpl" name="class"/>
-                </properties>
             </pattern>
         </lane>
     </flow>
