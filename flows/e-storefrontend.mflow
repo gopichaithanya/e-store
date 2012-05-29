@@ -436,6 +436,14 @@
                     <property name="transformer-refs"/>
                 </properties>
             </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="53fa4436-2191-416f-a904-0c987ed767d3">
+                <properties>
+                    <property value="#[groovy:payload.toString()]" name="message"/>
+                    <property value="" name="category"/>
+                    <property value="INFO" name="level"/>
+                </properties>
+                <description></description>
+            </pattern>
             <pattern type="http://www.mulesoft.org/schema/mule/core/properties-transformer" name="Set session id from AJAX client id" entity-id="b728bf06-5670-4363-9609-8447f4c2f6a7">
                 <properties>
                     <property value="http://www.mulesoft.org/schema/mule/core/set-property" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>

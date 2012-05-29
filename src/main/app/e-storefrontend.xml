@@ -42,6 +42,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     </flow>
     <flow name="e-storeFrontend-doCheckout" doc:name="e-storeFrontend-doCheckout">
         <ajax:inbound-endpoint channel="/estore/doCheckout" responseTimeout="10000" doc:name="/estore/doCheckout"/>
+        <logger message="#[groovy:payload.toString()]" level="INFO" doc:name="Logger"/>
         <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
         <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ" doc:name="Request checkout to backend"/>
     </flow>

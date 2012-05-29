@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph author="jdeoliveira" created="Tue May 29 15:16:54 GMT-03:00 2012" guiVersion="3.3.0.M2" id="1338317242585" licenseCode="Unlicensed" licenseType="Unknown" modified="Tue May 29 15:16:54 GMT-03:00 2012" modifiedBy="jdeoliveira" name="checkoutRequestToPaymentAuthorization" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Input" id="Metadata0">
+<Record fieldDelimiter="|" name="object" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{}/object/creditCardNumber" label="creditCardNumber" name="creditCardNumber" type="string"/>
+<Field __sourcePath="{}/object/securityCode" label="securityCode" name="securityCode" type="string"/>
+<Field __sourcePath="{}/object/cardholderName" label="cardholderName" name="cardholderName" type="string"/>
+<Field __sourcePath="{}/object/deliveryAddress" label="deliveryAddress" name="deliveryAddress" type="string"/>
+</Record>
+</Metadata>
+<Metadata __sourcePath="{http://www.mulesoft.com/schema/estoreBank.xsd=ns0}/ns0:requestToCharge" _dataStructure="OBJECT" _id="__id" _type="Output" id="Metadata1">
+<Record fieldDelimiter="|" name="requestToCharge" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{http://www.mulesoft.com/schema/estoreBank.xsd=ns0}/ns0:requestToCharge/ns0:creditCardNumber" label="ns0:creditCardNumber" name="ns0_creditCardNumber" type="string"/>
+<Field __sourcePath="{http://www.mulesoft.com/schema/estoreBank.xsd=ns0}/ns0:requestToCharge/ns0:securityCode" label="ns0:securityCode" name="ns0_securityCode" type="string"/>
+<Field __sourcePath="{http://www.mulesoft.com/schema/estoreBank.xsd=ns0}/ns0:requestToCharge/ns0:cardholderName" label="ns0:cardholderName" name="ns0_cardholderName" type="string"/>
+<Field __sourcePath="{http://www.mulesoft.com/schema/estoreBank.xsd=ns0}/ns0:requestToCharge/ns0:amount" label="ns0:amount" name="ns0_amount" type="decimal"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+<Entry id="DictionaryEntry2" input="true" name="grandTotal" output="false" type="string"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:outputPayload" guiHeight="0" guiName="XML Writer" guiWidth="0" guiX="460" guiY="20" id="EXT_XML_WRITER0" type="EXT_XML_WRITER" xmlSchemaURL="/Users/jdeoliveira/Documents/work/mulesoft/studio-workspaces/3.3.beta/sandbox-workspace/e-store/src/main/resources/requestToCharge.xsd">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<ns0:requestToCharge xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" xmlns:ns0="http://www.mulesoft.com/schema/estoreBank.xsd" clover:inPort="0">
+  <ns0:creditCardNumber>$0.ns0_creditCardNumber</ns0:creditCardNumber>
+  <ns0:securityCode>$0.ns0_securityCode</ns0:securityCode>
+  <ns0:cardholderName>$0.ns0_cardholderName</ns0:cardholderName>
+  <ns0:amount>$0.ns0_amount</ns0:amount>
+</ns0:requestToCharge>]]></attr>
+<attr name="_data_format"><![CDATA[XML]]></attr>
+</Node>
+<Node charset="UTF-8" enabled="enabled" fileURL="dict:inputPayload" guiHeight="0" guiName="JSON Reader" guiWidth="0" guiX="20" guiY="20" id="JSON_READER0" type="JSON_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context xpath="/root">
+  <Context outPort="0" sequenceField="__id" xpath="object">
+    <Mapping cloverField="creditCardNumber" trim="true" xpath="creditCardNumber"/>
+    <Mapping cloverField="securityCode" trim="true" xpath="securityCode"/>
+    <Mapping cloverField="cardholderName" trim="true" xpath="cardholderName"/>
+    <Mapping cloverField="deliveryAddress" trim="true" xpath="deliveryAddress"/>
+  </Context>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[JSON]]></attr>
+</Node>
+<Node enabled="enabled" guiHeight="0" guiName="object_to_ns0:requestToCharge" guiWidth="0" guiX="240" guiY="20" id="REFORMAT0" type="REFORMAT">
+<attr name="transform"><![CDATA[//#CTL2
+
+// Transforms input record into output record.
+function integer transform() {
+	$out.0.ns0_amount = (isnull(dictionary.grandTotal) ? 0 : str2decimal(dictionary.grandTotal));
+	$out.0.ns0_cardholderName = $in.0.cardholderName;
+	$out.0.ns0_securityCode = $in.0.securityCode;
+	$out.0.ns0_creditCardNumber = $in.0.creditCardNumber;
+$out.0.__id=$in.0.__id;
+		return ALL;
+}
+
+// Called during component initialization.
+// function boolean init() {}
+
+// Called during each graph run before the transform is executed. May be used to allocate and initialize resources
+// required by the transform. All resources allocated within this method should be released
+// by the postExecute() method.
+// function void preExecute() {}
+
+// Called only if transform() throws an exception.
+// function integer transformOnError(string errorMessage, string stackTrace) {}
+
+// Called during each graph run after the entire transform was executed. Should be used to free any resources
+// allocated within the preExecute() method.
+// function void postExecute() {}
+
+// Called to return a user-defined error message when an error occurs.
+// function string getMessage() {}
+]]></attr>
+</Node>
+<Edge fromNode="JSON_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="Metadata0" outPort="Port 0 (out)" toNode="REFORMAT0:0"/>
+<Edge fromNode="REFORMAT0:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="Metadata1" outPort="Port 0 (out)" toNode="EXT_XML_WRITER0:0"/>
+</Phase>
+</Graph>

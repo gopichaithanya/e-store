@@ -6,11 +6,14 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd ">
     <mulexml:schema-validation-filter schemaLocations="requestToCharge.xsd" returnResult="true" name="sintacticValidationFilter" doc:name="Schema Validation"/>
-    <expression-filter evaluator="xpath" expression="/requestToCharge/creditCardNumber.substring(13,16) = /requestToCharge/securityCode" name="securityCodeValidationFilter" doc:name="Security code validation filter"/>
-    <expression-filter evaluator="xpath" expression="/requestToCharge/amount &lt; 5000" name="allowableAmountValidationFilter" doc:name="Allowable amount validation filter"/>
+    <mulexml:namespace-manager xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" includeConfigNamespaces="false">  
+        <mulexml:namespace prefix="ns0" uri="http://www.mulesoft.com/schema/estoreBank.xsd"/> 
+    </mulexml:namespace-manager>
+    <expression-filter evaluator="xpath" expression="substring(/ns0:requestToCharge/ns0:creditCardNumber, 14, 16) = /ns0:requestToCharge/ns0:securityCode" name="securityCodeValidationFilter" doc:name="Security code validation filter"/>
+    <expression-filter evaluator="xpath" expression="/ns0:requestToCharge/ns0:amount &lt; 5000" name="allowableAmountValidationFilter" doc:name="Allowable amount validation filter"/>
     <flow name="bank" doc:name="bank">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="bank.authorizePayment" connector-ref="Active_MQ" doc:name="JMS"/>
-        <logger message="#[payload.toString()]" level="INFO" doc:name="lo"/>
+        <logger message="XXXXXXXXXXXXXX #[xpath:substring(/ns0:requestToCharge/ns0:creditCardNumber, 14, 16)]" level="INFO" doc:name="lo"/>
         <message-filter throwOnUnaccepted="true" doc:name="Sintactic validation">
             <filter ref="sintacticValidationFilter"/>
         </message-filter>

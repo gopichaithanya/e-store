@@ -58,20 +58,20 @@
 			<table width='100%' class='payment'>
 				<tr>
 					<td class="title">Credit card number:</td>
-					<td class="field"><input size="50" maxlength="16" name="creditCardNumber" type="text"/></td>
+					<td class="field"><input size="50" maxlength="16" name="creditCardNumber" id="creditCardNumber" type="text"/></td>
 				</tr>
 				<tr>
 					<td class="title">Security code:</td>
-					<td class="field"><input size="3" maxlength="3" name="securityCode" type="text"/><div class="comment">Must match the last 3-digits of the credit card number!</div></td>
+					<td class="field"><input size="3" maxlength="3" name="securityCode" id="securityCode" type="text"/><div class="comment">Must match the last 3-digits of the credit card number!</div></td>
 					
 				</tr>
 				<tr>
 					<td class="title">Name printed on the card:</td>
-					<td class="field"><input size="50" maxlength="100" name="cardholderName" type="text"/></td>
+					<td class="field"><input size="50" maxlength="100" name="cardholderName" id="cardholderName" type="text"/></td>
 				</tr>
 				<tr>
 					<td class="title">Delivery address:</td>
-					<td class="field"><input size="50" maxlength="100" name="deliveryAddress" type="text"/></td>
+					<td class="field"><input size="50" maxlength="100" name="deliveryAddress" id="deliveryAddress" type="text"/></td>
 				</tr>
 			</table>
 			<div id="checkoutComments"></div>
@@ -157,7 +157,7 @@ $('#doCheckoutButton').click(function() {
 	data['creditCardNumber'] = $("#checkoutForm #creditCardNumber").val();
 	data['securityCode'] = $("#checkoutForm #securityCode").val();
 	data['cardholderName'] = $("#checkoutForm #cardholderName").val();
-	data['deliveryAddress'] = $("#checkoutForm #deliveryAddress").val();	
+	data['deliveryAddress'] = $("#checkoutForm #deliveryAddress").val();
 	mule.rpc("/estore/doCheckout", JSON.stringify(data), doCheckoutResponse);
 });
 

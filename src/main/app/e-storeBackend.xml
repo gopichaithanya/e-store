@@ -25,7 +25,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     <data-mapper:config name="barbersParadiseToCanonicalJSON" transformationGraphPath="barbers_paradise_to_canonical_json.grf" doc:name="Barbers Paradise to canonical JSON"/>
     <data-mapper:config name="vanGoghPaintToCanonicalJSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"/>
     <data-mapper:config name="consolidateProductDetailsOnCart" transformationGraphPath="consolidateproductdetailsoncart.grf" doc:name="consolidateProductDetailsOnCart"/>
+    <data-mapper:config name="checkoutRequestToPaymentAuthorization" transformationGraphPath="checkoutrequesttopaymentauthorization.grf" doc:name="checkoutRequestToPaymentAuthorization"/>
     <http:connector name="HttpConnector" enableCookies="true" keepAlive="true" doc:name="HTTP\HTTPS"/>
+    <data-mapper:config name="checkoutRequestToPaymentAuthorization" transformationGraphPath="checkoutrequesttopaymentauthorization.grf" doc:name="checkoutRequestToPaymentAuthorization"/>
     <flow name="listProducts" doc:name="listProducts">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ" doc:name="JMS"/>
         <set-variable variableName="allProducts" value="#[new java.util.LinkedList()]" doc:name="Initialize output list"/>
@@ -52,7 +54,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
     </sub-flow>
     <flow name="addToCart" doc:name="addToCart">
-        <jms:inbound-endpoint queue="estore.addToCart" doc:name="JMS"/>
+        <jms:inbound-endpoint queue="estore.addToCart" connector-ref="Active_MQ" doc:name="JMS"/>
         <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-addToCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Store product on cart table"/>
     </flow>
     <flow name="showCart" doc:name="showCart">
@@ -92,9 +94,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <data-mapper:transform config-ref="consolidateProductDetailsOnCart" doc:name="Consolidate cart item info and subtotal">
                 <data-mapper:input-arguments>
                     <data-mapper:input-argument key="price">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).price]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="productDescription">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productDescription]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="product_id">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productId]</data-mapper:input-argument>
                     <data-mapper:input-argument key="providerId">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).providerId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="product_id">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="productDescription">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productDescription]</data-mapper:input-argument>
                 </data-mapper:input-arguments>
             </data-mapper:transform>
             <object-to-string-transformer doc:name="Object to String"/>
@@ -114,11 +116,15 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
     <flow name="doCheckout" doc:name="doCheckout">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ" doc:name="JMS"/>
-        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
-        <enricher source="#[header:outbound:cartTotal]" target="#[header:outbound:chargeAmount]" doc:name="Set cart total as message property (enrich)">
+        <enricher source="#[groovy:message.getOutboundProperty('cartTotal').toString()]" target="#[header:outbound:grandTotal]" doc:name="Set cart total as message property (enrich)">
             <core:flow-ref name="subflow-showCart" doc:name="subflow-showCart"/>
         </enricher>
-        <logger level="INFO" doc:name="Logger"/>
-        <logger message="#[payload.toString()]" level="INFO" doc:name="Logger"/>
+        <data-mapper:transform config-ref="checkoutRequestToPaymentAuthorization" doc:name="Transform checkout request to payment authorization request">
+            <data-mapper:input-arguments>
+                <data-mapper:input-argument key="grandTotal">#[header:outbound:grandTotal]</data-mapper:input-argument>
+            </data-mapper:input-arguments>
+        </data-mapper:transform>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <jms:outbound-endpoint exchange-pattern="request-response" queue="bank.authorizePayment" doc:name="Request payment authorization to bank"/>
     </flow>
 </mule>
