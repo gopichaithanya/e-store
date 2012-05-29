@@ -145,21 +145,26 @@ $('#addProductToCartButton').click(function() {
 	data['price'] = $("#addToCartForm #price").val();
 	mule.rpc("/estore/addToCart", JSON.stringify(data), addToCartResponse);
 })
-$('#clearCartButton').click(function() { // bind click event to link
+$('#clearCartButton').click(function() { 
 	mule.rpc("/estore/clearCart", "", null);
 	$("#cartProducts").html("<p>Your cart is empty! Add some products clicking on the Products tab!</p>");
 });
-$('#goToCheckoutButton').click(function() { // bind click event to link
+$('#goToCheckoutButton').click(function() { 
 	tabs.tabs('select', 3);
 });
-$('#doCheckoutButton').click(function() { // bind click event to link
-	alert("checkout!");
+$('#doCheckoutButton').click(function() {
+	var data = {};
+	data['creditCardNumber'] = $("#checkoutForm #creditCardNumber").val();
+	data['securityCode'] = $("#checkoutForm #securityCode").val();
+	data['cardholderName'] = $("#checkoutForm #cardholderName").val();
+	data['deliveryAddress'] = $("#checkoutForm #deliveryAddress").val();	
+	mule.rpc("/estore/doCheckout", JSON.stringify(data), checkoutResponse);
 });
 
-$('#listProductsButton').click(function() { // bind click event to link
+$('#listProductsButton').click(function() { 
     tabs.tabs('select', 1);
 });
-$('#showCartButton').click(function() { // bind click event to link
+$('#showCartButton').click(function() { 
     tabs.tabs('select', 2);
 });
 
@@ -252,6 +257,10 @@ function prepareCheckoutResponse(message) {
 		$("#checkoutForm :input").attr("disabled", false);
 		$("#doCheckoutButton").button({ disabled: false});
 	}
+}
+
+function doCheckoutResponse(message) {
+	alert(message.data);
 }
 
 </script>

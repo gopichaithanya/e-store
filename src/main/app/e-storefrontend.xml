@@ -34,15 +34,15 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
         <jms:outbound-endpoint queue="estore.clearCart" connector-ref="Active_MQ" doc:name="Request clear cart to backend"/>
     </flow>
-    <flow name="e-storeFrontendFlow1" doc:name="e-storeFrontendFlow1">
+    <flow name="e-storeFrontend-getCartTotal" doc:name="e-storeFrontend-getCartTotal">
         <ajax:inbound-endpoint channel="/estore/getCartTotal" responseTimeout="10000" connector-ref="ajaxServer" doc:name="/estore/getCartTotal"/>
-        <set-variable variableName="grandTotal" value="#[0]" doc:name="Initialize grand total"/>
         <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
         <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ" doc:name="Request cart contents to backend"/>
-        <foreach collection="#[groovy:(new groovy.json.JsonSlurper()).parseText(payload.toString())]" doc:name="Foreach">
-            <set-variable variableName="grandTotal" value="#[groovy:grandTotal + payload.subtotal]" doc:name="Sum item subtotal to grand total"/>
-        </foreach>
-        <expression-transformer expression="grandTotal" doc:name="Set payload as grand total"/>
-        <logger message="GRAND TOTAL: #[payload.toString()]" level="INFO" doc:name="Logger"/>
+        <expression-transformer expression="#[header:inbound:cartTotal]" doc:name="Set cart total property as payload"/>
+    </flow>
+    <flow name="e-storeFrontend-doCheckout" doc:name="e-storeFrontend-doCheckout">
+        <ajax:inbound-endpoint channel="/estore/doCheckout" responseTimeout="10000" doc:name="/estore/doCheckout"/>
+        <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
+        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ" doc:name="Request checkout to backend"/>
     </flow>
 </mule>

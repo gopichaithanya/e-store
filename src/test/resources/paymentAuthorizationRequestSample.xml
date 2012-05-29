@@ -1,0 +1,6 @@
+<requestToCharge>
+	<creditCardNumber>1111222233334444</creditCardNumber>
+	<securityCode>123</securityCode>
+	<cardholderName>JOHN DOE</cardholderName>
+	<amount>1234.33</amount>
+</requestToCharge>
