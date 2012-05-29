@@ -7,7 +7,7 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd ">
-    <jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="vm://localhost" validateConnections="true" doc:name="Active MQ"/>
+    <jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="vm://localhost" validateConnections="true" doc:name="Active_MQ"/>
     <ajax:connector name="ajaxServer" serverUrl="http://0.0.0.0:8090/estore" resourceBase="${app.home}/docroot" doc:name="Ajax"/>
     <flow name="e-storeFrontend-listProducts" doc:name="e-storeFrontend-listProducts">
         <ajax:inbound-endpoint channel="/estore/listProducts" responseTimeout="10000" connector-ref="ajaxServer" doc:name="/estore/listProducts"/>

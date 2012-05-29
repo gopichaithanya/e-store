@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd 
-http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd 
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd ">
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd ">
     <mulexml:schema-validation-filter schemaLocations="requestToCharge.xsd" returnResult="true" name="sintacticValidationFilter" doc:name="Schema Validation"/>
-    <mulexml:namespace-manager xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" includeConfigNamespaces="false">  
+    <mulexml:namespace-manager includeConfigNamespaces="false">  
         <mulexml:namespace prefix="ns0" uri="http://www.mulesoft.com/schema/estoreBank.xsd"/> 
     </mulexml:namespace-manager>
     <expression-filter evaluator="xpath" expression="substring(/ns0:requestToCharge/ns0:creditCardNumber, 14, 16) = /ns0:requestToCharge/ns0:securityCode" name="securityCodeValidationFilter" doc:name="Security code validation filter"/>
     <expression-filter evaluator="xpath" expression="/ns0:requestToCharge/ns0:amount &lt; 5000" name="allowableAmountValidationFilter" doc:name="Allowable amount validation filter"/>
     <flow name="bank" doc:name="bank">
-        <jms:inbound-endpoint exchange-pattern="request-response" queue="bank.authorizePayment" connector-ref="Active_MQ" doc:name="JMS"/>
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="10000" path="bank/authorizePayment" doc:name="HTTP"/>
         <message-filter throwOnUnaccepted="true" doc:name="Sintactic validation">
             <filter ref="sintacticValidationFilter"/>
         </message-filter>
@@ -22,7 +23,7 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
         <message-filter onUnaccepted="allowableAmountExceeded" doc:name="Max allowable amount validation">
             <filter ref="allowableAmountValidationFilter"/>
         </message-filter>
-        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;APPROVED&lt;/result&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build response message"/>
+        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;APPROVED&lt;/result&gt;&lt;reason/&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build response message"/>
     </flow>
     <sub-flow name="invalidSecurityCode" doc:name="invalidSecurityCode">
         <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Invalid security code. Must match the last 3-digits of the credit card&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build REJECTED response message"/>
