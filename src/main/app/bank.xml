@@ -13,7 +13,6 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
     <expression-filter evaluator="xpath" expression="/ns0:requestToCharge/ns0:amount &lt; 5000" name="allowableAmountValidationFilter" doc:name="Allowable amount validation filter"/>
     <flow name="bank" doc:name="bank">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="bank.authorizePayment" connector-ref="Active_MQ" doc:name="JMS"/>
-        <logger message="XXXXXXXXXXXXXX #[xpath:substring(/ns0:requestToCharge/ns0:creditCardNumber, 14, 16)]" level="INFO" doc:name="lo"/>
         <message-filter throwOnUnaccepted="true" doc:name="Sintactic validation">
             <filter ref="sintacticValidationFilter"/>
         </message-filter>
