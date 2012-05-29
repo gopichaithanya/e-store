@@ -447,24 +447,22 @@
             </pattern>
             <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="Request checkout to backend" entity-id="551d6cc9-17e8-4743-a46e-80df204182df">
                 <properties>
-                    <property value="one-way" name="exchange-pattern"/>
-                    <property value="request-response" name="exchange-pattern"/>
                     <property value="estore.doCheckout" name="queue"/>
-                    <property name="topic"/>
-                    <property name="businessEventsLabel"/>
-                    <property name="tracking:enable-default-events"/>
-                    <property name="address"/>
-                    <property name="mimeType"/>
-                    <property name="responseTimeout"/>
-                    <property name="encoding"/>
-                    <property name="durableName"/>
-                    <property name="disableTransportTransformer"/>
-                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property value="" name="businessEventsLabel"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="false" name="disableTemporaryReplyToDestinations"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="false" name="tracking:enable-default-events"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property value="" name="address"/>
+                    <property value="" name="encoding"/>
+                    <property value="" name="responseTransformer-refs"/>
+                    <property value="" name="mimeType"/>
+                    <property value="10000" name="responseTimeout"/>
                     <property value="Active_MQ" name="connector-ref"/>
-                    <property name="ref"/>
-                    <property name="transformer-refs"/>
-                    <property name="responseTransformer-refs"/>
                 </properties>
+                <description></description>
             </endpoint>
         </lane>
     </flow>

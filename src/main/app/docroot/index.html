@@ -158,7 +158,7 @@ $('#doCheckoutButton').click(function() {
 	data['securityCode'] = $("#checkoutForm #securityCode").val();
 	data['cardholderName'] = $("#checkoutForm #cardholderName").val();
 	data['deliveryAddress'] = $("#checkoutForm #deliveryAddress").val();	
-	mule.rpc("/estore/doCheckout", JSON.stringify(data), checkoutResponse);
+	mule.rpc("/estore/doCheckout", JSON.stringify(data), doCheckoutResponse);
 });
 
 $('#listProductsButton').click(function() { 

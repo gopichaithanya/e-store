@@ -57,6 +57,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
     <flow name="showCart" doc:name="showCart">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ" doc:name="JMS"/>
+        <flow-ref name="subflow-showCart" doc:name="subflow-showCart"/>
+    </flow>
+    <sub-flow name="subflow-showCart" doc:name="subflow-showCart">
         <jdbc:outbound-endpoint exchange-pattern="request-response" queryKey="query-showCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Fetch cart contents from database"/>
         <set-variable variableName="grandTotal" value="#[0]" doc:name="Initialize grand total"/>
         <set-variable variableName="cartItems" value="#[new java.util.LinkedList()]" doc:name="Initialize cart items list"/>
@@ -89,9 +92,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <data-mapper:transform config-ref="consolidateProductDetailsOnCart" doc:name="Consolidate cart item info and subtotal">
                 <data-mapper:input-arguments>
                     <data-mapper:input-argument key="price">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).price]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="providerId">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).providerId]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="product_id">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productId]</data-mapper:input-argument>
                     <data-mapper:input-argument key="productDescription">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productDescription]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="product_id">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="providerId">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).providerId]</data-mapper:input-argument>
                 </data-mapper:input-arguments>
             </data-mapper:transform>
             <object-to-string-transformer doc:name="Object to String"/>
@@ -100,7 +103,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         </foreach>
         <set-property propertyName="cartTotal" value="#[grandTotal]" doc:name="Set cartTotal message property with grand total"/>
         <expression-transformer expression="cartItems" doc:name="Set payload to cart items list"/>
-    </flow>
+    </sub-flow>
     <sub-flow name="fetchProductDetailsFromVanGoghPaintStore" doc:name="fetchProductDetailsFromVanGoghPaintStore">
         <cxf:jaxws-client operation="getProductInfo" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
@@ -111,8 +114,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     </flow>
     <flow name="doCheckout" doc:name="doCheckout">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ" doc:name="JMS"/>
-        <enricher source="#[header:inbound:cartTotal]" target="#[header:outbound:chargeAmount]" doc:name="Message Enricher">
-            <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.showCart" doc:name="Get cart total"/>
+        <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <enricher source="#[header:outbound:cartTotal]" target="#[header:outbound:chargeAmount]" doc:name="Set cart total as message property (enrich)">
+            <core:flow-ref name="subflow-showCart" doc:name="subflow-showCart"/>
         </enricher>
         <logger level="INFO" doc:name="Logger"/>
         <logger message="#[payload.toString()]" level="INFO" doc:name="Logger"/>
