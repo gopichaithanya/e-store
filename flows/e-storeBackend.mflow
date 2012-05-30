@@ -1130,22 +1130,22 @@
     <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="5f098fc5-e610-4f62-b8e8-7dd9ffb4f784"/>
     <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add order to orders list" entity-id="694db5d2-7985-413c-94a6-2c0cb2bb88a9">
         <properties>
-            <property name="returnClass"/>
-            <property name="ignoreBadInput"/>
-            <property name="encoding"/>
-            <property name="mimeType"/>
+            <property value="message.getInvocationProperty('orders').add(&quot;\&quot;&quot; + payload.toString() + &quot;\&quot;&quot;)" name="expression"/>
+            <property value="" name="returnClass"/>
+            <property value="false" name="ignoreBadInput"/>
+            <property value="false" name="returnSourceIfNull"/>
+            <property value="" name="encoding"/>
             <property value="groovy" name="evaluator"/>
-            <property value="message.getInvocationProperty('orders').add(payload)" name="expression"/>
-            <property name="custom-evaluator"/>
-            <property name="returnSourceIfNull"/>
+            <property value="" name="mimeType"/>
         </properties>
+        <description></description>
     </pattern>
 </lane>
                             </compartment>
                         </scope>
                         <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build checkout sucessful message" entity-id="29648149-60d7-4177-8b1f-0b353138215b">
                             <properties>
-<property value="&quot;{'result': 'APPROVED', 'orders': '&quot; + message.getInvocationProperty(&quot;orders&quot;).toString() + &quot;'}&quot;" name="expression"/>
+<property value="&quot;{\&quot;result\&quot;: \&quot;APPROVED\&quot;, \&quot;orders\&quot;: &quot; + message.getInvocationProperty(&quot;orders&quot;).toString() + &quot;}&quot;" name="expression"/>
 <property value="" name="returnClass"/>
 <property value="false" name="ignoreBadInput"/>
 <property value="false" name="returnSourceIfNull"/>
@@ -1159,15 +1159,15 @@
                     <lane entity-id="168b7a08-903d-4e71-a4fa-5cf2cceba54e">
                         <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build payment rejected message" entity-id="41c4174e-84b9-433f-9c45-332cc1416212">
                             <properties>
-<property name="returnClass"/>
-<property name="ignoreBadInput"/>
-<property name="encoding"/>
-<property name="mimeType"/>
+<property value="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;&quot; + message.getOutboundProperty(&quot;paymentReason&quot;) + &quot;\&quot;}&quot;" name="expression"/>
+<property value="" name="returnClass"/>
+<property value="false" name="ignoreBadInput"/>
+<property value="false" name="returnSourceIfNull"/>
+<property value="" name="encoding"/>
 <property value="groovy" name="evaluator"/>
-<property value="&quot;{'result': 'FAILED', 'reason': '&quot; + message.getOutboundProperty(&quot;paymentReason&quot;) + &quot;'}&quot;" name="expression"/>
-<property name="custom-evaluator"/>
-<property name="returnSourceIfNull"/>
+<property value="" name="mimeType"/>
                             </properties>
+                            <description></description>
                         </pattern>
                     </lane>
                 </compartment>
@@ -1182,15 +1182,15 @@
                     <lane entity-id="8d27b82f-bb77-4b77-97ac-e4ee1afee45d">
                         <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build error response" entity-id="4a79fd71-0365-49ee-9fad-01edf66aa568">
                             <properties>
-<property name="returnClass"/>
-<property name="ignoreBadInput"/>
-<property name="encoding"/>
-<property name="mimeType"/>
-<property name="evaluator"/>
-<property value="&quot;{'result': 'FAILED', 'reason': 'Unable to process payment with bank due to communication problems or invalid credit card information.'}&quot;" name="expression"/>
-<property name="custom-evaluator"/>
-<property name="returnSourceIfNull"/>
+<property value="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;Unable to process payment with bank due to communication problems or invalid credit card information.\&quot;}&quot;" name="expression"/>
+<property value="" name="returnClass"/>
+<property value="false" name="ignoreBadInput"/>
+<property value="false" name="returnSourceIfNull"/>
+<property value="" name="encoding"/>
+<property value="" name="evaluator"/>
+<property value="" name="mimeType"/>
                             </properties>
+                            <description></description>
                         </pattern>
                     </lane>
                 </compartment>

@@ -76,7 +76,9 @@
 			</table>
 			<div id="checkoutComments"></div>
 			<a id="doCheckoutButton" class="button">Verify payment and submit order &gt;&gt;</a>
-			
+			<div id="checkoutResultDialog">
+				
+			</div>
 		</form>
     </div>
     
@@ -153,6 +155,7 @@ $('#goToCheckoutButton').click(function() {
 	tabs.tabs('select', 3);
 });
 $('#doCheckoutButton').click(function() {
+	$("#doCheckoutButton").button({ disabled: true});
 	var data = {};
 	data['creditCardNumber'] = $("#checkoutForm #creditCardNumber").val();
 	data['securityCode'] = $("#checkoutForm #securityCode").val();
@@ -260,7 +263,31 @@ function prepareCheckoutResponse(message) {
 }
 
 function doCheckoutResponse(message) {
-	alert(message.data);
+	
+	response = JSON.parse(message.data);
+	
+	if (response.result == 'FAILED') {
+		
+		$("#checkoutResultDialog").empty();
+		$("#checkoutResultDialog").append("<p>Ooops! Your payment has been rejected:</p>");
+		$("#checkoutResultDialog").append("<p><em>" + response.reason + "</em></p>");
+		
+	} else if (response.result == 'APPROVED') {
+		
+		$("#checkoutResultDialog").empty();
+		$("#checkoutResultDialog").append("<p>Congratulations! Your payment has been approved and the following orders have been placed with the providers:</p><ul>");
+		alert(response.orders);
+		for (i = 0; i < response.orders.length; i++) {
+			$("#checkoutResultDialog").append("<li>" + response.orders[i] + "</li>");
+		}	
+		$("#checkoutResultDialog").append("</ul><p>We just cleared your cart so you can continue shopping with us!</p>");
+		
+		tabs.tabs('select', 0);
+		mule.rpc("/estore/clearCart", "", null);
+	}
+	$('#checkoutResultDialog').dialog({modal: true, resizable: false });
+	$("#doCheckoutButton").button({ disabled: false});
+	
 }
 
 </script>

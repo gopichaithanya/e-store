@@ -154,19 +154,19 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                             </when>
                         </choice>
                         <object-to-string-transformer doc:name="Object to String"/>
-                        <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('orders').add(payload)" doc:name="Add order to orders list"/>
+                        <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('orders').add(&quot;\&quot;&quot; + payload.toString() + &quot;\&quot;&quot;)" doc:name="Add order to orders list"/>
                     </foreach>
-                    <expression-transformer evaluator="groovy" expression="&quot;{'result': 'APPROVED', 'orders': '&quot; + message.getInvocationProperty(&quot;orders&quot;).toString() + &quot;'}&quot;" doc:name="Build checkout sucessful message"/>
+                    <expression-transformer evaluator="groovy" expression="&quot;{\&quot;result\&quot;: \&quot;APPROVED\&quot;, \&quot;orders\&quot;: &quot; + message.getInvocationProperty(&quot;orders&quot;).toString() + &quot;}&quot;" doc:name="Build checkout sucessful message"/>
                 </processor-chain>
             </when>
             <when expression="paymentResult=FAILED" evaluator="header">
                 <processor-chain>
-                    <expression-transformer evaluator="groovy" expression="&quot;{'result': 'FAILED', 'reason': '&quot; + message.getOutboundProperty(&quot;paymentReason&quot;) + &quot;'}&quot;" doc:name="Build payment rejected message"/>
+                    <expression-transformer evaluator="groovy" expression="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;&quot; + message.getOutboundProperty(&quot;paymentReason&quot;) + &quot;\&quot;}&quot;" doc:name="Build payment rejected message"/>
                 </processor-chain>
             </when>
         </choice>
         <catch-exception-strategy>
-            <expression-transformer expression="&quot;{'result': 'FAILED', 'reason': 'Unable to process payment with bank due to communication problems or invalid credit card information.'}&quot;" doc:name="Build error response"/>
+            <expression-transformer expression="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;Unable to process payment with bank due to communication problems or invalid credit card information.\&quot;}&quot;" doc:name="Build error response"/>
         </catch-exception-strategy>
     </flow>
     <sub-flow name="placeOrderOnVanGoghPaintStore" doc:name="placeOrderOnVanGoghPaintStore">

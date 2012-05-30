@@ -65,6 +65,10 @@ td {
 	display: none;
 }
 
+#checkoutResultDialog {
+	display: none;
+}
+
 .product {
 	width: 700px;
 	height: 30px;
