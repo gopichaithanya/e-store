@@ -29,6 +29,6 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
         <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Invalid security code. Must match the last 3-digits of the credit card&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build REJECTED response message"/>
     </sub-flow>
     <sub-flow name="allowableAmountExceeded" doc:name="allowableAmountExceeded">
-        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Max allowable amount exceeded&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build REJECTED response message"/>
+        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Max allowable amount exceeded. You're authorized to spend AT MOST $1.000 on each payment!&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build REJECTED response message"/>
     </sub-flow>
 </mule>

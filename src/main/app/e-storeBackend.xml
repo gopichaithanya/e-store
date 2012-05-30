@@ -94,9 +94,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <data-mapper:transform config-ref="consolidateProductDetailsOnCart" doc:name="Consolidate cart item info and subtotal">
                 <data-mapper:input-arguments>
                     <data-mapper:input-argument key="price">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).price]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="productDescription">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productDescription]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="product_id">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productId]</data-mapper:input-argument>
                     <data-mapper:input-argument key="providerId">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).providerId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="product_id">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="productDescription">#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('productDetails').toString())).productDescription]</data-mapper:input-argument>
                 </data-mapper:input-arguments>
             </data-mapper:transform>
             <object-to-string-transformer doc:name="Object to String"/>
@@ -139,30 +139,24 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <when expression="paymentResult=APPROVED" evaluator="header">
                 <processor-chain>
                     <set-variable variableName="orders" value="#[new java.util.LinkedList()]" doc:name="Initialize order numbers list"/>
-                    <logger message="#[payload.toString()]" level="INFO" doc:name="Logger"/>
                     <foreach collection="#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('cartContents').toString()))]" doc:name="For each item on the cart">
-                        <logger message="#[payload.toString()]" level="INFO" doc:name="Logger"/>
                         <choice doc:name="Choice">
                             <when expression="payload['providerId'] == 'Barber\'s Paradise Store'">
                                 <processor-chain>
-                                    <logger level="INFO" doc:name="Logger"/>
-                                    <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="HTTP"/>
+                                    <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="Place order on Barber's Paradise Store"/>
                                 </processor-chain>
                             </when>
                             <when expression="payload['providerId'] == 'Van Gogh\'s Paint Store'">
                                 <processor-chain>
-                                    <logger message="vangogh" level="INFO" doc:name="Logger"/>
-                                    <expression-transformer evaluator="groovy" expression="[ payload.productId, new Integer(payload.qty)].toArray()" doc:name="Expression"/>
-                                    <logger message="request: #[payload.toString()]" level="INFO" doc:name="Logger"/>
-                                    <flow-ref name="placeOrderOnVanGoghPaintStore" doc:name="Flow Reference"/>
-                                    <logger message="ORDER: #[payload.toString()]" level="INFO" doc:name="Logger"/>
+                                    <expression-transformer evaluator="groovy" expression="[ payload.productId, new Integer(payload.qty)].toArray()" doc:name="Set parameters to place order"/>
+                                    <flow-ref name="placeOrderOnVanGoghPaintStore" doc:name="Place order on Van Gogh Paint Store"/>
                                 </processor-chain>
                             </when>
                         </choice>
+                        <object-to-string-transformer doc:name="Object to String"/>
                         <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('orders').add(payload)" doc:name="Add order to orders list"/>
-                        <logger message="item: #[payload.toString()]" level="INFO" doc:name="Logger"/>
                     </foreach>
-                    <expression-transformer evaluator="groovy" expression="&quot;{'result': 'APPROVED', 'orders': '&quot; + message.getInvocationProperty(&quot;order&quot;) + &quot;'}&quot;" doc:name="Build checkout sucessful message"/>
+                    <expression-transformer evaluator="groovy" expression="&quot;{'result': 'APPROVED', 'orders': '&quot; + message.getInvocationProperty(&quot;orders&quot;).toString() + &quot;'}&quot;" doc:name="Build checkout sucessful message"/>
                 </processor-chain>
             </when>
             <when expression="paymentResult=FAILED" evaluator="header">

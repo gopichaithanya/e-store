@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
-http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd 
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd 
 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd ">
-    <flow name="barbersParadiseStore" doc:name="barbersParadiseStore">
+    <flow name="listOrGetProducts" doc:name="listOrGetProducts">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" doc:name="HTTP"/>
         <scripting:component doc:name="Generate product list">
             <scripting:script engine="Groovy">
@@ -55,16 +55,11 @@ return json.toPrettyString();]]></scripting:text>
             </otherwise>
         </choice>
     </flow>
-    <flow name="vangoghPaintStore" doc:name="vangoghPaintStore">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="HTTP"/>
-        <cxf:jaxws-service port="80" serviceClass="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStore" doc:name="Interpret SOAP request"/>
-        <component class="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStoreImpl" doc:name="Java"/>
-    </flow>
-    <flow name="providersFlow1" doc:name="providersFlow1">
+    <flow name="placeOrder" doc:name="placeOrder">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="HTTP"/>
         <scripting:component doc:name="Generate order number">
             <scripting:script engine="Groovy">
-                <scripting:text><![CDATA[return "BARBERSPARADISE" + (new UUID()).getUUID().toString();]]></scripting:text>
+                <scripting:text><![CDATA[return "BARBERSPARADISE-" + java.util.UUID.randomUUID().toString();]]></scripting:text>
             </scripting:script>
         </scripting:component>
     </flow>

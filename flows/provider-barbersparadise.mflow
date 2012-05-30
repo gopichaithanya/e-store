@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="provider-barbersParadise">
+    <flow SubFlow="false" name="listOrGetProducts">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="USE_TRANSACTION_ID"/>
+            <property name="tracking:transaction-id"/>
+        </properties>
+        <lane entity-id="70b5ee3d-7e09-46d5-92f7-32a3f182c81c">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="31b436c2-d390-4eac-a79d-b64f5d019e13">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="httpLabel"/>
+                    <property value="localhost" name="host"/>
+                    <property value="9080" name="port"/>
+                    <property value="barbersparadise/products" name="path"/>
+                    <property name="method"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="followRedirects"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="user"/>
+                    <property name="password"/>
+                    <property name="contentType"/>
+                    <property name="keep-alive"/>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Generate product list" entity-id="67e10f58-4f3f-46d1-b41b-f73f691a2faf">
+                <properties>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                        <property value="def json = new groovy.json.JsonBuilder()&#xA;&#xA;def products = json([&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1827349'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Billy-boy forever-sharp razors'&#xA;&#x9;&#x9;&#x9;&#x9;price '9.95'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '7727362'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Mama Juana aftershave potion'&#xA;&#x9;&#x9;&#x9;&#x9;price '12.99'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;   &#x9;upc '1762738'&#xA;&#x9;&#x9;&#x9;&#x9;description 'Ultrasmooth shave foam'&#xA;&#x9;&#x9;&#x9;&#x9;price '3.50'&#xA;&#x9;&#x9;&#x9;},&#xA;&#x9;&#x9;&#x9;json {&#xA;&#x9;&#x9;&#x9;&#x9;upc '87668334'&#xA;&#x9;&#x9;&#x9;&#x9;description 'UltraQuickHeal scar tissues'&#xA;&#x9;&#x9;&#x9;&#x9;price '1.95'&#xA;&#x9;&#x9;&#x9;}&#xA;       ])&#xA;&#xA;return json.toPrettyString();" name="text"/>
+                        <property value="Groovy" name="engine"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="a777445c-2fb2-4843-b90f-7b8ee5ca563d">
+                <properties>
+                    <property-collection name="2ea731d5-3709-4295-b673-fc147fd8327f">
+                        <property value="! message.getInboundProperty('http.relative.path').isEmpty()" name="choice.expression"/>
+                        <property value="groovy" name="choice.evaluator"/>
+                    </property-collection>
+                    <property-collection name="1d0047ab-021a-4597-bf34-8509b02dda48">
+                        <property value="true" name="choice.otherwise"/>
+                    </property-collection>
+                </properties>
+                <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="1b0ce99c-a958-4fa1-be9a-c72fb094fe94"/>
+                <compartment entity-id="80e366ef-8581-41cd-8a0f-e6578755c3d8">
+                    <lane entity-id="2ea731d5-3709-4295-b673-fc147fd8327f">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="8bcdbc9b-a300-438b-a308-effad37264e5">
+                            <properties>
+<property value="Requesting specific product: #[header:inbound:http.relative.path]" name="message"/>
+<property value="INFO" name="level"/>
+<property name="category"/>
+                            </properties>
+                        </pattern>
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Set requestedUpc" entity-id="6f3b9263-4f89-4794-8022-c771405fdf3e">
+                            <properties>
+<property value="http://www.mulesoft.org/schema/mule/core/set-variable" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+<property name="nameVar"/>
+<property value="requestedUpc" name="variableNameForSet"/>
+<property name="variableValue"/>
+<property value="#[header:inbound:http.relative.path]" name="value"/>
+                            </properties>
+                        </pattern>
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/splitter" name="Split products list" entity-id="d0d8011a-d991-4268-b08c-41dd861accd3">
+                            <properties>
+<property name="enableCorrelation"/>
+<property value="json" name="evaluator"/>
+<property value="" name="expression"/>
+<property name="custom-evaluator"/>
+<property name="businessEventsLabel"/>
+<property name="tracking:enable-default-events"/>
+                            </properties>
+                        </pattern>
+                        <pattern type="org.mule.tooling.ui.modules.core.filter.Expression" name="Filter matching product" entity-id="8b3683b0-df5b-499d-b09a-6d5d099a8b56">
+                            <properties>
+<property value="groovy" name="evaluator"/>
+<property value="(new groovy.json.JsonSlurper().parseText(payload.toString())).upc.equals(message.getInvocationProperty('requestedUpc'))" name="expression"/>
+<property name="customEvaluator"/>
+<property name="nullReturnsTrue"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                    <lane entity-id="1d0047ab-021a-4597-bf34-8509b02dda48">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="aacb9ae4-0eb1-4ae8-a86f-e0c729d19676">
+                            <properties>
+<property value="Requesting all products" name="message"/>
+<property value="INFO" name="level"/>
+<property name="category"/>
+                            </properties>
+                        </pattern>
+                    </lane>
+                </compartment>
+            </splitter>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="placeOrder">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="USE_TRANSACTION_ID"/>
+            <property name="tracking:transaction-id"/>
+        </properties>
+        <lane entity-id="d6bdb56c-5be5-4833-8cd2-bc8472021e46">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="90d2b533-8dea-40a7-bbc1-ae7c34507d30">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="httpLabel"/>
+                    <property value="localhost" name="host"/>
+                    <property value="9080" name="port"/>
+                    <property value="barbersparadise/placeOrder" name="path"/>
+                    <property name="method"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="followRedirects"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="user"/>
+                    <property name="password"/>
+                    <property name="contentType"/>
+                    <property name="keep-alive"/>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Generate order number" entity-id="21b1d376-2b4d-43e1-937b-70a054ebe3ec">
+                <properties>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
+                        <property value="return &quot;BARBERSPARADISE-&quot; + java.util.UUID.randomUUID().toString();" name="text"/>
+                        <property value="Groovy" name="engine"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

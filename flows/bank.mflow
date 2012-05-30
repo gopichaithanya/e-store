@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="bank">
-    <global-element type="http://www.mulesoft.org/schema/mule/xml/schema-validation-filter" name="Schema Validation" entity-id="d9f82621-0af7-44c2-829d-c51d3550b358">
+    <global-element type="http://www.mulesoft.org/schema/mule/xml/schema-validation-filter" name="Schema Validation" entity-id="23e87254-fe87-47d3-b951-1ea49f0ed3cb">
         <properties>
             <property value="requestToCharge.xsd" name="schemaLocations"/>
             <property name="schemaLanguage"/>
@@ -8,12 +8,12 @@
             <property value="sintacticValidationFilter" name="name"/>
         </properties>
     </global-element>
-    <global-unknown entity-id="851b7dd8-f891-41e0-b8b4-3067f7a80342">
+    <global-unknown entity-id="5d09ee89-1504-451d-a51b-236426ff5231">
         <content>&lt;mulexml:namespace-manager xmlns:mulexml=&quot;http://www.mulesoft.org/schema/mule/xml&quot; includeConfigNamespaces=&quot;false&quot;&gt;  
         &lt;mulexml:namespace prefix=&quot;ns0&quot; uri=&quot;http://www.mulesoft.com/schema/estoreBank.xsd&quot;/&gt; 
     &lt;/mulexml:namespace-manager&gt;</content>
     </global-unknown>
-    <global-element type="http://www.mulesoft.org/schema/mule/core/expression-filter" name="Security code validation filter" entity-id="5aed93a0-b8af-49f0-a1c8-5d5738c37ff7">
+    <global-element type="http://www.mulesoft.org/schema/mule/core/expression-filter" name="Security code validation filter" entity-id="12d257cc-1bbe-45ae-ba5a-459a8de6895e">
         <properties>
             <property value="xpath" name="evaluator"/>
             <property value="substring(/ns0:requestToCharge/ns0:creditCardNumber, 14, 16) = /ns0:requestToCharge/ns0:securityCode" name="expression"/>
@@ -22,7 +22,7 @@
             <property value="securityCodeValidationFilter" name="name"/>
         </properties>
     </global-element>
-    <global-element type="http://www.mulesoft.org/schema/mule/core/expression-filter" name="Allowable amount validation filter" entity-id="b2b02dee-551a-46f8-aef4-a83b37489d48">
+    <global-element type="http://www.mulesoft.org/schema/mule/core/expression-filter" name="Allowable amount validation filter" entity-id="4605c6af-a1c9-43be-a8fe-1fdd2a2e86a8">
         <properties>
             <property value="xpath" name="evaluator"/>
             <property value="/ns0:requestToCharge/ns0:amount &lt; 5000" name="expression"/>
@@ -40,34 +40,36 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="e5c5c1fe-d22b-4ec9-92e2-af6b252304ab">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="8c8111a9-657b-477b-a7bb-2964c9a9de64">
+        <lane entity-id="a92dea3c-06f3-4c8d-9b67-4251a0f3c9d3">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="93515042-22c7-43bd-8668-3057692a1f34">
                 <properties>
-                    <property value="10000" name="port"/>
-                    <property value="localhost" name="host"/>
-                    <property value="" name="businessEventsLabel"/>
-                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                    <property value="false" name="keep-alive"/>
-                    <property value="" name="contentType"/>
-                    <property value="false" name="disableTransportTransformer"/>
-                    <property value="" name="password"/>
+                    <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
-                    <property value="false" name="tracking:enable-default-events"/>
-                    <property value="" name="ref"/>
-                    <property value="" name="transformer-refs"/>
-                    <property value="" name="httpLabel"/>
-                    <property value="" name="address"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="httpLabel"/>
+                    <property value="localhost" name="host"/>
+                    <property value="10000" name="port"/>
                     <property value="bank/authorizePayment" name="path"/>
-                    <property value="" name="encoding"/>
-                    <property value="" name="responseTransformer-refs"/>
-                    <property value="" name="user"/>
-                    <property value="10000" name="responseTimeout"/>
-                    <property value="" name="mimeType"/>
-                    <property value="" name="connector-ref"/>
+                    <property name="method"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="followRedirects"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="user"/>
+                    <property name="password"/>
+                    <property name="contentType"/>
+                    <property name="keep-alive"/>
                 </properties>
-                <description></description>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/message-filter" name="Sintactic validation" entity-id="a6009b55-c57e-4323-a7c0-1c8cacbfa8dd">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/message-filter" name="Sintactic validation" entity-id="dcd5269f-6cf0-4872-905e-f68d59315653">
                 <properties>
                     <property name="onUnaccepted"/>
                     <property value="true" name="throwOnUnaccepted"/>
@@ -76,7 +78,7 @@
                     </property-collection>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/message-filter" name="Security code validation" entity-id="df50979f-3ff8-4c6a-a68b-a2f4654ccfd3">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/message-filter" name="Security code validation" entity-id="fb150d4b-b590-4f03-a4a4-0a8bd58281f6">
                 <properties>
                     <property value="invalidSecurityCode" name="onUnaccepted"/>
                     <property name="throwOnUnaccepted"/>
@@ -85,7 +87,7 @@
                     </property-collection>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/message-filter" name="Max allowable amount validation" entity-id="8fd886f5-35fa-4531-afeb-036d02e5f9c2">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/message-filter" name="Max allowable amount validation" entity-id="5065670d-c6df-4945-acd6-2c5466bfa4a5">
                 <properties>
                     <property value="allowableAmountExceeded" name="onUnaccepted"/>
                     <property name="throwOnUnaccepted"/>
@@ -94,17 +96,17 @@
                     </property-collection>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build response message" entity-id="d4fbb752-c22f-4ef9-9595-36144a58faed">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build response message" entity-id="bb9c3ad1-021c-4d7a-85f3-46ebc9ced3ed">
                 <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="evaluator"/>
                     <property value="&quot;&lt;authorizationResponse&gt;&lt;result&gt;APPROVED&lt;/result&gt;&lt;reason/&gt;&lt;/authorizationResponse&gt;&quot;" name="expression"/>
-                    <property value="" name="returnClass"/>
-                    <property value="false" name="ignoreBadInput"/>
-                    <property value="false" name="returnSourceIfNull"/>
-                    <property value="" name="encoding"/>
-                    <property value="" name="evaluator"/>
-                    <property value="" name="mimeType"/>
+                    <property name="custom-evaluator"/>
+                    <property name="returnSourceIfNull"/>
                 </properties>
-                <description></description>
             </pattern>
         </lane>
     </flow>
@@ -117,18 +119,18 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="b7443f4f-0648-4693-99e7-66fc4520ab5d">
-            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build REJECTED response message" entity-id="0f211602-9bfc-4c8e-83c6-04adfcc3ffff">
+        <lane entity-id="33205841-8644-4f45-b2f7-a0c462449a5d">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build REJECTED response message" entity-id="07dbd0b7-eea1-4a80-8e1e-4733222490d8">
                 <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="evaluator"/>
                     <property value="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Invalid security code. Must match the last 3-digits of the credit card&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" name="expression"/>
-                    <property value="" name="returnClass"/>
-                    <property value="false" name="ignoreBadInput"/>
-                    <property value="false" name="returnSourceIfNull"/>
-                    <property value="" name="encoding"/>
-                    <property value="" name="evaluator"/>
-                    <property value="" name="mimeType"/>
+                    <property name="custom-evaluator"/>
+                    <property name="returnSourceIfNull"/>
                 </properties>
-                <description></description>
             </pattern>
         </lane>
     </flow>
@@ -141,18 +143,18 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="01aba933-d336-47eb-9c0c-62b7c10b6a27">
-            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build REJECTED response message" entity-id="52beab3f-3f2f-46e5-a285-93a34a532fd3">
+        <lane entity-id="b7b496b3-d362-477e-a6e6-4590fca06456">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build REJECTED response message" entity-id="ee571d19-4b9d-4a69-9df4-019405027199">
                 <properties>
-                    <property name="returnClass"/>
-                    <property name="ignoreBadInput"/>
-                    <property name="encoding"/>
-                    <property name="mimeType"/>
-                    <property name="evaluator"/>
-                    <property value="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Max allowable amount exceeded&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" name="expression"/>
-                    <property name="custom-evaluator"/>
-                    <property name="returnSourceIfNull"/>
+                    <property value="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Max allowable amount exceeded. You're authorized to spend AT MOST $1.000 on each payment!&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" name="expression"/>
+                    <property value="" name="returnClass"/>
+                    <property value="false" name="ignoreBadInput"/>
+                    <property value="false" name="returnSourceIfNull"/>
+                    <property value="" name="encoding"/>
+                    <property value="" name="evaluator"/>
+                    <property value="" name="mimeType"/>
                 </properties>
+                <description></description>
             </pattern>
         </lane>
     </flow>

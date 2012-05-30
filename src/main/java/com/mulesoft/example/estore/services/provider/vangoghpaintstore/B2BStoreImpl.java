@@ -3,7 +3,7 @@ package com.mulesoft.example.estore.services.provider.vangoghpaintstore;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.mule.util.UUID;
+import java.util.UUID;
 
 public class B2BStoreImpl implements B2BStore {
 
@@ -41,7 +41,7 @@ public class B2BStoreImpl implements B2BStore {
 
 	@Override
 	public String orderProduct(String upc, int qty) {
-		return "VANGOGH-" + UUID.getUUID().toString();
+		return "VANGOGH-" + UUID.randomUUID().toString();
 	}
 	
 	
