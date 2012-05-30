@@ -276,7 +276,6 @@ function doCheckoutResponse(message) {
 		
 		$("#checkoutResultDialog").empty();
 		$("#checkoutResultDialog").append("<p>Congratulations! Your payment has been approved and the following orders have been placed with the providers:</p><ul>");
-		alert(response.orders);
 		for (i = 0; i < response.orders.length; i++) {
 			$("#checkoutResultDialog").append("<li>" + response.orders[i] + "</li>");
 		}	
