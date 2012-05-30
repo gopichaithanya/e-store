@@ -139,7 +139,25 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <when expression="paymentResult=APPROVED" evaluator="header">
                 <processor-chain>
                     <set-variable variableName="orders" value="#[new java.util.LinkedList()]" doc:name="Initialize order numbers list"/>
-                    <foreach collection="#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('cartContents').toString()))]" doc:name="Foreach">
+                    <logger message="#[payload.toString()]" level="INFO" doc:name="Logger"/>
+                    <foreach collection="#[groovy:(new groovy.json.JsonSlurper().parseText(message.getOutboundProperty('cartContents').toString()))]" doc:name="For each item on the cart">
+                        <logger message="#[payload.toString()]" level="INFO" doc:name="Logger"/>
+                        <choice doc:name="Choice">
+                            <when expression="payload['providerId'] == 'Barber\'s Paradise Store'">
+                                <processor-chain>
+                                    <logger level="INFO" doc:name="Logger"/>
+                                </processor-chain>
+                            </when>
+                            <when expression="payload['providerId'] == 'Van Gogh\'s Paint Store'">
+                                <processor-chain>
+                                    <logger message="vangogh" level="INFO" doc:name="Logger"/>
+                                    <expression-transformer evaluator="groovy" expression="[ payload.productId, new Integer(payload.qty)].toArray()" doc:name="Expression"/>
+                                    <logger message="request: #[payload.toString()]" level="INFO" doc:name="Logger"/>
+                                    <flow-ref name="placeOrderOnVanGoghPaintStore" doc:name="Flow Reference"/>
+                                    <logger message="ORDER: #[payload.toString()]" level="INFO" doc:name="Logger"/>
+                                </processor-chain>
+                            </when>
+                        </choice>
                         <logger message="item: #[payload.toString()]" level="INFO" doc:name="Logger"/>
                     </foreach>
                     <expression-transformer evaluator="groovy" expression="&quot;{'result': 'APPROVED', 'orders': '&quot; + message.getInvocationProperty(&quot;order&quot;) + &quot;'}&quot;" doc:name="Build checkout sucessful message"/>
@@ -151,5 +169,12 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                 </processor-chain>
             </when>
         </choice>
+        <catch-exception-strategy>
+            <expression-transformer expression="&quot;{'result': 'FAILED', 'reason': 'Unable to process payment with bank due to communication problems or invalid credit card information.'}&quot;" doc:name="Build error response"/>
+        </catch-exception-strategy>
     </flow>
+    <sub-flow name="placeOrderOnVanGoghPaintStore" doc:name="placeOrderOnVanGoghPaintStore">
+        <cxf:jaxws-client operation="orderProduct" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
+    </sub-flow>
 </mule>
