@@ -146,6 +146,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                             <when expression="payload['providerId'] == 'Barber\'s Paradise Store'">
                                 <processor-chain>
                                     <logger level="INFO" doc:name="Logger"/>
+                                    <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="HTTP"/>
                                 </processor-chain>
                             </when>
                             <when expression="payload['providerId'] == 'Van Gogh\'s Paint Store'">
@@ -158,6 +159,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                                 </processor-chain>
                             </when>
                         </choice>
+                        <expression-transformer evaluator="groovy" expression="message.getInvocationProperty('orders').add(payload)" doc:name="Add order to orders list"/>
                         <logger message="item: #[payload.toString()]" level="INFO" doc:name="Logger"/>
                     </foreach>
                     <expression-transformer evaluator="groovy" expression="&quot;{'result': 'APPROVED', 'orders': '&quot; + message.getInvocationProperty(&quot;order&quot;) + &quot;'}&quot;" doc:name="Build checkout sucessful message"/>

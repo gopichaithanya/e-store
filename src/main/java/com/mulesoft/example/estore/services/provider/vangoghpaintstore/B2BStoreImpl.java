@@ -41,7 +41,7 @@ public class B2BStoreImpl implements B2BStore {
 
 	@Override
 	public String orderProduct(String upc, int qty) {
-		return UUID.getUUID();
+		return "VANGOGH-" + UUID.getUUID().toString();
 	}
 	
 	

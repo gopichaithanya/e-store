@@ -1092,6 +1092,34 @@
                         <property name="category"/>
                     </properties>
                 </pattern>
+                <endpoint message-exchange-pattern="RequestResponse" direction="Outbound" type="http://www.mulesoft.org/schema/mule/https/endpoint" name="HTTP" entity-id="9b10da81-877d-4176-b01b-b58485706e0a">
+                    <properties>
+                        <property value="9080" name="port"/>
+                        <property value="localhost" name="host"/>
+                        <property value="" name="businessEventsLabel"/>
+                        <property value="false" name="followRedirects"/>
+                        <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                        <property value="false" name="keep-alive"/>
+                        <property value="" name="contentType"/>
+                        <property value="false" name="disableTransportTransformer"/>
+                        <property value="" name="password"/>
+                        <property value="request-response" name="exchange-pattern"/>
+                        <property value="false" name="tracking:enable-default-events"/>
+                        <property value="" name="ref"/>
+                        <property value="" name="transformer-refs"/>
+                        <property value="" name="httpLabel"/>
+                        <property value="" name="address"/>
+                        <property value="barbersparadise/placeOrder" name="path"/>
+                        <property value="" name="encoding"/>
+                        <property value="" name="responseTransformer-refs"/>
+                        <property value="POST" name="method"/>
+                        <property value="" name="user"/>
+                        <property value="" name="mimeType"/>
+                        <property value="10000" name="responseTimeout"/>
+                        <property value="" name="connector-ref"/>
+                    </properties>
+                    <description></description>
+                </endpoint>
             </lane>
             <lane entity-id="e6d84e72-a212-4e7f-ac51-b39a825e90c2">
                 <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="1d4c507c-ef9c-488b-918d-bf4ed1f92673">
@@ -1135,6 +1163,18 @@
             </lane>
         </compartment>
     </splitter>
+    <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add order to orders list" entity-id="fa296222-85ca-486b-b708-08984c6f08b0">
+        <properties>
+            <property value="message.getInvocationProperty('orders').add(payload)" name="expression"/>
+            <property value="" name="returnClass"/>
+            <property value="false" name="ignoreBadInput"/>
+            <property value="false" name="returnSourceIfNull"/>
+            <property value="" name="encoding"/>
+            <property value="groovy" name="evaluator"/>
+            <property value="" name="mimeType"/>
+        </properties>
+        <description></description>
+    </pattern>
     <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="49da08d2-46aa-45d3-959c-ebed9de2a23f">
         <properties>
             <property value="item: #[payload.toString()]" name="message"/>
