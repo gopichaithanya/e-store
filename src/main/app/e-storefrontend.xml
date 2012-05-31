@@ -1,49 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd 
-http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd 
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
-http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd ">
-    <jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="vm://localhost" validateConnections="true" doc:name="Active_MQ"/>
-    <ajax:connector name="ajaxServer" serverUrl="http://0.0.0.0:8090/estore" resourceBase="${app.home}/docroot" doc:name="Ajax"/>
-    <flow name="e-storeFrontend-listProducts" doc:name="e-storeFrontend-listProducts">
-        <ajax:inbound-endpoint channel="/estore/listProducts" responseTimeout="10000" connector-ref="ajaxServer" doc:name="/estore/listProducts"/>
-        <response>
-            <object-to-string-transformer doc:name="Object to String"/>
-        </response>
-        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ" doc:name="Request product list to backend"/>
-    </flow>
-    <flow name="e-storeFrontend-addToCart" doc:name="e-storeFrontend-addToCart">
-        <ajax:inbound-endpoint channel="/estore/addToCart" responseTimeout="10000" doc:name="/estore/addToCart"/>
-        <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
-        <jms:outbound-endpoint queue="estore.addToCart" connector-ref="Active_MQ" doc:name="Request add product to cart to backend"/>
-    </flow>
-    <flow name="e-storeFrontend-showCart" doc:name="e-storeFrontend-showCart">
-        <ajax:inbound-endpoint channel="/estore/showCart" responseTimeout="10000" connector-ref="ajaxServer" doc:name="/estore/showCart"/>
-        <response>
-            <object-to-string-transformer doc:name="Object to String"/>
-        </response>
-        <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
-        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ" doc:name="Request cart contents to backend"/>
-    </flow>
-    <flow name="e-storeFrontend-clearCart" doc:name="e-storeFrontend-clearCart">
-        <ajax:inbound-endpoint channel="/estore/clearCart" responseTimeout="10000" doc:name="/estore/clearCart"/>
-        <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
-        <jms:outbound-endpoint queue="estore.clearCart" connector-ref="Active_MQ" doc:name="Request clear cart to backend"/>
-    </flow>
-    <flow name="e-storeFrontend-getCartTotal" doc:name="e-storeFrontend-getCartTotal">
-        <ajax:inbound-endpoint channel="/estore/getCartTotal" responseTimeout="10000" connector-ref="ajaxServer" doc:name="/estore/getCartTotal"/>
-        <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
-        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ" doc:name="Request cart contents to backend"/>
-        <expression-transformer expression="#[header:inbound:cartTotal]" doc:name="Set cart total property as payload"/>
-    </flow>
-    <flow name="e-storeFrontend-doCheckout" doc:name="e-storeFrontend-doCheckout">
-        <ajax:inbound-endpoint channel="/estore/doCheckout" responseTimeout="10000" doc:name="/estore/doCheckout"/>
-        <logger message="#[groovy:payload.toString()]" level="INFO" doc:name="Logger"/>
-        <set-property propertyName="sessionId" value="#[groovy:message.getInvocationProperty('cometd.client').toString()]" doc:name="Set session id from AJAX client id"/>
-        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ" doc:name="Request checkout to backend"/>
-    </flow>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" version="EE-3.3.0" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd  http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd  http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">  
+    <jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="vm://localhost" validateConnections="true" doc:name="Active_MQ"></jms:activemq-connector>  
+    <ajax:connector name="ajaxServer" serverUrl="http://0.0.0.0:8090/estore" resourceBase="${app.home}/docroot" doc:name="Ajax"></ajax:connector>  
+    <flow name="e-storeFrontend-listProducts" doc:name="e-storeFrontend-listProducts"> 
+        <ajax:inbound-endpoint channel="/estore/listProducts" responseTimeout="10000" connector-ref="ajaxServer" doc:name="/estore/listProducts"></ajax:inbound-endpoint>  
+        <response> 
+            <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>  
+        </response>  
+        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ" doc:name="Request product list to backend"></jms:outbound-endpoint>  
+    </flow>  
+    <flow name="e-storeFrontend-addToCart" doc:name="e-storeFrontend-addToCart"> 
+        <ajax:inbound-endpoint channel="/estore/addToCart" responseTimeout="10000" doc:name="/estore/addToCart"></ajax:inbound-endpoint>  
+        <set-property propertyName="sessionId" value="#[flowVars['cometd.client'].toString()]" doc:name="Set session id from AJAX client id"></set-property>  
+        <jms:outbound-endpoint queue="estore.addToCart" connector-ref="Active_MQ" doc:name="Request add product to cart to backend"></jms:outbound-endpoint>  
+    </flow>  
+    <flow name="e-storeFrontend-showCart" doc:name="e-storeFrontend-showCart"> 
+        <ajax:inbound-endpoint channel="/estore/showCart" responseTimeout="10000" connector-ref="ajaxServer" doc:name="/estore/showCart"></ajax:inbound-endpoint>  
+        <response> 
+            <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>  
+        </response>  
+        <set-property propertyName="sessionId" value="#[flowVars['cometd.client'].toString()]" doc:name="Set session id from AJAX client id"></set-property>  
+        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ" doc:name="Request cart contents to backend"></jms:outbound-endpoint>  
+    </flow>  
+    <flow name="e-storeFrontend-clearCart" doc:name="e-storeFrontend-clearCart"> 
+        <ajax:inbound-endpoint channel="/estore/clearCart" responseTimeout="10000" doc:name="/estore/clearCart"></ajax:inbound-endpoint>  
+        <set-property propertyName="sessionId" value="#[flowVars['cometd.client'].toString()]" doc:name="Set session id from AJAX client id"></set-property>  
+        <jms:outbound-endpoint queue="estore.clearCart" connector-ref="Active_MQ" doc:name="Request clear cart to backend"></jms:outbound-endpoint>  
+    </flow>  
+    <flow name="e-storeFrontend-getCartTotal" doc:name="e-storeFrontend-getCartTotal"> 
+        <ajax:inbound-endpoint channel="/estore/getCartTotal" responseTimeout="10000" connector-ref="ajaxServer" doc:name="/estore/getCartTotal"></ajax:inbound-endpoint>  
+        <set-property propertyName="sessionId" value="#[flowVars['cometd.client'].toString()]" doc:name="Set session id from AJAX client id"></set-property>  
+        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ" doc:name="Request cart contents to backend"></jms:outbound-endpoint>  
+        <expression-transformer expression="#[header:inbound:cartTotal]" doc:name="Set cart total property as payload"></expression-transformer>  
+    </flow>  
+    <flow name="e-storeFrontend-doCheckout" doc:name="e-storeFrontend-doCheckout"> 
+        <ajax:inbound-endpoint channel="/estore/doCheckout" responseTimeout="10000" doc:name="/estore/doCheckout"></ajax:inbound-endpoint>  
+        <set-property propertyName="sessionId" value="#[flowVars['cometd.client'].toString()]" doc:name="Set session id from AJAX client id"></set-property>  
+        <jms:outbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ" doc:name="Request checkout to backend"></jms:outbound-endpoint>  
+    </flow>  
 </mule>

@@ -9,8 +9,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="00b43717-88b6-49f8-8252-4a25c032d426">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="f0954d50-c094-47a1-9c67-e988ffe14d6a">
+        <lane entity-id="11ee31e3-a87b-4821-89a3-ad3f76bbdea7">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="b3d5943d-1103-4a11-8607-fbb35a96a8dc">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -38,7 +38,7 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="34ff8215-ff67-4976-b802-2b826c50547b">
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="2a57e5c7-9020-40e7-8ffe-82895f2db0b1">
                 <properties>
                     <property name="configuration-ref"/>
                     <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
@@ -54,7 +54,7 @@
                     <property name="enableMuleSoapHeaders"/>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="a76da4a5-f281-4dd6-989e-2d2c826dd6c9">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="e13b36d0-3c06-4020-9059-878a2026975c">
                 <properties>
                     <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStoreImpl" name="class"/>
                 </properties>

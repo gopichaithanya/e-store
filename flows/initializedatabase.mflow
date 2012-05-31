@@ -9,8 +9,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="6855da6c-5811-4de5-a382-4bc60422f882">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="84b08dd4-884a-43ee-a0c2-c530082a30e5">
+        <lane entity-id="6dd20992-3cc8-492e-a4fb-c10a5ddcdee1">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="d9c2f44e-7028-4563-b3ab-52716ec7a136">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -38,36 +38,29 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Initialise Database" entity-id="e91f5ce4-5586-4f90-8b0a-b32a98fe21a2">
+            <pattern type="http://www.mulesoft.org/schema/mule/scripting/groovyComponent" name="Initialise Database" entity-id="d0df05c9-48e4-4df9-87d2-b711f8300c8b">
                 <properties>
-                    <property value="" name="ref"/>
-                    <property value="jdbcConnector = muleContext.getRegistry().lookupConnector(&quot;JDBCConnector&quot;);&#xA;qr = jdbcConnector.getQueryRunner();&#xA;conn = jdbcConnector.getConnection();&#xA;qr.update(conn, &quot;CREATE TABLE cart (id int generated always as identity, session_id varchar(256), product_id varchar(256), provider varchar(256), quantity integer)&quot;);&#xA;return &quot;db populated&quot;;" name="text"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/refInterceptorStackType;444507014">
-                        <property value="" name="ref"/>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;1773645803">
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/scripting/script;0">
                         <property value="jdbcConnector = muleContext.getRegistry().lookupConnector(&quot;JDBCConnector&quot;);&#xA;qr = jdbcConnector.getQueryRunner();&#xA;conn = jdbcConnector.getConnection();&#xA;qr.update(conn, &quot;CREATE TABLE cart (id int generated always as identity, session_id varchar(256), product_id varchar(256), provider varchar(256), quantity integer)&quot;);&#xA;return &quot;db populated&quot;;" name="text"/>
+                        <property value="Groovy" name="engine"/>
                     </property-collection>
                 </properties>
-                <description></description>
             </pattern>
-            <scope type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" name="Catch Exception Strategy" entity-id="b981b0e8-a0c7-4bce-b4c1-dcae77222734">
+            <scope type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" name="Catch Exception Strategy" entity-id="282a3da8-fa7f-4e6a-ba98-c3f2d28a5c45">
                 <properties>
                     <property name=""/>
                     <property name="when"/>
                     <property name="enableNotifications"/>
                 </properties>
-                <compartment entity-id="9d44f9c1-1317-49bb-8cc8-a5c2f56531d0">
-                    <lane entity-id="c933313c-cc90-4c18-a2f1-76831eae261d">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Expression" entity-id="4d54305a-3f2e-480a-b29e-f2e109aa76e7">
+                <compartment entity-id="8e36def4-0745-4386-833e-66ac820bbed9">
+                    <lane entity-id="977ab2e7-fe0d-4a6f-8e4f-c5fe36faa59d">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Expression" entity-id="cf18b8ed-44dc-4b74-903c-97ab0173cf3b">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>
 <property name="encoding"/>
 <property name="mimeType"/>
-<property value="string" name="evaluator"/>
-<property value="table already populated" name="expression"/>
-<property name="custom-evaluator"/>
+<property value="'table already populated'" name="expression"/>
 <property name="returnSourceIfNull"/>
                             </properties>
                         </pattern>

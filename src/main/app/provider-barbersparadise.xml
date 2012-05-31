@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
-http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd 
-http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd ">
-    <flow name="listOrGetProducts" doc:name="listOrGetProducts">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" doc:name="HTTP"/>
-        <scripting:component doc:name="Generate product list">
-            <scripting:script engine="Groovy">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" version="EE-3.3.0" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd  http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd  http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd  http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">  
+    <flow name="listOrGetProducts" doc:name="listOrGetProducts"> 
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" doc:name="HTTP"></http:inbound-endpoint>  
+        <scripting:component doc:name="Generate product list"> 
+            <scripting:script engine="Groovy"> 
                 <scripting:text><![CDATA[def json = new groovy.json.JsonBuilder()
 
 def products = json([
@@ -36,31 +30,31 @@ def products = json([
 			}
        ])
 
-return json.toPrettyString();]]></scripting:text>
-            </scripting:script>
-        </scripting:component>
-        <choice doc:name="Choice">
-            <when expression="! message.getInboundProperty('http.relative.path').isEmpty()" evaluator="groovy">
-                <processor-chain>
-                    <logger message="Requesting specific product: #[header:inbound:http.relative.path]" level="INFO" doc:name="Logger"/>
-                    <set-variable variableName="requestedUpc" value="#[header:inbound:http.relative.path]" doc:name="Set requestedUpc"/>
-                    <splitter evaluator="json" expression="" doc:name="Split products list"/>
-                    <expression-filter evaluator="groovy" expression="(new groovy.json.JsonSlurper().parseText(payload.toString())).upc.equals(message.getInvocationProperty('requestedUpc'))" doc:name="Filter matching product"/>
-                </processor-chain>
-            </when>
-            <otherwise>
-                <processor-chain>
-                    <logger message="Requesting all products" level="INFO" doc:name="Logger"/>
-                </processor-chain>
-            </otherwise>
-        </choice>
-    </flow>
-    <flow name="placeOrder" doc:name="placeOrder">
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="HTTP"/>
-        <scripting:component doc:name="Generate order number">
-            <scripting:script engine="Groovy">
-                <scripting:text><![CDATA[return "BARBERSPARADISE-" + java.util.UUID.randomUUID().toString();]]></scripting:text>
-            </scripting:script>
-        </scripting:component>
-    </flow>
+return json.toPrettyString();]]></scripting:text>  
+            </scripting:script>  
+        </scripting:component>  
+        <choice doc:name="Choice"> 
+            <when expression="! message.inboundProperties['http.relative.path'].isEmpty()"> 
+                <processor-chain> 
+                    <logger message="Requesting specific product: #[header:inbound:http.relative.path]" level="INFO" doc:name="Logger"></logger>  
+                    <set-variable variableName="requestedUpc" value="#[header:inbound:http.relative.path]" doc:name="Set requestedUpc"></set-variable>  
+                    <splitter expression="#[json:]" doc:name="Split products list"></splitter>  
+                    <expression-filter expression="#[(new groovy.json.JsonSlurper().parseText(payload.toString())).upc.equals(flowVars['requestedUpc'])]" doc:name="Filter matching product"></expression-filter>  
+                </processor-chain>  
+            </when>  
+            <otherwise> 
+                <processor-chain> 
+                    <logger message="Requesting all products" level="INFO" doc:name="Logger"></logger>  
+                </processor-chain>  
+            </otherwise>  
+        </choice>  
+    </flow>  
+    <flow name="placeOrder" doc:name="placeOrder"> 
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="HTTP"></http:inbound-endpoint>  
+        <scripting:component doc:name="Generate order number"> 
+            <scripting:script engine="Groovy"> 
+                <scripting:text><![CDATA[return "BARBERSPARADISE-" + java.util.UUID.randomUUID().toString();]]></scripting:text>  
+            </scripting:script>  
+        </scripting:component>  
+    </flow>  
 </mule>
