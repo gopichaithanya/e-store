@@ -79,7 +79,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                     <processor-chain>
                         <enricher target="#[header:outbound:productDetails]" doc:name="Store product details as message property (enrich)">
                             <ee:cache cachingStrategy-ref="fetchProductDetailsCachingStrategy" doc:name="Cache">
-                                <core:flow-ref name="subflow-fetchProductDetailsFromBarbersParadise" doc:name="subflow-fetchProductDetailsFromBarbersParadise"></core:flow-ref>
+                                <flow-ref name="subflow-fetchProductDetailsFromBarbersParadise" doc:name="subflow-fetchProductDetailsFromBarbersParadise"></flow-ref>
                             </ee:cache>
                         </enricher>
                     </processor-chain>
@@ -88,7 +88,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                     <processor-chain>
                         <enricher target="#[header:outbound:productDetails]" doc:name="Store product details as message property (enrich)">
                             <ee:cache cachingStrategy-ref="fetchProductDetailsCachingStrategy" doc:name="Cache">
-                                <core:flow-ref name="subflow-fetchProductDetailsFromVanGoghPaintStore" doc:name="subflow-fetchProductDetailsFromVanGoghPaintStore"></core:flow-ref>
+                                <flow-ref name="subflow-fetchProductDetailsFromVanGoghPaintStore" doc:name="subflow-fetchProductDetailsFromVanGoghPaintStore"></flow-ref>
                             </ee:cache>
                         </enricher>
                     </processor-chain>
@@ -131,12 +131,12 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     <flow name="doCheckout" doc:name="doCheckout">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ2" doc:name="JMS"></jms:inbound-endpoint>
         <enricher doc:name="Enrich message with cart details">
-            <core:flow-ref name="subflow-showCart" doc:name="subflow-showCart"></core:flow-ref>
+            <flow-ref name="subflow-showCart" doc:name="subflow-showCart"></flow-ref>
             <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
             <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
         </enricher>
         <enricher doc:name="Enrich message with payment authorization results">
-            <core:flow-ref name="subflow-authorizePayment" doc:name="subflow-authorizePayment"></core:flow-ref>
+            <flow-ref name="subflow-authorizePayment" doc:name="subflow-authorizePayment"></flow-ref>
             <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
             <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
         </enricher>
