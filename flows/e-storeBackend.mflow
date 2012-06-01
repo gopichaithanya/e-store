@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="e-store">
-    <global-element type="org.mule.tooling.ui.modules.core.global.activemq.config" name="Active_MQ" entity-id="7552e4e1-5ea4-4fe0-8781-f2abe7c0ad98">
+    <global-element type="org.mule.tooling.ui.modules.core.global.activemq.config" name="Active_MQ" entity-id="66c57d9f-84c6-4cd9-9fe8-279b852119eb">
         <properties>
             <property value="Active_MQ2" name="name"/>
             <property value="1.1" name="specification"/>
@@ -62,7 +62,7 @@
             <property value="http://www.mulesoft.org/schema/mule/jms/activemq-connector" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
         </properties>
     </global-element>
-    <global-element type="http://www.springframework.org/schema/beans/bean" name="Bean" entity-id="0369bf18-84f8-4020-aa52-ee7684903e9c">
+    <global-element type="http://www.springframework.org/schema/beans/bean" name="Bean" entity-id="ebc63605-4e4f-407f-b2ae-53916a9c7f66">
         <properties>
             <property value="Derby_Data_Source" name="id"/>
             <property name="name"/>
@@ -90,7 +90,7 @@
             </property-collection>
         </properties>
     </global-element>
-    <global-element type="http://www.mulesoft.org/schema/mule/ee/jdbc/connector" name="JDBCConnector" entity-id="6db7b6b7-5812-4d15-b28e-92233b0cb3c9">
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/jdbc/connector" name="JDBCConnector" entity-id="90e0bbff-3e47-49de-a617-c1dfa09ff24c">
         <properties>
             <property value="JDBCConnector" name="name"/>
             <property value="Derby_Data_Source" name="dataSource-ref to JDBC DataSource"/>
@@ -117,31 +117,31 @@
             </property-collection>
         </properties>
     </global-element>
-    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="Barbers Paradise to canonical JSON" entity-id="5b49fbc2-a4b2-4ad2-a32d-16ea62215406">
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="Barbers Paradise to canonical JSON" entity-id="87281744-2e62-4ee4-9a3a-effedaed92e5">
         <properties>
             <property value="barbersParadiseToCanonicalJSON" name="name"/>
             <property value="barbers_paradise_to_canonical_json.grf" name="transformationGraphPath"/>
         </properties>
     </global-element>
-    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="Van Gogh Paint to canonical JSON" entity-id="d1ca8b43-c4f7-4bf9-91da-cd1c9d0744dc">
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="Van Gogh Paint to canonical JSON" entity-id="a1814fde-276b-426c-9878-73e5ea6d10fe">
         <properties>
             <property value="vanGoghPaintToCanonicalJSON" name="name"/>
             <property value="van_gogh_paint_to_canonical_json.grf" name="transformationGraphPath"/>
         </properties>
     </global-element>
-    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="consolidateProductDetailsOnCart" entity-id="8cc582a8-5a4e-4148-990a-4a5c60188034">
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="consolidateProductDetailsOnCart" entity-id="ba91690b-d213-4c79-80df-95e335252570">
         <properties>
             <property value="consolidateProductDetailsOnCart" name="name"/>
             <property value="consolidateproductdetailsoncart.grf" name="transformationGraphPath"/>
         </properties>
     </global-element>
-    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="checkoutRequestToPaymentAuthorization" entity-id="6d7dbee5-620b-40da-b82f-884c225ed29d">
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="checkoutRequestToPaymentAuthorization" entity-id="8773c213-585a-4137-aada-463068047d77">
         <properties>
             <property value="checkoutRequestToPaymentAuthorization" name="name"/>
             <property value="checkoutrequesttopaymentauthorization.grf" name="transformationGraphPath"/>
         </properties>
     </global-element>
-    <global-element type="org.mule.tooling.ui.modules.core.global.httpConnector" name="HTTP\HTTPS" entity-id="4e67c005-4cc0-4a0a-a456-6493a1396256">
+    <global-element type="org.mule.tooling.ui.modules.core.global.httpConnector" name="HTTP\HTTPS" entity-id="699713f8-a72e-4f79-be3c-33bb58bfdd86">
         <properties>
             <property value="HttpConnector" name="name"/>
             <property value="true" name="enableCookies"/>
@@ -166,13 +166,28 @@
             <property name="proxyPassword"/>
         </properties>
     </global-element>
-    <global-element type="http://www.mulesoft.org/schema/mule/ee/core/object-store-caching-strategy" name="Caching Strategy" entity-id="f30d66c6-6338-416a-bb6b-b63b2d0f1c44">
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/core/object-store-caching-strategy" name="Caching Strategy" entity-id="9a2ac20a-0f4f-490e-93b4-9680f3ab50b5">
         <properties>
             <property value="Caching_Strategy" name="name"/>
             <property name="eventKeyLabel"/>
             <property name="dont_use"/>
             <property name="key_expression"/>
             <property value="#[payload['PRODUCT_ID']]" name="keyGenerationExpression"/>
+            <property name="key_generator"/>
+            <property name="keyGenerator-ref"/>
+            <property name="responseGenerator-ref"/>
+            <property name="consumableFilter-ref"/>
+            <property name="radioGroupLabel"/>
+            <property name="EVENT_STRATEGY_TYPE"/>
+        </properties>
+    </global-element>
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/core/object-store-caching-strategy" name="Caching Strategy" entity-id="a70023ec-6c9c-4262-915a-90f2fa6896f4">
+        <properties>
+            <property value="listProductsCachingStrategy" name="name"/>
+            <property name="eventKeyLabel"/>
+            <property name="dont_use"/>
+            <property name="key_expression"/>
+            <property name="keyGenerationExpression"/>
             <property name="key_generator"/>
             <property name="keyGenerator-ref"/>
             <property name="responseGenerator-ref"/>
@@ -190,8 +205,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="edd7eee7-a525-4611-bd23-14e285645e31">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="a5abb8c0-9742-4e7b-9235-252482f2b7b2">
+        <lane entity-id="b56995d7-5516-453a-a2f5-4d003e55d0a4">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="e1bc494d-3ef9-44bf-b7ab-387d3dc23eaa">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -212,9 +227,9 @@
                     <property name="responseTransformer-refs"/>
                 </properties>
             </endpoint>
-            <scope type="http://www.mulesoft.org/schema/mule/ee/core/cache" name="Cache" entity-id="2f9c004c-a335-4969-8448-82a17ef6036c">
+            <scope type="http://www.mulesoft.org/schema/mule/ee/core/cache" name="Cache" entity-id="a79e395e-eb4c-407c-943a-a9a78c388988">
                 <properties>
-                    <property value="Caching_Strategy" name="cachingStrategy-ref"/>
+                    <property value="listProductsCachingStrategy" name="cachingStrategy-ref"/>
                     <property name="filterLabel"/>
                     <property name="dont_use"/>
                     <property name="use_an_expression"/>
@@ -222,20 +237,20 @@
                     <property name="use_a_filter"/>
                     <property name="filter-ref"/>
                 </properties>
-                <compartment entity-id="4f63a915-b85f-4e0d-a337-7bccf22bc236">
-                    <lane entity-id="68f2fdfe-c312-4f3a-ae66-5e1ff50a12a7">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Initialize output list" entity-id="36de8358-1645-471c-abe1-ade9054c6686">
+                <compartment entity-id="e047a1a8-9019-4aa0-b1d2-924e6aaa0f2b">
+                    <lane entity-id="f8cf2678-0e2b-49fa-bbae-57fca8d7a34d">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Initialize output list" entity-id="221e8b0a-fd18-4fe6-97f9-8fb61ed428cc">
                             <properties>
 <property value="http://www.mulesoft.org/schema/mule/core/set-variable" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
 <property value="allProducts" name="variableName"/>
 <property value="#[new java.util.LinkedList()]" name="value"/>
                             </properties>
                         </pattern>
-                        <splitter type="org.mule.tooling.ui.modules.core.pattern.all" name="All" entity-id="11bb7d53-716c-4eb3-a4cc-3a08d2f4b9d8">
-                            <pattern type="org.mule.tooling.ui.modules.core.pattern.all" name="All" entity-id="f5490c95-703d-435a-93b4-6e8eb1ceb052"/>
-                            <compartment entity-id="ebd40984-4c64-49fd-bbf8-4cf0ae2127a6">
-<lane entity-id="827cd9e7-eda0-486e-b6a9-c7cc21d5d7da">
-    <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Fetch products from Barbers Paradise Store" entity-id="b4466974-5f05-452e-951b-5020e1f3d220">
+                        <splitter type="org.mule.tooling.ui.modules.core.pattern.all" name="All" entity-id="2149c283-fe27-4647-b85c-b638e7804ed3">
+                            <pattern type="org.mule.tooling.ui.modules.core.pattern.all" name="All" entity-id="f7dbaa99-4286-436b-a106-6801873baf26"/>
+                            <compartment entity-id="6bcb1782-6c80-4af7-890e-45ec61a6c62b">
+<lane entity-id="63f54390-7c0c-41e7-8cb6-80dc59f36ac2">
+    <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Fetch products from Barbers Paradise Store" entity-id="27b46e75-1199-49d5-a015-ce548712c887">
         <properties>
             <property value="one-way" name="exchange-pattern"/>
             <property value="request-response" name="exchange-pattern"/>
@@ -263,7 +278,7 @@
             <property name="keep-alive"/>
         </properties>
     </endpoint>
-    <pattern type="org.mule.tooling.ui.modules.core.pattern.splitter" name="Split received products list" entity-id="d4837126-db12-4bff-82cc-e41b29938c83">
+    <pattern type="org.mule.tooling.ui.modules.core.pattern.splitter" name="Split received products list" entity-id="a40ce9b0-ab6c-4e0c-abfd-c18a0631043c">
         <properties>
             <property name="enableCorrelation"/>
             <property value="#[json:]" name="expression"/>
@@ -271,7 +286,7 @@
             <property name="tracking:enable-default-events"/>
         </properties>
     </pattern>
-    <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform to canonical JSON" entity-id="ea59d09a-d7fb-47ba-8876-148adc221851">
+    <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform to canonical JSON" entity-id="93d37554-a550-4d95-a4e6-bc73960ee034">
         <properties>
             <property value="barbersParadiseToCanonicalJSON" name="config-ref"/>
             <property value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
@@ -279,7 +294,7 @@
             <property name="input-ref"/>
         </properties>
     </pattern>
-    <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="6ffc852a-68d6-4708-b7dc-80301852d0e6">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="57d7f111-037a-4f46-9f41-6f25f9621900">
         <properties>
             <property name="returnClass"/>
             <property name="ignoreBadInput"/>
@@ -287,7 +302,7 @@
             <property name="mimeType"/>
         </properties>
     </pattern>
-    <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add product to output list" entity-id="623973d1-fa7a-485c-8c21-cc180b2dc992">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add product to output list" entity-id="d93caa3c-bdd0-43ed-b16d-9889c00728e0">
         <properties>
             <property name="returnClass"/>
             <property name="ignoreBadInput"/>
@@ -298,20 +313,20 @@
         </properties>
     </pattern>
 </lane>
-<lane entity-id="bca41292-99df-4e9b-b4f3-36b9705e1d7d">
-    <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="Fetch products from Van Gogh Paint Store" entity-id="e4d59657-ea10-4446-b008-536c932d4204">
+<lane entity-id="2f26d88b-ae67-4b23-8c53-2aadf5eec710">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="Fetch products from Van Gogh Paint Store" entity-id="43998bd5-32f3-4ed2-b027-c13e47388414">
         <properties>
             <property value="fetchProductsFromVanGoghPaintStore" name="name"/>
         </properties>
     </pattern>
-    <pattern type="http://www.mulesoft.org/schema/mule/core/collection-splitter" name="Split received collection" entity-id="dcb43df1-c0e9-497f-a1bc-d6de78bcf9da">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/collection-splitter" name="Split received collection" entity-id="d2dd0222-2a24-47b3-9708-6d4c311f95ac">
         <properties>
             <property name="enableCorrelation"/>
             <property name="businessEventsLabel"/>
             <property name="tracking:enable-default-events"/>
         </properties>
     </pattern>
-    <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform to canonical JSON" entity-id="e73bf41f-36c6-4969-b8b6-9b4f207fc427">
+    <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform to canonical JSON" entity-id="25600aa8-e86f-4317-a588-adb92f1f94e6">
         <properties>
             <property value="vanGoghPaintToCanonicalJSON" name="config-ref"/>
             <property value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
@@ -319,7 +334,7 @@
             <property name="input-ref"/>
         </properties>
     </pattern>
-    <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="29514a47-a54c-45e1-93d3-7d20542cd1a9">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="155f9a5e-779d-4a10-adcf-2d7d4f848cce">
         <properties>
             <property name="returnClass"/>
             <property name="ignoreBadInput"/>
@@ -327,7 +342,7 @@
             <property name="mimeType"/>
         </properties>
     </pattern>
-    <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add product to output list" entity-id="79fc006f-514c-40ff-b2ef-5c64c543f156">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add product to output list" entity-id="0bf00337-b5cc-4faf-bc94-ded6d8666da4">
         <properties>
             <property name="returnClass"/>
             <property name="ignoreBadInput"/>
@@ -340,7 +355,7 @@
 </lane>
                             </compartment>
                         </splitter>
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Set payload to output list" entity-id="8952a238-4b2a-4971-b3fd-ef49b9fd55d1">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Set payload to output list" entity-id="fafbac93-bc07-4e7e-a931-846f56fa6134">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>
@@ -353,7 +368,7 @@
                     </lane>
                 </compartment>
             </scope>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="5aa14010-9bfb-4a1c-b4fd-b380b06d31a4">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="a4b4c9b9-89e1-4751-9a2e-e5fbc12e7f61">
                 <properties>
                     <property value="Saliendo de cache: #[payload.getClass()] xxxxxxxxxxxxxxxxx #[payload[0].toString()] " name="message"/>
                     <property value="INFO" name="level"/>
@@ -371,8 +386,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="b3231b04-b609-4101-b2d7-c7be1ad6971a">
-            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Prepare SOAP request" entity-id="8ff90b8b-4fb3-4bf9-8922-2eab8e612bdd">
+        <lane entity-id="714da791-d965-485e-a8a5-0c93540b2542">
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Prepare SOAP request" entity-id="0d747ce1-37bf-4961-8975-4d1e115a5f3f">
                 <properties>
                     <property name="configuration-ref"/>
                     <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-client" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
@@ -386,7 +401,7 @@
                     <property value="true" name="enableMuleSoapHeaders"/>
                 </properties>
             </pattern>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Invoke SOAP request" entity-id="5852af99-f5f3-4566-bd8f-bd50e8090596">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Invoke SOAP request" entity-id="c3a2f657-349b-4c98-90cb-4267213e10e5">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -425,8 +440,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="dab0be52-3e1f-4d8d-bbbe-65024a78538b">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="d89f74ec-5abc-411e-8958-29aea8cdce0c">
+        <lane entity-id="5b738e16-7c65-4e1b-8855-de083a891b59">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="08a5520c-39a5-4bb3-a872-d8fc2aea795e">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property name="exchange-pattern"/>
@@ -447,7 +462,7 @@
                     <property name="responseTransformer-refs"/>
                 </properties>
             </endpoint>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/jdbc/endpoint" name="Store product on cart table" entity-id="5d6ca3e1-8f3e-4103-b7cf-50c1b7120546">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/jdbc/endpoint" name="Store product on cart table" entity-id="279541fb-27b1-4f67-a718-3e1c233849ca">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="one-way" name="exchange-pattern"/>
@@ -479,8 +494,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="5b63a5fe-684a-4c45-be09-ef91d685593d">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="d9862885-2338-48f5-97bf-3aa06b7b1ba6">
+        <lane entity-id="6e1a7d2d-7028-4fa6-b792-914509e31aa6">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="c9f1a1d9-e53a-4552-844d-98be86e75655">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -501,7 +516,7 @@
                     <property name="responseTransformer-refs"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="subflow-showCart" entity-id="a4edf07c-f036-4d41-8eb1-63334259ac96">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="subflow-showCart" entity-id="9eff1e7b-86c7-4dbc-b289-8a8bbbf0b80c">
                 <properties>
                     <property value="subflow-showCart" name="name"/>
                 </properties>
@@ -517,8 +532,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="def664b9-6734-4c34-9593-d69c7dcbe328">
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/jdbc/endpoint" name="Fetch cart contents from database" entity-id="019481c5-d133-4dfe-a4c6-d04bb0dce718">
+        <lane entity-id="826aa44d-7198-4a71-8bcd-687924b6e9c0">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/jdbc/endpoint" name="Fetch cart contents from database" entity-id="6fc86763-2836-44f2-84cf-c1a211d8bf8e">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -539,30 +554,30 @@
                     <property name="responseTransformer-refs"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Initialize grand total" entity-id="66c2f0d1-3f35-45b7-a1cc-e006e686f501">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Initialize grand total" entity-id="03eb0978-b085-4856-a50f-377c5da85ace">
                 <properties>
                     <property value="http://www.mulesoft.org/schema/mule/core/set-variable" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
                     <property value="grandTotal" name="variableName"/>
                     <property value="#[0]" name="value"/>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Initialize cart items list" entity-id="519de554-274f-408f-bc82-d04cc0e563d9">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Initialize cart items list" entity-id="9fc8d5f3-19c1-4951-b0fd-b35adbb8deb9">
                 <properties>
                     <property value="http://www.mulesoft.org/schema/mule/core/set-variable" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
                     <property value="cartItems" name="variableName"/>
                     <property value="#[new java.util.LinkedList()]" name="value"/>
                 </properties>
             </pattern>
-            <scope type="http://www.mulesoft.org/schema/mule/core/foreach" name="Foreach" entity-id="d82cae2a-4904-4936-b96c-0bbd109ed736">
+            <scope type="http://www.mulesoft.org/schema/mule/core/foreach" name="Foreach" entity-id="6d5aa994-08d3-44a8-b3db-1da870f4fc51">
                 <properties>
                     <property name="collection"/>
                     <property name="counterVariableName"/>
                     <property name="batchSize"/>
                     <property name="rootMessageVariableName"/>
                 </properties>
-                <compartment entity-id="f16ae9f4-1c09-4a65-a11a-8eef8f70da55">
-                    <lane entity-id="0e7ff38c-ac71-486c-a1dd-f89ed7a170c1">
-                        <scope type="http://www.mulesoft.org/schema/mule/ee/core/cache" name="Cache" entity-id="3ce91cf7-36e1-4ee6-8be5-2813791f6640">
+                <compartment entity-id="64455667-049b-4d5e-b01f-82c50e5627ca">
+                    <lane entity-id="439d25f6-2083-4434-9d02-afbbdeeb4b90">
+                        <scope type="http://www.mulesoft.org/schema/mule/ee/core/cache" name="Cache" entity-id="5f6b0d91-8aba-42e6-8cab-f38e78181317">
                             <properties>
 <property value="Caching_Strategy" name="cachingStrategy-ref"/>
 <property name="filterLabel"/>
@@ -572,126 +587,58 @@
 <property name="use_a_filter"/>
 <property name="filter-ref"/>
                             </properties>
-                            <compartment entity-id="70ea8c28-f876-4019-8642-ccf6dc166cde">
-<lane entity-id="a10c9b43-1d17-470c-9c7e-0b15c7fd5d88">
-    <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="4f215a77-cac7-45c7-a0bd-3a9190c4226c">
+                            <compartment entity-id="90ba63d6-81cf-4626-9252-709609d4cb25">
+<lane entity-id="db862089-50a5-49ad-8193-7daed147a56b">
+    <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="b88c2640-f1e3-4fbd-afff-3652289b7213">
         <properties>
-            <property-collection name="7dc6eba4-70aa-46d3-bbf9-71e39b4267fd">
+            <property-collection name="5f161a3c-654b-4c48-bc14-0cce789c31f7">
                 <property value="payload['PROVIDER'].equals('Van Gogh\'s Paint Store')" name="choice.expression"/>
             </property-collection>
-            <property-collection name="5461fe36-5785-4d70-b1c9-711cdd76a0e2">
+            <property-collection name="a59d9034-d382-4275-be9f-1745402cbea0">
                 <property value="payload['PROVIDER'].equals('Barber\'s Paradise Store')" name="choice.expression"/>
             </property-collection>
         </properties>
-        <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="54c5e70b-d8bf-4ddd-92d4-569670bb16ca"/>
-        <compartment entity-id="290bb2d9-5a0a-4f4c-80f6-05b67cd87d5b">
-            <lane entity-id="5461fe36-5785-4d70-b1c9-711cdd76a0e2">
-                <scope type="org.mule.tooling.ui.modules.core.scope.enricher" name="Store product details as message property (enrich)" entity-id="9c185b16-bb5e-46e8-93c1-70bb9561cba8">
+        <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="9f2cac29-a687-42ab-9b9d-5e23461591ad">
+            <properties>
+                <property-collection name="5f161a3c-654b-4c48-bc14-0cce789c31f7">
+                    <property value="payload['PROVIDER'].equals('Van Gogh\'s Paint Store')" name="choice.expression"/>
+                </property-collection>
+                <property-collection name="a59d9034-d382-4275-be9f-1745402cbea0">
+                    <property value="payload['PROVIDER'].equals('Barber\'s Paradise Store')" name="choice.expression"/>
+                </property-collection>
+            </properties>
+        </pattern>
+        <compartment entity-id="2542d456-2bdb-4736-ae9b-57157150a071">
+            <lane entity-id="a59d9034-d382-4275-be9f-1745402cbea0">
+                <scope type="http://www.mulesoft.org/schema/mule/core/enricher" name="Store product details as message property (enrich)" entity-id="90912ca7-f715-4a4b-9b3f-45591f5a8afd">
                     <properties>
                         <property name="source"/>
                         <property value="#[header:outbound:productDetails]" name="target"/>
                     </properties>
-                    <compartment entity-id="dc32c469-bc2d-4bbc-95e0-d7cdcc96d4e5">
-                        <lane entity-id="db9fbdc6-2458-442a-8685-dd0d72122a37">
-                            <scope type="http://www.mulesoft.org/schema/mule/core/processor-chain" name="Processor Chain" entity-id="d4eb53c0-63d8-49dc-bf9f-e623410cfce6">
-<compartment entity-id="131ecb1e-fe6c-4123-9365-75c1f8f196a3">
-    <lane entity-id="c3519e9c-4c1d-4134-84be-a4c25e26313a">
-        <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Fetch product info from Barber's Paradise Store" entity-id="8a837ea4-03d9-4b6d-954f-3ab266d6396d">
-            <properties>
-                <property value="one-way" name="exchange-pattern"/>
-                <property value="request-response" name="exchange-pattern"/>
-                <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                <property name="httpLabel"/>
-                <property value="localhost" name="host"/>
-                <property value="9080" name="port"/>
-                <property value="barbersparadise/products/#[payload['PRODUCT_ID']]" name="path"/>
-                <property name="method"/>
-                <property name="businessEventsLabel"/>
-                <property name="tracking:enable-default-events"/>
-                <property name="address"/>
-                <property name="encoding"/>
-                <property name="disableTransportTransformer"/>
-                <property name="mimeType"/>
-                <property name="responseTimeout"/>
-                <property name="followRedirects"/>
-                <property name="connector-ref"/>
-                <property name="ref"/>
-                <property name="transformer-refs"/>
-                <property name="responseTransformer-refs"/>
-                <property name="user"/>
-                <property name="password"/>
-                <property name="contentType"/>
-                <property name="keep-alive"/>
-            </properties>
-        </endpoint>
-        <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform to canonical JSON" entity-id="6d27efe4-99de-49b8-8b77-cfff3563919d">
-            <properties>
-                <property value="barbersParadiseToCanonicalJSON" name="config-ref"/>
-                <property value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                <property value="barbersParadiseToCanonicalJSON" name="config-ref"/>
-                <property name="input-ref"/>
-            </properties>
-        </pattern>
-        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="0b843249-d1c4-4f22-8aa5-65eb6993d177">
-            <properties>
-                <property name="returnClass"/>
-                <property name="ignoreBadInput"/>
-                <property name="encoding"/>
-                <property name="mimeType"/>
-            </properties>
-        </pattern>
-    </lane>
-</compartment>
-                            </scope>
+                    <compartment entity-id="cf846e9a-ec10-4f4c-9f0f-ec02d0f05f03">
+                        <lane entity-id="539a368c-40cd-4814-9680-a0798098db41">
+                            <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="fetchProductDetailsFromBarbersParadise" entity-id="fa5cf4fe-8683-4c25-9f17-06e71dcc8f7a">
+<properties>
+    <property value="fetchProductDetailsFromBarbersParadise" name="name"/>
+</properties>
+                            </pattern>
                         </lane>
                     </compartment>
                 </scope>
             </lane>
-            <lane entity-id="7dc6eba4-70aa-46d3-bbf9-71e39b4267fd">
-                <scope type="org.mule.tooling.ui.modules.core.scope.enricher" name="Store product details as message property (enrich)" entity-id="28b3b1dd-f4ad-4126-bb06-b57c4c7f1067">
+            <lane entity-id="5f161a3c-654b-4c48-bc14-0cce789c31f7">
+                <scope type="http://www.mulesoft.org/schema/mule/core/enricher" name="Store product details as message property (enrich)" entity-id="6b30015b-2563-45c0-bc3c-81ac63d3e995">
                     <properties>
                         <property name="source"/>
                         <property value="#[header:outbound:productDetails]" name="target"/>
                     </properties>
-                    <compartment entity-id="0580e1e7-ac06-44a3-97a0-262800796831">
-                        <lane entity-id="4aa3fc5d-eb9f-4eb1-a98b-5c1ffeb4f753">
-                            <scope type="http://www.mulesoft.org/schema/mule/core/processor-chain" name="Processor Chain" entity-id="9ace7377-bc35-48a1-9ceb-4b605ade0a1d">
-<compartment entity-id="e9187bfd-41e3-4d3c-bea8-f879e63431d3">
-    <lane entity-id="e63d3c7c-e4d6-43bf-8949-b2ffca50453a">
-        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Assing product id to payload" entity-id="cb5cbb3f-b517-4a97-818a-5a64fad03a1b">
-            <properties>
-                <property name="returnClass"/>
-                <property name="ignoreBadInput"/>
-                <property name="encoding"/>
-                <property name="mimeType"/>
-                <property value="payload['PRODUCT_ID']" name="expression"/>
-                <property name="returnSourceIfNull"/>
-            </properties>
-        </pattern>
-        <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="Fetch product info from Van Gogh Paint Store" entity-id="18a5cd80-e203-4d1f-afb0-ee2575bed21b">
-            <properties>
-                <property value="fetchProductDetailsFromVanGoghPaintStore" name="name"/>
-            </properties>
-        </pattern>
-        <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform to canonical JSON" entity-id="8debfbd5-8d20-4221-86b8-1af083f055e8">
-            <properties>
-                <property value="vanGoghPaintToCanonicalJSON" name="config-ref"/>
-                <property value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                <property value="vanGoghPaintToCanonicalJSON" name="config-ref"/>
-                <property name="input-ref"/>
-            </properties>
-        </pattern>
-        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="633c6f3b-c007-42ec-9a84-8781634a51c0">
-            <properties>
-                <property name="returnClass"/>
-                <property name="ignoreBadInput"/>
-                <property name="encoding"/>
-                <property name="mimeType"/>
-            </properties>
-        </pattern>
-    </lane>
-</compartment>
-                            </scope>
+                    <compartment entity-id="f9bbe50e-22ba-4be3-beba-c5fc537c95df">
+                        <lane entity-id="d5548e9b-5de0-4dd6-9eb4-d078b743b633">
+                            <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="fetchProductDetailsFromVanGoghPaintStore" entity-id="7df8e480-6434-449b-a51c-259131fb3e52">
+<properties>
+    <property value="fetchProductDetailsFromVanGoghPaintStore" name="name"/>
+</properties>
+                            </pattern>
                         </lane>
                     </compartment>
                 </scope>
@@ -701,33 +648,38 @@
 </lane>
                             </compartment>
                         </scope>
-                        <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Consolidate cart item info and subtotal" entity-id="cb715aed-f345-42dd-bfac-73b0f1aa6c15">
+                        <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Consolidate cart item info and subtotal" entity-id="74122a5b-171f-4f44-914c-76427fbaa841">
                             <properties>
 <property value="consolidateProductDetailsOnCart" name="config-ref"/>
 <property value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
 <property value="consolidateProductDetailsOnCart" name="config-ref"/>
 <property name="input-ref"/>
 <property-collection name="@http://www.mulesoft.org/schema/mule/ee/data-mapper/input-arguments;0">
+    <property value="true" name="isProcessed$$$$"/>
     <property-collection name="@http://www.mulesoft.org/schema/mule/ee/data-mapper/input-argument;1">
         <property value="#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).price]" name="value"/>
         <property value="price" name="key"/>
+        <property value="true" name="isProcessed$$$$"/>
     </property-collection>
     <property-collection name="@http://www.mulesoft.org/schema/mule/ee/data-mapper/input-argument;4">
         <property value="#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).providerId]" name="value"/>
         <property value="providerId" name="key"/>
+        <property value="true" name="isProcessed$$$$"/>
     </property-collection>
     <property-collection name="@http://www.mulesoft.org/schema/mule/ee/data-mapper/input-argument;3">
         <property value="#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productId]" name="value"/>
         <property value="product_id" name="key"/>
+        <property value="true" name="isProcessed$$$$"/>
     </property-collection>
     <property-collection name="@http://www.mulesoft.org/schema/mule/ee/data-mapper/input-argument;2">
         <property value="#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productDescription]" name="value"/>
         <property value="productDescription" name="key"/>
+        <property value="true" name="isProcessed$$$$"/>
     </property-collection>
 </property-collection>
                             </properties>
                         </pattern>
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="81f634dc-6422-47ea-8019-ad1f56bcde7b">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="5dea604a-4345-4192-adc3-7ed7fb8e885d">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>
@@ -735,14 +687,14 @@
 <property name="mimeType"/>
                             </properties>
                         </pattern>
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Sum item subtotal to grand total" entity-id="b9cca620-fbf3-4d64-9512-4317be46a93f">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Sum item subtotal to grand total" entity-id="ef7e9efb-4652-44e9-9535-34a9093649fa">
                             <properties>
 <property value="http://www.mulesoft.org/schema/mule/core/set-variable" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
 <property value="grandTotal" name="variableName"/>
 <property value="#[grandTotal + (new Float((new groovy.json.JsonSlurper().parseText(payload)).subtotal)).floatValue()]" name="value"/>
                             </properties>
                         </pattern>
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add cart item to list" entity-id="9092960b-293d-40a3-a3f8-300433330cc3">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add cart item to list" entity-id="30bc8551-a8d9-48e3-bec3-cc9629bce688">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>
@@ -755,14 +707,14 @@
                     </lane>
                 </compartment>
             </scope>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/properties-transformer" name="Set cartTotal message property with grand total" entity-id="e81975d4-9f04-4c9b-a67e-e8a6093db189">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/properties-transformer" name="Set cartTotal message property with grand total" entity-id="3362f97a-c757-4f54-9747-0a5eaba43cca">
                 <properties>
                     <property value="http://www.mulesoft.org/schema/mule/core/set-property" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
                     <property value="cartTotal" name="propertyName"/>
                     <property value="#[grandTotal]" name="value"/>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Set payload to cart items list" entity-id="0d8520c2-424c-476f-9af1-ba7408c1753c">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Set payload to cart items list" entity-id="98cff0e1-d3c4-491f-8a9a-c58480426ae9">
                 <properties>
                     <property name="returnClass"/>
                     <property name="ignoreBadInput"/>
@@ -770,6 +722,62 @@
                     <property name="mimeType"/>
                     <property value="cartItems" name="expression"/>
                     <property name="returnSourceIfNull"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="true" name="fetchProductDetailsFromBarbersParadise">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="USE_TRANSACTION_ID"/>
+            <property name="tracking:transaction-id"/>
+        </properties>
+        <lane entity-id="43538e5e-7f28-4f48-8e4b-02c8ff191b63">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Fetch product info from Barber's Paradise Store" entity-id="721852f2-39cb-4cd9-a47c-bf11590f1340">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="httpLabel"/>
+                    <property value="localhost" name="host"/>
+                    <property value="9080" name="port"/>
+                    <property value="barbersparadise/products/#[payload['PRODUCT_ID']]" name="path"/>
+                    <property name="method"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="followRedirects"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="user"/>
+                    <property name="password"/>
+                    <property name="contentType"/>
+                    <property name="keep-alive"/>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform to canonical JSON" entity-id="4a0e70c1-8ad5-414e-ade5-ec34f0ebc217">
+                <properties>
+                    <property value="barbersParadiseToCanonicalJSON" name="config-ref"/>
+                    <property value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="barbersParadiseToCanonicalJSON" name="config-ref"/>
+                    <property name="input-ref"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="146c7c4b-53d2-4ae1-83ca-cd0fbcd80919">
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
                 </properties>
             </pattern>
         </lane>
@@ -783,8 +791,51 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="0d5f8415-7bb8-4df6-a05c-e7944c16a688">
-            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Prepare SOAP request" entity-id="062495b2-b401-48ac-a167-6997e6ad9ba1">
+        <lane entity-id="93c893ff-386e-4e29-bb29-46d71b8259d0">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Assing product id to payload" entity-id="602e261b-35f7-4150-ad9c-50e487f45daf">
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property value="payload['PRODUCT_ID']" name="expression"/>
+                    <property name="returnSourceIfNull"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="invokeVanGoghGetProductInfoSOAPService" entity-id="11cca525-42f0-442a-940f-3d5e9df480d2">
+                <properties>
+                    <property value="invokeVanGoghGetProductInfoSOAPService" name="name"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform to canonical JSON" entity-id="678b5a0a-2204-4198-a3bd-e23cb8008252">
+                <properties>
+                    <property value="vanGoghPaintToCanonicalJSON" name="config-ref"/>
+                    <property value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="vanGoghPaintToCanonicalJSON" name="config-ref"/>
+                    <property name="input-ref"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="3e2b0346-6bfa-4cbc-b514-fec0f1c217fd">
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="true" name="invokeVanGoghGetProductInfoSOAPService">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="USE_TRANSACTION_ID"/>
+            <property name="tracking:transaction-id"/>
+        </properties>
+        <lane entity-id="6b473477-7871-4a93-ae38-1bec09be6502">
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Prepare SOAP request" entity-id="e5713847-999a-4e81-b92f-afec5d8d6aae">
                 <properties>
                     <property name="configuration-ref"/>
                     <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-client" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
@@ -798,7 +849,7 @@
                     <property value="true" name="enableMuleSoapHeaders"/>
                 </properties>
             </pattern>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Invoke SOAP request" entity-id="2bdf161a-07f1-4d5c-91cf-34079b4a8943">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Invoke SOAP request" entity-id="df69bea9-aa22-4052-9e7d-84c10996d677">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -837,8 +888,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="66796ff8-dc07-4e95-9c9d-b4ace52df3c2">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="e9f5ff45-ad18-45e6-9b62-d536a4f4af77">
+        <lane entity-id="7abf0e38-5d85-4837-bc5a-3818355d25a5">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="7d23844f-2732-4c56-b927-a268ed65c691">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property name="exchange-pattern"/>
@@ -859,7 +910,7 @@
                     <property name="responseTransformer-refs"/>
                 </properties>
             </endpoint>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/jdbc/endpoint" name="Delete cart contents" entity-id="ba34667b-d494-47f2-80d5-985cf60a57b8">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/jdbc/endpoint" name="Delete cart contents" entity-id="4383b38c-ba13-474c-9135-2b97f03760fb">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="one-way" name="exchange-pattern"/>
@@ -891,8 +942,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="405453f3-0a49-4ef5-941b-52e080c55064">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="adf3be9e-b564-4fbd-b6a0-0d0c9bb56e6d">
+        <lane entity-id="06eab7e7-ec38-4209-93fd-2be8e7bee3d0">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="aaa86b7f-ed9f-45b4-bf23-cb8382f5b002">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -913,7 +964,7 @@
                     <property name="responseTransformer-refs"/>
                 </properties>
             </endpoint>
-            <scope type="org.mule.tooling.ui.modules.core.scope.enricher" name="Enrich message with cart details" entity-id="8b1d5929-1874-492d-8384-67bcbc7decff">
+            <scope type="http://www.mulesoft.org/schema/mule/core/enricher" name="Enrich message with cart details" entity-id="91840ca5-b4f0-4aec-8a77-677e7ec410b4">
                 <properties>
                     <property name="source"/>
                     <property name="target"/>
@@ -926,23 +977,23 @@
                         <property value="#[header:outbound:cartContents]" name="target"/>
                     </property-collection>
                 </properties>
-                <compartment entity-id="df7d3872-11b6-4edc-8ea1-2c72136d093c">
-                    <lane entity-id="5763964b-6fe4-455a-affd-21c0d4249097">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="subflow-showCart" entity-id="8b01bdd1-9859-4831-9df7-ba971fb022b6">
+                <compartment entity-id="0bf5693a-6dc1-4737-aa2e-d10ae2248289">
+                    <lane entity-id="dc36eec4-bec1-4905-a36a-99572bd01608">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="subflow-showCart" entity-id="18bcd72c-ac7e-4c06-aa17-9d6a2d14145e">
                             <properties>
 <property value="subflow-showCart" name="name"/>
                             </properties>
                         </pattern>
-                        <unknown entity-id="bdbf2bd9-29f3-4545-8ebc-4614af188211">
+                        <unknown entity-id="dc039837-01af-4a81-b536-aaabbf944077">
                             <content>&lt;enrich xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; source=&quot;#[message.outboundProperties['cartTotal'].toString()]&quot; target=&quot;#[header:outbound:grandTotal]&quot;/&gt;</content>
                         </unknown>
-                        <unknown entity-id="f32059b2-5d7e-4613-af33-2e7e5b9e3acd">
+                        <unknown entity-id="c205d5ac-4635-4381-bef4-cecc11de1494">
                             <content>&lt;enrich xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; source=&quot;#[payload]&quot; target=&quot;#[header:outbound:cartContents]&quot;/&gt;</content>
                         </unknown>
                     </lane>
                 </compartment>
             </scope>
-            <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform checkout request to payment authorization request" entity-id="03878c45-e5ef-43d6-a331-013207596869">
+            <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="Transform checkout request to payment authorization request" entity-id="908fe1ed-a072-4b6f-8053-e4d35a179a15">
                 <properties>
                     <property value="checkoutRequestToPaymentAuthorization" name="config-ref"/>
                     <property value="http://www.mulesoft.org/schema/mule/ee/data-mapper/transform" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
@@ -956,7 +1007,7 @@
                     </property-collection>
                 </properties>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="48ec84ea-4b6f-4f14-b60a-7467e4dc893d">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="366326ed-b03e-4d97-ade0-3fa63da9bec1">
                 <properties>
                     <property name="returnClass"/>
                     <property name="ignoreBadInput"/>
@@ -964,125 +1015,95 @@
                     <property name="mimeType"/>
                 </properties>
             </pattern>
-            <scope type="org.mule.tooling.ui.modules.core.scope.enricher" name="Message Enricher" entity-id="f46f4c40-1dd0-4b81-9868-3a70b7ff99b7">
+            <scope type="http://www.mulesoft.org/schema/mule/core/enricher" name="Enrich message with payment authorization results" entity-id="04507453-72a1-483e-81dd-6a1a427f10c5">
                 <properties>
-                    <property name="source"/>
-                    <property name="target"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/enrich;0">
-                        <property value="#[xpath:/authorizationResponse/result]" name="source"/>
-                        <property value="#[header:outbound:paymentResult]" name="target"/>
-                    </property-collection>
+                    <property value="" name="source"/>
+                    <property value="" name="target"/>
                     <property-collection name="@http://www.mulesoft.org/schema/mule/core/enrich;1">
                         <property value="#[xpath:/authorizationResponse/reason]" name="source"/>
                         <property value="#[header:outbound:paymentReason]" name="target"/>
                     </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/enrich;2">
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/enrich;0">
                         <property value="#[xpath:/authorizationResponse/result]" name="source"/>
                         <property value="#[header:outbound:paymentResult]" name="target"/>
                     </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/enrich;3">
-                        <property value="#[xpath:/authorizationResponse/reason]" name="source"/>
-                        <property value="#[header:outbound:paymentReason]" name="target"/>
-                    </property-collection>
                 </properties>
-                <compartment entity-id="acd6dd95-3e00-48c2-903a-1adfff8b36fc">
-                    <lane entity-id="2b394b2b-5274-41f2-8d74-68dfe39dfc5c">
-                        <scope type="http://www.mulesoft.org/schema/mule/core/processor-chain" name="Processor Chain" entity-id="c8866b7a-8888-481d-bab2-1a5883c5f805">
-                            <compartment entity-id="d8c9f80a-318b-48d1-85d4-81f3dbd7dbe4">
-<lane entity-id="d5254cea-a2e4-468a-beaf-4e0a4c10fdc3">
-    <pattern type="http://www.mulesoft.org/schema/mule/core/properties-transformer" name="Remove cart contents property to call bank" entity-id="e9bab29e-8697-494b-86d4-f53252b8ee5f">
-        <properties>
-            <property value="http://www.mulesoft.org/schema/mule/core/remove-property" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-            <property value="cartContents" name="propertyName"/>
-        </properties>
-    </pattern>
-    <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Request payment authorization to bank" entity-id="32f334c6-6551-4a42-97fe-a23451d58bfd">
-        <properties>
-            <property value="one-way" name="exchange-pattern"/>
-            <property value="request-response" name="exchange-pattern"/>
-            <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-            <property name="httpLabel"/>
-            <property value="localhost" name="host"/>
-            <property value="10000" name="port"/>
-            <property value="bank/authorizePayment" name="path"/>
-            <property name="method"/>
-            <property name="businessEventsLabel"/>
-            <property name="tracking:enable-default-events"/>
-            <property name="address"/>
-            <property name="encoding"/>
-            <property name="disableTransportTransformer"/>
-            <property name="mimeType"/>
-            <property name="responseTimeout"/>
-            <property name="followRedirects"/>
-            <property name="connector-ref"/>
-            <property name="ref"/>
-            <property name="transformer-refs"/>
-            <property name="responseTransformer-refs"/>
-            <property name="user"/>
-            <property name="password"/>
-            <property name="contentType"/>
-            <property name="keep-alive"/>
-        </properties>
-    </endpoint>
-</lane>
-                            </compartment>
-                        </scope>
-                        <unknown entity-id="65603ced-6d3a-471a-83a8-ffab1cad0d71">
+                <description></description>
+                <compartment entity-id="07bc0b64-7f5a-466a-bc8b-d1fa67d84330">
+                    <lane entity-id="eb094b05-46e9-4eaa-b8a3-7e8987ee2095">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="requestPaymentAuthorizationToBank" entity-id="1a875f96-7648-480b-9fe7-d7d8808e181c">
+                            <properties>
+<property value="requestPaymentAuthorizationToBank" name="name"/>
+                            </properties>
+                        </pattern>
+                        <unknown entity-id="5b21e76c-e732-45c1-812a-6871008f7c56">
                             <content>&lt;enrich xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; source=&quot;#[xpath:/authorizationResponse/result]&quot; target=&quot;#[header:outbound:paymentResult]&quot;/&gt;</content>
                         </unknown>
-                        <unknown entity-id="990467c7-c285-4a2d-a66e-94787ab386e0">
-                            <content>&lt;enrich xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; source=&quot;#[xpath:/authorizationResponse/reason]&quot; target=&quot;#[header:outbound:paymentReason]&quot;/&gt;</content>
-                        </unknown>
-                        <unknown entity-id="ba32587b-8b8a-439d-80ac-547840819c08">
-                            <content>&lt;enrich xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; source=&quot;#[xpath:/authorizationResponse/result]&quot; target=&quot;#[header:outbound:paymentResult]&quot;/&gt;</content>
-                        </unknown>
-                        <unknown entity-id="7d8966a2-a124-4578-99b9-be135f45c2e7">
+                        <unknown entity-id="997d9117-aa87-4f4a-9b0a-9f1543dee744">
                             <content>&lt;enrich xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; source=&quot;#[xpath:/authorizationResponse/reason]&quot; target=&quot;#[header:outbound:paymentReason]&quot;/&gt;</content>
                         </unknown>
                     </lane>
                 </compartment>
             </scope>
-            <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="742a6409-e0c2-4dab-8612-9ddf658cbdcc">
+            <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="195666b6-e639-4644-8746-77a84dea34dd">
                 <properties>
-                    <property-collection name="af2ca835-5585-4666-883b-2d605ecce020">
+                    <property-collection name="77cf8d9b-d75f-43c9-89f1-633235438e74">
                         <property value="#[header:paymentResult=FAILED]" name="choice.expression"/>
                     </property-collection>
-                    <property-collection name="023f23ff-f377-40bd-88b6-b2cb58a89de4">
+                    <property-collection name="c0e0b537-6ba8-431e-8fec-26f134e10957">
                         <property value="#[header:paymentResult=APPROVED]" name="choice.expression"/>
                     </property-collection>
                 </properties>
-                <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="8457ecfe-d589-4447-8023-8a5a6028bf36"/>
-                <compartment entity-id="44f38f49-3ade-4235-b56c-36c9f18eaeda">
-                    <lane entity-id="023f23ff-f377-40bd-88b6-b2cb58a89de4">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Initialize order numbers list" entity-id="c2864fbe-b17a-4141-9e37-f2ab4a520657">
+                <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="dbe36698-e668-4ad2-b9a6-24755246eda7">
+                    <properties>
+                        <property-collection name="77cf8d9b-d75f-43c9-89f1-633235438e74">
+                            <property value="#[header:paymentResult=FAILED]" name="choice.expression"/>
+                        </property-collection>
+                        <property-collection name="c0e0b537-6ba8-431e-8fec-26f134e10957">
+                            <property value="#[header:paymentResult=APPROVED]" name="choice.expression"/>
+                        </property-collection>
+                    </properties>
+                </pattern>
+                <compartment entity-id="084af2ad-48e6-43ae-a389-db8155682aa0">
+                    <lane entity-id="c0e0b537-6ba8-431e-8fec-26f134e10957">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/variable-transformer" name="Initialize order numbers list" entity-id="8dc40e20-745f-4c32-bf6d-c89104595401">
                             <properties>
 <property value="http://www.mulesoft.org/schema/mule/core/set-variable" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
 <property value="orders" name="variableName"/>
 <property value="#[new java.util.LinkedList()]" name="value"/>
                             </properties>
                         </pattern>
-                        <scope type="http://www.mulesoft.org/schema/mule/core/foreach" name="For each item on the cart" entity-id="52d7c0e8-1936-4a96-9927-a5ca0176ea13">
+                        <scope type="http://www.mulesoft.org/schema/mule/core/foreach" name="For each item on the cart" entity-id="628f417a-628d-43d6-9427-13c253151324">
                             <properties>
 <property value="#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['cartContents'].toString()))]" name="collection"/>
 <property name="counterVariableName"/>
 <property name="batchSize"/>
 <property name="rootMessageVariableName"/>
                             </properties>
-                            <compartment entity-id="6115f4a3-48c6-42d5-baec-7a91b395d774">
-<lane entity-id="4b74cae2-07ba-49bf-82a6-4090e395be5f">
-    <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="7809c481-9f9b-46b7-bc7d-383710c834aa">
+                            <compartment entity-id="b83e56c0-f887-4c3f-8432-4908a3afbcde">
+<lane entity-id="9c9fb7fa-104f-4c91-a828-a12f147e9f75">
+    <splitter type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="56623b89-6e5c-478f-bbc3-df682e145e23">
         <properties>
-            <property-collection name="ccea72eb-d8b4-4303-af22-22ddcec568ef">
+            <property-collection name="0c7a2293-520a-4106-8171-ee894099a090">
                 <property value="#[payload['providerId'] == 'Barber\'s Paradise Store']" name="choice.expression"/>
             </property-collection>
-            <property-collection name="bf03026c-d91e-4eb1-b60d-2a7e15b1ddf8">
+            <property-collection name="6aab99da-1782-48bd-8b94-8b8894ada0dc">
                 <property value="#[payload['providerId'] == 'Van Gogh\'s Paint Store']" name="choice.expression"/>
             </property-collection>
         </properties>
-        <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="41b62e00-1b13-4d34-98be-95087d7303f3"/>
-        <compartment entity-id="eb0c4d05-21e3-4d3d-8232-1c06dd559d45">
-            <lane entity-id="ccea72eb-d8b4-4303-af22-22ddcec568ef">
-                <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Place order on Barber's Paradise Store" entity-id="9cf02f91-caf0-4a17-b401-f0582778aac8">
+        <pattern type="org.mule.tooling.ui.modules.core.pattern.cbr" name="Choice" entity-id="01f0b3d7-4c94-4e40-adb5-4ca1aef3ddae">
+            <properties>
+                <property-collection name="0c7a2293-520a-4106-8171-ee894099a090">
+                    <property value="#[payload['providerId'] == 'Barber\'s Paradise Store']" name="choice.expression"/>
+                </property-collection>
+                <property-collection name="6aab99da-1782-48bd-8b94-8b8894ada0dc">
+                    <property value="#[payload['providerId'] == 'Van Gogh\'s Paint Store']" name="choice.expression"/>
+                </property-collection>
+            </properties>
+        </pattern>
+        <compartment entity-id="964cc95b-e8d5-405c-80a5-f74dca09b906">
+            <lane entity-id="0c7a2293-520a-4106-8171-ee894099a090">
+                <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Place order on Barber's Paradise Store" entity-id="928dec85-d362-4590-899f-bc97e609d4f7">
                     <properties>
                         <property value="one-way" name="exchange-pattern"/>
                         <property value="request-response" name="exchange-pattern"/>
@@ -1111,8 +1132,8 @@
                     </properties>
                 </endpoint>
             </lane>
-            <lane entity-id="bf03026c-d91e-4eb1-b60d-2a7e15b1ddf8">
-                <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Set parameters to place order" entity-id="026e8ca2-3edc-4502-b3de-78a34f0c7028">
+            <lane entity-id="6aab99da-1782-48bd-8b94-8b8894ada0dc">
+                <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Set parameters to place order" entity-id="6d4e8438-ace4-4524-9e24-3b39443397c5">
                     <properties>
                         <property name="returnClass"/>
                         <property name="ignoreBadInput"/>
@@ -1122,15 +1143,16 @@
                         <property name="returnSourceIfNull"/>
                     </properties>
                 </pattern>
-                <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="Place order on Van Gogh Paint Store" entity-id="71b50e3f-fb29-4cbd-ad9a-ee25fa7f9f0a">
+                <pattern type="http://www.mulesoft.org/schema/mule/core/flow-ref" name="placeOrderOnVanGoghPaintStore" entity-id="df38990f-2076-401c-a9c0-a74834372e20">
                     <properties>
                         <property value="placeOrderOnVanGoghPaintStore" name="name"/>
                     </properties>
+                    <description></description>
                 </pattern>
             </lane>
         </compartment>
     </splitter>
-    <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="e9fe9b2e-7d14-4b81-b465-48d4e9e0124b">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="6451038d-213d-4d2e-b518-8b9bbd6274d7">
         <properties>
             <property name="returnClass"/>
             <property name="ignoreBadInput"/>
@@ -1138,7 +1160,7 @@
             <property name="mimeType"/>
         </properties>
     </pattern>
-    <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add order to orders list" entity-id="6073d907-ee72-4064-a4e6-a9055215189d">
+    <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Add order to orders list" entity-id="1e6c93f3-eef4-4a48-99b5-ecad032a84fc">
         <properties>
             <property name="returnClass"/>
             <property name="ignoreBadInput"/>
@@ -1151,7 +1173,7 @@
 </lane>
                             </compartment>
                         </scope>
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build checkout sucessful message" entity-id="961f2522-51b8-496c-9f41-96476fc032e4">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build checkout sucessful message" entity-id="a9dd6879-56f9-4834-9681-e603bf7dbac9">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>
@@ -1162,8 +1184,8 @@
                             </properties>
                         </pattern>
                     </lane>
-                    <lane entity-id="af2ca835-5585-4666-883b-2d605ecce020">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build payment rejected message" entity-id="fac68027-40aa-4842-9988-05a7e092eefc">
+                    <lane entity-id="77cf8d9b-d75f-43c9-89f1-633235438e74">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build payment rejected message" entity-id="f27a5aa7-fbb0-447d-9c7c-e2ba4d1cdcfe">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>
@@ -1176,15 +1198,15 @@
                     </lane>
                 </compartment>
             </splitter>
-            <scope type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" name="Catch Exception Strategy" entity-id="5f53ff6b-935f-4b95-984f-992fa706c7db">
+            <scope type="http://www.mulesoft.org/schema/mule/core/catch-exception-strategy" name="Catch Exception Strategy" entity-id="bee5f65b-d151-4d99-90e9-8e736e394f23">
                 <properties>
                     <property name=""/>
                     <property name="when"/>
                     <property name="enableNotifications"/>
                 </properties>
-                <compartment entity-id="5b94060d-60fc-4948-9c0c-beeae516a0f6">
-                    <lane entity-id="5fb49352-4889-46fa-8a3d-594bc5d94731">
-                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build error response" entity-id="deb15234-e546-4f5a-9fbe-e2509dfb00ad">
+                <compartment entity-id="bfe0d7ae-3773-4335-ad46-2a8a45864f74">
+                    <lane entity-id="5a9c6e95-1cc4-4a94-9a7a-45718c8e8376">
+                        <pattern type="http://www.mulesoft.org/schema/mule/core/expression-transformer" name="Build error response" entity-id="1af52fd4-5ace-46dd-89a7-24a0d916aa24">
                             <properties>
 <property name="returnClass"/>
 <property name="ignoreBadInput"/>
@@ -1199,6 +1221,52 @@
             </scope>
         </lane>
     </flow>
+    <flow SubFlow="true" name="requestPaymentAuthorizationToBank">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="USE_TRANSACTION_ID"/>
+            <property name="tracking:transaction-id"/>
+        </properties>
+        <lane entity-id="1f603590-5000-4fcb-8696-d345aae82ca9">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/properties-transformer" name="Remove cart contents property to call bank" entity-id="eee74193-8c70-4e2d-adcc-b71d3440c6d8">
+                <properties>
+                    <property value="http://www.mulesoft.org/schema/mule/core/remove-property" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="cartContents" name="propertyName"/>
+                </properties>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Request payment authorization to bank" entity-id="635dad91-b453-4ecb-ba2e-fc06ba15b997">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="httpLabel"/>
+                    <property value="localhost" name="host"/>
+                    <property value="10000" name="port"/>
+                    <property value="bank/authorizePayment" name="path"/>
+                    <property name="method"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="followRedirects"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="user"/>
+                    <property name="password"/>
+                    <property name="contentType"/>
+                    <property name="keep-alive"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
     <flow SubFlow="true" name="placeOrderOnVanGoghPaintStore">
         <properties>
             <property name="processingStrategy2"/>
@@ -1208,8 +1276,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane entity-id="2e8e6334-c79b-499a-9b10-19ae0890d100">
-            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Prepare SOAP request" entity-id="52ebd343-ae35-4841-abe7-009c566e3d7f">
+        <lane entity-id="fc63fae5-0f7f-4f26-a45c-67a88a7c6569">
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Prepare SOAP request" entity-id="2e3dfd33-e312-4bc5-96d9-6ca220ff480b">
                 <properties>
                     <property name="configuration-ref"/>
                     <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-client" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
@@ -1223,7 +1291,7 @@
                     <property value="true" name="enableMuleSoapHeaders"/>
                 </properties>
             </pattern>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Invoke SOAP request" entity-id="b4853299-0120-428f-a366-579ad83fdc8c">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="Invoke SOAP request" entity-id="9fe1116f-4246-410c-bacd-2a583e46673b">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
