@@ -47,7 +47,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             </processor-chain>
             <processor-chain>
                 <ee:cache cachingStrategy-ref="listProductsVangoghPaintStoreCachingStrategy" doc:name="Cache">
-                    <flow-ref name="fetchProductsFromVanGoghPaintStore" doc:name="Fetch products from Van Gogh Paint Store"></flow-ref>
+                    <flow-ref name="subflow-fetchProductsFromVanGoghPaintStore" doc:name="subflow-fetchProductsFromVanGoghPaintStore"></flow-ref>
                 </ee:cache>
                 <collection-splitter doc:name="Split received collection"></collection-splitter>
                 <data-mapper:transform config-ref="vanGoghPaintToCanonicalJSON" doc:name="Transform to canonical JSON"></data-mapper:transform>
@@ -57,7 +57,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         </all>
         <expression-transformer expression="allProducts" doc:name="Set payload to output list"></expression-transformer>
     </flow>
-    <sub-flow name="fetchProductsFromVanGoghPaintStore" doc:name="fetchProductsFromVanGoghPaintStore">
+    <sub-flow name="subflow-fetchProductsFromVanGoghPaintStore" doc:name="subflow-fetchProductsFromVanGoghPaintStore">
         <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"></cxf:jaxws-client>
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"></http:outbound-endpoint>
     </sub-flow>
@@ -79,7 +79,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                     <processor-chain>
                         <enricher target="#[header:outbound:productDetails]" doc:name="Store product details as message property (enrich)">
                             <ee:cache cachingStrategy-ref="fetchProductDetailsCachingStrategy" doc:name="Cache">
-                                <flow-ref name="fetchProductDetailsFromBarbersParadise" doc:name="fetchProductDetailsFromBarbersParadise"></flow-ref>
+                                <core:flow-ref name="subflow-fetchProductDetailsFromBarbersParadise" doc:name="subflow-fetchProductDetailsFromBarbersParadise"></core:flow-ref>
                             </ee:cache>
                         </enricher>
                     </processor-chain>
@@ -88,7 +88,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                     <processor-chain>
                         <enricher target="#[header:outbound:productDetails]" doc:name="Store product details as message property (enrich)">
                             <ee:cache cachingStrategy-ref="fetchProductDetailsCachingStrategy" doc:name="Cache">
-                                <flow-ref name="fetchProductDetailsFromVanGoghPaintStore" doc:name="fetchProductDetailsFromVanGoghPaintStore"></flow-ref>
+                                <core:flow-ref name="subflow-fetchProductDetailsFromVanGoghPaintStore" doc:name="subflow-fetchProductDetailsFromVanGoghPaintStore"></core:flow-ref>
                             </ee:cache>
                         </enricher>
                     </processor-chain>
@@ -97,9 +97,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <data-mapper:transform config-ref="consolidateProductDetailsOnCart" doc:name="Consolidate cart item info and subtotal">
                 <data-mapper:input-arguments>
                     <data-mapper:input-argument key="price">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).price]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="providerId">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).providerId]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="product_id">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productId]</data-mapper:input-argument>
                     <data-mapper:input-argument key="productDescription">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productDescription]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="product_id">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="providerId">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).providerId]</data-mapper:input-argument>
                 </data-mapper:input-arguments>
             </data-mapper:transform>
             <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
@@ -109,18 +109,18 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <set-property propertyName="cartTotal" value="#[grandTotal]" doc:name="Set cartTotal message property with grand total"></set-property>
         <expression-transformer expression="cartItems" doc:name="Set payload to cart items list"></expression-transformer>
     </sub-flow>
-    <sub-flow name="fetchProductDetailsFromBarbersParadise" doc:name="fetchProductDetailsFromBarbersParadise">
+    <sub-flow name="subflow-fetchProductDetailsFromBarbersParadise" doc:name="subflow-fetchProductDetailsFromBarbersParadise">
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products/#[payload['PRODUCT_ID']]" doc:name="Fetch product info from Barber's Paradise Store"></http:outbound-endpoint>
         <data-mapper:transform config-ref="barbersParadiseToCanonicalJSON" doc:name="Transform to canonical JSON"></data-mapper:transform>
         <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
     </sub-flow>
-    <sub-flow name="fetchProductDetailsFromVanGoghPaintStore" doc:name="fetchProductDetailsFromVanGoghPaintStore">
+    <sub-flow name="subflow-fetchProductDetailsFromVanGoghPaintStore" doc:name="subflow-fetchProductDetailsFromVanGoghPaintStore">
         <expression-transformer expression="payload['PRODUCT_ID']" doc:name="Assing product id to payload"></expression-transformer>
-        <flow-ref name="invokeVanGoghGetProductInfoSOAPService" doc:name="invokeVanGoghGetProductInfoSOAPService"></flow-ref>
+        <flow-ref name="subflow-invokeVanGoghGetProductInfoSOAPService" doc:name="subflow-invokeVanGoghGetProductInfoSOAPService"></flow-ref>
         <data-mapper:transform config-ref="vanGoghPaintToCanonicalJSON" doc:name="Transform to canonical JSON"></data-mapper:transform>
         <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
     </sub-flow>
-    <sub-flow name="invokeVanGoghGetProductInfoSOAPService" doc:name="invokeVanGoghGetProductInfoSOAPService">
+    <sub-flow name="subflow-invokeVanGoghGetProductInfoSOAPService" doc:name="subflow-invokeVanGoghGetProductInfoSOAPService">
         <cxf:jaxws-client operation="getProductInfo" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"></cxf:jaxws-client>
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"></http:outbound-endpoint>
     </sub-flow>
@@ -131,18 +131,12 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     <flow name="doCheckout" doc:name="doCheckout">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ2" doc:name="JMS"></jms:inbound-endpoint>
         <enricher doc:name="Enrich message with cart details">
-            <flow-ref name="subflow-showCart" doc:name="subflow-showCart"></flow-ref>
+            <core:flow-ref name="subflow-showCart" doc:name="subflow-showCart"></core:flow-ref>
             <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
             <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
         </enricher>
-        <data-mapper:transform config-ref="checkoutRequestToPaymentAuthorization" doc:name="Transform checkout request to payment authorization request">
-            <data-mapper:input-arguments>
-                <data-mapper:input-argument key="grandTotal">#[header:outbound:grandTotal]</data-mapper:input-argument>
-            </data-mapper:input-arguments>
-        </data-mapper:transform>
-        <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
         <enricher doc:name="Enrich message with payment authorization results">
-            <flow-ref name="requestPaymentAuthorizationToBank" doc:name="requestPaymentAuthorizationToBank"></flow-ref>
+            <core:flow-ref name="subflow-authorizePayment" doc:name="subflow-authorizePayment"></core:flow-ref>
             <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
             <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
         </enricher>
@@ -160,7 +154,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                             <when expression="#[payload['providerId'] == 'Van Gogh\'s Paint Store']">
                                 <processor-chain>
                                     <expression-transformer expression="[ payload.productId, new Integer(payload.qty)].toArray()" doc:name="Set parameters to place order"></expression-transformer>
-                                    <flow-ref name="placeOrderOnVanGoghPaintStore" doc:name="placeOrderOnVanGoghPaintStore"></flow-ref>
+                                    <flow-ref name="subflow-placeOrderOnVanGoghPaintStore" doc:name="subflow-placeOrderOnVanGoghPaintStore"></flow-ref>
                                 </processor-chain>
                             </when>
                         </choice>
@@ -180,11 +174,20 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <expression-transformer expression="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;Unable to process payment with bank due to communication problems or invalid credit card information. Check you're submitting a 16-digit credit card number, a 3-digit security code, a name and an address.\&quot;}&quot;" doc:name="Build error response"></expression-transformer>
         </catch-exception-strategy>
     </flow>
-    <sub-flow name="requestPaymentAuthorizationToBank" doc:name="requestPaymentAuthorizationToBank">
+    <sub-flow name="subflow-authorizePayment" doc:name="subflow-authorizePayment">
+        <data-mapper:transform config-ref="checkoutRequestToPaymentAuthorization" doc:name="Transform checkout request to payment authorization request">
+            <data-mapper:input-arguments>
+                <data-mapper:input-argument key="grandTotal">#[header:outbound:grandTotal]</data-mapper:input-argument>
+            </data-mapper:input-arguments>
+        </data-mapper:transform>
+        <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
+        <flow-ref name="subflow-requestPaymentAuthorizationToBank" doc:name="subflow-requestPaymentAuthorizationToBank"></flow-ref>
+    </sub-flow>
+    <sub-flow name="subflow-requestPaymentAuthorizationToBank" doc:name="subflow-requestPaymentAuthorizationToBank">
         <remove-property propertyName="cartContents" doc:name="Remove cart contents property to call bank"></remove-property>
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="10000" path="bank/authorizePayment" doc:name="Request payment authorization to bank"></http:outbound-endpoint>
     </sub-flow>
-    <sub-flow name="placeOrderOnVanGoghPaintStore" doc:name="placeOrderOnVanGoghPaintStore">
+    <sub-flow name="subflow-placeOrderOnVanGoghPaintStore" doc:name="subflow-placeOrderOnVanGoghPaintStore">
         <cxf:jaxws-client operation="orderProduct" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"></cxf:jaxws-client>
         <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"></http:outbound-endpoint>
     </sub-flow>
