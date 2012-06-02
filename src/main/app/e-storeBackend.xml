@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jdbc="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jdbc="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:debugger="http://www.mulesoft.org/schema/mule/debugger" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="EE-3.3.0" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
 http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd 
@@ -9,10 +9,12 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
 http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/3.2/mule-data-mapper.xsd 
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd 
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
+http://www.mulesoft.org/schema/mule/debugger http://www.mulesoft.org/schema/mule/debugger/current/mule-debugger.xsd 
 http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd 
 http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd 
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd ">
-    <jms:activemq-connector name="Active_MQ2" specification="1.1" brokerURL="vm://localhost" validateConnections="true" doc:name="Active_MQ"></jms:activemq-connector>
+    <jms:activemq-connector name="Active_MQ2" specification="1.1" brokerURL="vm://localhost" validateConnections="true" doc:name="Active_MQ"/>
     <spring:beans>
         <spring:bean id="Derby_Data_Source" class="org.enhydra.jdbc.standard.StandardXADataSource" destroy-method="shutdown">
             <spring:property name="driverName" value="org.apache.derby.jdbc.EmbeddedDriver"/>
@@ -24,62 +26,62 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
         <jdbc:query key="query-showCart" value="SELECT * FROM cart WHERE session_id = #[header:inbound:sessionId]"/>
         <jdbc:query key="query-clearCart" value="DELETE FROM cart WHERE session_id = #[header:inbound:sessionId]"/>
     </jdbc:connector>
-    <data-mapper:config name="barbersParadiseToCanonicalJSON" transformationGraphPath="barbers_paradise_to_canonical_json.grf" doc:name="Barbers Paradise to canonical JSON"></data-mapper:config>
-    <data-mapper:config name="vanGoghPaintToCanonicalJSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"></data-mapper:config>
-    <data-mapper:config name="consolidateProductDetailsOnCart" transformationGraphPath="consolidateproductdetailsoncart.grf" doc:name="consolidateProductDetailsOnCart"></data-mapper:config>
-    <data-mapper:config name="checkoutRequestToPaymentAuthorization" transformationGraphPath="checkoutrequesttopaymentauthorization.grf" doc:name="checkoutRequestToPaymentAuthorization"></data-mapper:config>
-    <http:connector name="HttpConnector" enableCookies="true" keepAlive="true" doc:name="HTTP\HTTPS"></http:connector>
-    <ee:object-store-caching-strategy name="fetchProductDetailsCachingStrategy" keyGenerationExpression="#[payload['PRODUCT_ID']]" doc:name="Caching Strategy"></ee:object-store-caching-strategy>
-    <ee:object-store-caching-strategy name="listProductsBarbersParadiseCachingStrategy" keyGenerationExpression="#[&quot;BARBERSPARADISE&quot;]" doc:name="Caching Strategy"></ee:object-store-caching-strategy>
-    <ee:object-store-caching-strategy name="listProductsVangoghPaintStoreCachingStrategy" keyGenerationExpression="#[&quot;VANGOGH&quot;]" doc:name="Caching Strategy"></ee:object-store-caching-strategy>
+    <data-mapper:config name="barbersParadiseToCanonicalJSON" transformationGraphPath="barbers_paradise_to_canonical_json.grf" doc:name="Barbers Paradise to canonical JSON"/>
+    <data-mapper:config name="vanGoghPaintToCanonicalJSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"/>
+    <data-mapper:config name="consolidateProductDetailsOnCart" transformationGraphPath="consolidateproductdetailsoncart.grf" doc:name="consolidateProductDetailsOnCart"/>
+    <data-mapper:config name="checkoutRequestToPaymentAuthorization" transformationGraphPath="checkoutrequesttopaymentauthorization.grf" doc:name="checkoutRequestToPaymentAuthorization"/>
+    <http:connector name="HttpConnector" enableCookies="true" keepAlive="true" doc:name="HTTP\HTTPS"/>
+    <ee:object-store-caching-strategy name="fetchProductDetailsCachingStrategy" keyGenerationExpression="#[payload['PRODUCT_ID']]" doc:name="Caching Strategy"/>
+    <ee:object-store-caching-strategy name="listProductsBarbersParadiseCachingStrategy" keyGenerationExpression="#[&quot;BARBERSPARADISE&quot;]" doc:name="Caching Strategy"/>
+    <ee:object-store-caching-strategy name="listProductsVangoghPaintStoreCachingStrategy" keyGenerationExpression="#[&quot;VANGOGH&quot;]" doc:name="Caching Strategy"/>
     <flow name="listProducts" doc:name="listProducts">
-        <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ2" doc:name="JMS"></jms:inbound-endpoint>
-        <set-variable variableName="allProducts" value="#[new java.util.LinkedList()]" doc:name="Initialize output list"></set-variable>
+        <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ2" doc:name="JMS"/>
+        <set-variable variableName="allProducts" value="#[new java.util.LinkedList()]" doc:name="Initialize output list"/>
         <all doc:name="All">
             <processor-chain>
                 <ee:cache cachingStrategy-ref="listProductsBarbersParadiseCachingStrategy" doc:name="Cache">
-                    <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" method="GET" connector-ref="HttpConnector" doc:name="Fetch products from Barbers Paradise Store"></http:outbound-endpoint>
+                    <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products" method="GET" connector-ref="HttpConnector" doc:name="Fetch products from Barbers Paradise Store"/>
                 </ee:cache>
-                <splitter expression="#[json:]" doc:name="Split received products list"></splitter>
-                <data-mapper:transform config-ref="barbersParadiseToCanonicalJSON" doc:name="Transform to canonical JSON"></data-mapper:transform>
-                <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
-                <expression-transformer expression="flowVars['allProducts'].add(payload)" doc:name="Add product to output list"></expression-transformer>
+                <splitter expression="#[json:]" doc:name="Split received products list"/>
+                <data-mapper:transform config-ref="barbersParadiseToCanonicalJSON" doc:name="Transform to canonical JSON"/>
+                <object-to-string-transformer doc:name="Object to String"/>
+                <expression-transformer expression="flowVars['allProducts'].add(payload)" doc:name="Add product to output list"/>
             </processor-chain>
             <processor-chain>
                 <ee:cache cachingStrategy-ref="listProductsVangoghPaintStoreCachingStrategy" doc:name="Cache">
-                    <flow-ref name="subflow-fetchProductsFromVanGoghPaintStore" doc:name="subflow-fetchProductsFromVanGoghPaintStore"></flow-ref>
+                    <flow-ref name="subflow-fetchProductsFromVanGoghPaintStore" doc:name="subflow-fetchProductsFromVanGoghPaintStore"/>
                 </ee:cache>
-                <collection-splitter doc:name="Split received collection"></collection-splitter>
-                <data-mapper:transform config-ref="vanGoghPaintToCanonicalJSON" doc:name="Transform to canonical JSON"></data-mapper:transform>
-                <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
-                <expression-transformer expression="flowVars['allProducts'].add(payload)" doc:name="Add product to output list"></expression-transformer>
+                <collection-splitter doc:name="Split received collection"/>
+                <data-mapper:transform config-ref="vanGoghPaintToCanonicalJSON" doc:name="Transform to canonical JSON"/>
+                <object-to-string-transformer doc:name="Object to String"/>
+                <expression-transformer expression="flowVars['allProducts'].add(payload)" doc:name="Add product to output list"/>
             </processor-chain>
         </all>
-        <expression-transformer expression="allProducts" doc:name="Set payload to output list"></expression-transformer>
+        <expression-transformer expression="allProducts" doc:name="Set payload to output list"/>
     </flow>
     <sub-flow name="subflow-fetchProductsFromVanGoghPaintStore" doc:name="subflow-fetchProductsFromVanGoghPaintStore">
-        <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"></cxf:jaxws-client>
-        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"></http:outbound-endpoint>
+        <cxf:jaxws-client operation="listProducts" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
     </sub-flow>
     <flow name="addToCart" doc:name="addToCart">
-        <jms:inbound-endpoint queue="estore.addToCart" connector-ref="Active_MQ2" doc:name="JMS"></jms:inbound-endpoint>
-        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-addToCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Store product on cart table"></jdbc:outbound-endpoint>
+        <jms:inbound-endpoint queue="estore.addToCart" connector-ref="Active_MQ2" doc:name="JMS"/>
+        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-addToCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Store product on cart table"/>
     </flow>
     <flow name="showCart" doc:name="showCart">
-        <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ2" doc:name="JMS"></jms:inbound-endpoint>
-        <flow-ref name="subflow-showCart" doc:name="subflow-showCart"></flow-ref>
+        <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.showCart" connector-ref="Active_MQ2" doc:name="JMS"/>
+        <flow-ref name="subflow-showCart" doc:name="subflow-showCart"/>
     </flow>
     <sub-flow name="subflow-showCart" doc:name="subflow-showCart">
-        <jdbc:outbound-endpoint exchange-pattern="request-response" queryKey="query-showCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Fetch cart contents from database"></jdbc:outbound-endpoint>
-        <set-variable variableName="grandTotal" value="#[0]" doc:name="Initialize grand total"></set-variable>
-        <set-variable variableName="cartItems" value="#[new java.util.LinkedList()]" doc:name="Initialize cart items list"></set-variable>
+        <jdbc:outbound-endpoint exchange-pattern="request-response" queryKey="query-showCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Fetch cart contents from database"/>
+        <set-variable variableName="grandTotal" value="#[0]" doc:name="Initialize grand total"/>
+        <set-variable variableName="cartItems" value="#[new java.util.LinkedList()]" doc:name="Initialize cart items list"/>
         <foreach doc:name="Foreach">
             <choice doc:name="Choice">
                 <when expression="payload['PROVIDER'].equals('Barber\'s Paradise Store')">
                     <processor-chain>
                         <enricher target="#[header:outbound:productDetails]" doc:name="Store product details as message property (enrich)">
                             <ee:cache cachingStrategy-ref="fetchProductDetailsCachingStrategy" doc:name="Cache">
-                                <flow-ref name="subflow-fetchProductDetailsFromBarbersParadise" doc:name="subflow-fetchProductDetailsFromBarbersParadise"></flow-ref>
+                                <core:flow-ref name="subflow-fetchProductDetailsFromBarbersParadise" doc:name="subflow-fetchProductDetailsFromBarbersParadise"/>
                             </ee:cache>
                         </enricher>
                     </processor-chain>
@@ -88,7 +90,7 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                     <processor-chain>
                         <enricher target="#[header:outbound:productDetails]" doc:name="Store product details as message property (enrich)">
                             <ee:cache cachingStrategy-ref="fetchProductDetailsCachingStrategy" doc:name="Cache">
-                                <flow-ref name="subflow-fetchProductDetailsFromVanGoghPaintStore" doc:name="subflow-fetchProductDetailsFromVanGoghPaintStore"></flow-ref>
+                                <core:flow-ref name="subflow-fetchProductDetailsFromVanGoghPaintStore" doc:name="subflow-fetchProductDetailsFromVanGoghPaintStore"/>
                             </ee:cache>
                         </enricher>
                     </processor-chain>
@@ -97,81 +99,98 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <data-mapper:transform config-ref="consolidateProductDetailsOnCart" doc:name="Consolidate cart item info and subtotal">
                 <data-mapper:input-arguments>
                     <data-mapper:input-argument key="price">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).price]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="productDescription">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productDescription]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="product_id">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productId]</data-mapper:input-argument>
                     <data-mapper:input-argument key="providerId">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).providerId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="product_id">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="productDescription">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productDescription]</data-mapper:input-argument>
                 </data-mapper:input-arguments>
             </data-mapper:transform>
-            <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
-            <set-variable variableName="grandTotal" value="#[grandTotal + (new Float((new groovy.json.JsonSlurper().parseText(payload)).subtotal)).floatValue()]" doc:name="Sum item subtotal to grand total"></set-variable>
-            <expression-transformer expression="flowVars['cartItems'].add(payload)" doc:name="Add cart item to list"></expression-transformer>
+            <object-to-string-transformer doc:name="Object to String"/>
+            <set-variable variableName="grandTotal" value="#[grandTotal + Float.parseFloat((new groovy.json.JsonSlurper().parseText(payload)).subtotal)]" doc:name="Sum item subtotal to grand total"/>
+            <expression-transformer expression="flowVars['cartItems'].add(payload)" doc:name="Add cart item to list"/>
         </foreach>
-        <set-property propertyName="cartTotal" value="#[grandTotal]" doc:name="Set cartTotal message property with grand total"></set-property>
-        <expression-transformer expression="cartItems" doc:name="Set payload to cart items list"></expression-transformer>
+        <set-property propertyName="cartTotal" value="#[grandTotal]" doc:name="Set cartTotal message property with grand total"/>
+        <expression-transformer expression="cartItems" doc:name="Set payload to cart items list"/>
     </sub-flow>
     <sub-flow name="subflow-fetchProductDetailsFromBarbersParadise" doc:name="subflow-fetchProductDetailsFromBarbersParadise">
-        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products/#[payload['PRODUCT_ID']]" doc:name="Fetch product info from Barber's Paradise Store"></http:outbound-endpoint>
-        <data-mapper:transform config-ref="barbersParadiseToCanonicalJSON" doc:name="Transform to canonical JSON"></data-mapper:transform>
-        <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/products/#[payload['PRODUCT_ID']]" doc:name="Fetch product info from Barber's Paradise Store"/>
+        <data-mapper:transform config-ref="barbersParadiseToCanonicalJSON" doc:name="Transform to canonical JSON"/>
+        <object-to-string-transformer doc:name="Object to String"/>
     </sub-flow>
     <sub-flow name="subflow-fetchProductDetailsFromVanGoghPaintStore" doc:name="subflow-fetchProductDetailsFromVanGoghPaintStore">
-        <expression-transformer expression="payload['PRODUCT_ID']" doc:name="Assing product id to payload"></expression-transformer>
-        <flow-ref name="subflow-invokeVanGoghGetProductInfoSOAPService" doc:name="subflow-invokeVanGoghGetProductInfoSOAPService"></flow-ref>
-        <data-mapper:transform config-ref="vanGoghPaintToCanonicalJSON" doc:name="Transform to canonical JSON"></data-mapper:transform>
-        <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
+        <expression-transformer expression="payload['PRODUCT_ID']" doc:name="Assing product id to payload"/>
+        <flow-ref name="subflow-invokeVanGoghGetProductInfoSOAPService" doc:name="subflow-invokeVanGoghGetProductInfoSOAPService"/>
+        <data-mapper:transform config-ref="vanGoghPaintToCanonicalJSON" doc:name="Transform to canonical JSON"/>
+        <object-to-string-transformer doc:name="Object to String"/>
     </sub-flow>
     <sub-flow name="subflow-invokeVanGoghGetProductInfoSOAPService" doc:name="subflow-invokeVanGoghGetProductInfoSOAPService">
-        <cxf:jaxws-client operation="getProductInfo" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"></cxf:jaxws-client>
-        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"></http:outbound-endpoint>
+        <cxf:jaxws-client operation="getProductInfo" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
     </sub-flow>
     <flow name="clearCart" doc:name="clearCart">
-        <jms:inbound-endpoint queue="estore.clearCart" connector-ref="Active_MQ2" doc:name="JMS"></jms:inbound-endpoint>
-        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-clearCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Delete cart contents"></jdbc:outbound-endpoint>
+        <jms:inbound-endpoint queue="estore.clearCart" connector-ref="Active_MQ2" doc:name="JMS"/>
+        <jdbc:outbound-endpoint exchange-pattern="one-way" queryKey="query-clearCart" queryTimeout="-1" connector-ref="JDBCConnector" doc:name="Delete cart contents"/>
     </flow>
     <flow name="doCheckout" doc:name="doCheckout">
-        <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ2" doc:name="JMS"></jms:inbound-endpoint>
+        <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.doCheckout" connector-ref="Active_MQ2" doc:name="JMS"/>
         <enricher doc:name="Enrich message with cart details">
-            <flow-ref name="subflow-showCart" doc:name="subflow-showCart"></flow-ref>
+            <core:flow-ref name="subflow-showCart" doc:name="subflow-showCart"/>
             <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
             <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
+            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
+            <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
+            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
+            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
+            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
+            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
         </enricher>
         <enricher doc:name="Enrich message with payment authorization results">
-            <flow-ref name="subflow-authorizePayment" doc:name="subflow-authorizePayment"></flow-ref>
+            <core:flow-ref name="subflow-authorizePayment" doc:name="subflow-authorizePayment"/>
             <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
             <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
+            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
+            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
+            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
+            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
+            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
+            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
         </enricher>
         <choice doc:name="Choice">
             <when expression="#[header:paymentResult=APPROVED]">
                 <processor-chain>
-                    <set-variable variableName="orders" value="#[new java.util.LinkedList()]" doc:name="Initialize order numbers list"></set-variable>
+                    <set-variable variableName="orders" value="#[new java.util.LinkedList()]" doc:name="Initialize order numbers list"/>
+                    <set-variable variableName="orderSorter" value="#[new com.mulesoft.example.estore.util.OrderSorter((new groovy.json.JsonSlurper().parseText(payload)).cardholderName, (new groovy.json.JsonSlurper().parseText(payload)).deliveryAddress)]" doc:name="Initialize orders sorter"/>
                     <foreach collection="#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['cartContents'].toString()))]" doc:name="For each item on the cart">
+                        <expression-component doc:name="Expression">#[flowVars['orderSorter'].sortOrderItem(payload.providerId, new com.mulesoft.example.estore.util.OrderItem(payload.productId, Integer.parseInt(payload.qty)))]</expression-component>
+                    </foreach>
+                    <foreach collection="#[flowVars['orderSorter'].getSortedOrders()]" doc:name="For each order">
+                        <logger message="Sorted order: #[payload.toString()]" level="INFO" doc:name="Logger"/>
                         <choice doc:name="Choice">
-                            <when expression="#[payload['providerId'] == 'Barber\'s Paradise Store']">
+                            <when expression="#[payload.providerId == 'Barber\'s Paradise Store']">
                                 <processor-chain>
-                                    <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="Place order on Barber's Paradise Store"></http:outbound-endpoint>
+                                    <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="Place order on Barber's Paradise Store"/>
                                 </processor-chain>
                             </when>
-                            <when expression="#[payload['providerId'] == 'Van Gogh\'s Paint Store']">
+                            <when expression="#[payload.providerId == 'Van Gogh\'s Paint Store']">
                                 <processor-chain>
-                                    <expression-transformer expression="[ payload.productId, new Integer(payload.qty)].toArray()" doc:name="Set parameters to place order"></expression-transformer>
-                                    <flow-ref name="subflow-placeOrderOnVanGoghPaintStore" doc:name="subflow-placeOrderOnVanGoghPaintStore"></flow-ref>
+                                    <expression-transformer expression="[ payload.productId, new Integer(payload.qty)].toArray()" doc:name="Set parameters to place order"/>
+                                    <flow-ref name="subflow-placeOrderOnVanGoghPaintStore" doc:name="subflow-placeOrderOnVanGoghPaintStore"/>
                                 </processor-chain>
                             </when>
                         </choice>
-                        <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
-                        <expression-transformer expression="flowVars['orders'].add(&quot;\&quot;&quot; + payload.toString() + &quot;\&quot;&quot;)" doc:name="Add order to orders list"></expression-transformer>
+                        <object-to-string-transformer doc:name="Object to String"/>
+                        <expression-transformer expression="flowVars['orders'].add(&quot;\&quot;&quot; + payload.toString() + &quot;\&quot;&quot;)" doc:name="Add order to orders list"/>
                     </foreach>
-                    <expression-transformer expression="&quot;{\&quot;result\&quot;: \&quot;APPROVED\&quot;, \&quot;orders\&quot;: &quot; + flowVars[&quot;orders&quot;].toString() + &quot;}&quot;" doc:name="Build checkout sucessful message"></expression-transformer>
+                    <expression-transformer expression="&quot;{\&quot;result\&quot;: \&quot;APPROVED\&quot;, \&quot;orders\&quot;: &quot; + flowVars[&quot;orders&quot;].toString() + &quot;}&quot;" doc:name="Build checkout sucessful message"/>
                 </processor-chain>
             </when>
             <when expression="#[header:paymentResult=FAILED]">
                 <processor-chain>
-                    <expression-transformer expression="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;&quot; + message.outboundProperties[&quot;paymentReason&quot;] + &quot;\&quot;}&quot;" doc:name="Build payment rejected message"></expression-transformer>
+                    <expression-transformer expression="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;&quot; + message.outboundProperties[&quot;paymentReason&quot;] + &quot;\&quot;}&quot;" doc:name="Build payment rejected message"/>
                 </processor-chain>
             </when>
         </choice>
-        <catch-exception-strategy>
-            <expression-transformer expression="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;Unable to process payment with bank due to communication problems or invalid credit card information. Check you're submitting a 16-digit credit card number, a 3-digit security code, a name and an address.\&quot;}&quot;" doc:name="Build error response"></expression-transformer>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <expression-transformer expression="&quot;{\&quot;result\&quot;: \&quot;FAILED\&quot;, \&quot;reason\&quot;: \&quot;Unable to process payment with bank due to communication problems or invalid credit card information. Check you're submitting a 16-digit credit card number, a 3-digit security code, a name and an address.\&quot;}&quot;" doc:name="Build error response"/>
         </catch-exception-strategy>
     </flow>
     <sub-flow name="subflow-authorizePayment" doc:name="subflow-authorizePayment">
@@ -180,15 +199,15 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                 <data-mapper:input-argument key="grandTotal">#[header:outbound:grandTotal]</data-mapper:input-argument>
             </data-mapper:input-arguments>
         </data-mapper:transform>
-        <object-to-string-transformer doc:name="Object to String"></object-to-string-transformer>
-        <flow-ref name="subflow-requestPaymentAuthorizationToBank" doc:name="subflow-requestPaymentAuthorizationToBank"></flow-ref>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <flow-ref name="subflow-requestPaymentAuthorizationToBank" doc:name="subflow-requestPaymentAuthorizationToBank"/>
     </sub-flow>
     <sub-flow name="subflow-requestPaymentAuthorizationToBank" doc:name="subflow-requestPaymentAuthorizationToBank">
-        <remove-property propertyName="cartContents" doc:name="Remove cart contents property to call bank"></remove-property>
-        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="10000" path="bank/authorizePayment" doc:name="Request payment authorization to bank"></http:outbound-endpoint>
+        <remove-property propertyName="cartContents" doc:name="Remove cart contents property to call bank"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="10000" path="bank/authorizePayment" doc:name="Request payment authorization to bank"/>
     </sub-flow>
     <sub-flow name="subflow-placeOrderOnVanGoghPaintStore" doc:name="subflow-placeOrderOnVanGoghPaintStore">
-        <cxf:jaxws-client operation="orderProduct" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"></cxf:jaxws-client>
-        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"></http:outbound-endpoint>
+        <cxf:jaxws-client operation="orderProduct" serviceClass="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.B2BStore" port="80" enableMuleSoapHeaders="true" doc:name="Prepare SOAP request"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9081" path="vangoghpaintstore" doc:name="Invoke SOAP request"/>
     </sub-flow>
 </mule>
