@@ -138,15 +138,11 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <core:flow-ref name="subflow-showCart" doc:name="subflow-showCart"/>
             <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
             <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
         </enricher>
         <enricher doc:name="Enrich message with payment authorization results">
             <core:flow-ref name="subflow-authorizePayment" doc:name="subflow-authorizePayment"/>
             <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
             <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
         </enricher>
         <choice doc:name="Choice">
             <when expression="#[header:paymentResult=APPROVED]">
