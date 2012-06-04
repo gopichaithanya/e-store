@@ -8,8 +8,9 @@ import javax.jws.WebService;
 public interface B2BStore {
 
 	public List<Product> listProducts();
+	
 	public Product getProductInfo(String upc);
-	public String orderProduct(String upc, int qty);
 	
-	
+	public String placeOrder(DeliveryOrder order);
+		
 }

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph author="jdeoliveira" created="Fri Jun 01 22:00:03 GMT-03:00 2012" guiVersion="3.3.0.M2" id="1338826968462" licenseCode="Unlicensed" licenseType="Unknown" modified="Fri Jun 01 22:00:03 GMT-03:00 2012" modifiedBy="jdeoliveira" name="ordertodeliveryorder" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Output" id="Metadata2">
+<Record fieldDelimiter="|" name="DeliveryOrder" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{}/object/address" label="address" name="address" type="string"/>
+<Field __sourcePath="{}/object/name" label="name" name="name" type="string"/>
+</Record>
+</Metadata>
+<Metadata __sourcePath="{}/object/items" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="Metadata2" _parent_id="__parent_id" _position="0" _type="Output" id="Metadata3">
+<Record fieldDelimiter="|" name="DeliveryOrderItem" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __sourcePath="{}/object/items/qty" label="qty" name="qty" type="integer"/>
+<Field __sourcePath="{}/object/items/upc" label="upc" name="upc" type="string"/>
+</Record>
+</Metadata>
+<Metadata __sourcePath="{}/object" _dataStructure="OBJECT" _id="__id" _type="Input" id="Metadata0">
+<Record fieldDelimiter="|" name="Order" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __sourcePath="{}/object/customerName" label="customerName" name="customerName" type="string"/>
+<Field __sourcePath="{}/object/deliveryAddress" label="deliveryAddress" name="deliveryAddress" type="string"/>
+<Field __sourcePath="{}/object/providerId" label="providerId" name="providerId" type="string"/>
+</Record>
+</Metadata>
+<Metadata __sourcePath="{}/object/items" _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _id="__id" _metadataParentId="Metadata0" _parent_id="__parent_id" _position="0" _type="Input" id="Metadata1">
+<Record fieldDelimiter="|" name="OrderItem" recordDelimiter="&#10;" type="delimited">
+<Field __artificialType="_id" __systemManaged="true" name="__id" type="string"/>
+<Field __artificialType="_parent_id" __systemManaged="true" name="__parent_id" type="string"/>
+<Field __sourcePath="{}/object/items/productId" label="productId" name="productId" type="string"/>
+<Field __sourcePath="{}/object/items/quantity" label="quantity" name="quantity" type="integer"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node enabled="enabled" fileURL="dict:inputPayload" guiHeight="0" guiName="JAVA Reader" guiWidth="0" guiX="20" guiY="20" id="BEAN_READER0" type="BEAN_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Context outPort="0" sequenceField="__id" xpath=".">
+  <Mapping cloverField="customerName" trim="true" xpath="customerName"/>
+  <Mapping cloverField="deliveryAddress" trim="true" xpath="deliveryAddress"/>
+  <Mapping cloverField="providerId" trim="true" xpath="providerId"/>
+  <Context generatedKey="__parent_id" outPort="1" parentKey="__id" sequenceField="__id" xpath="items">
+    <Mapping cloverField="productId" trim="true" xpath="productId"/>
+    <Mapping cloverField="quantity" trim="true" xpath="quantity"/>
+  </Context>
+  <Context generatedKey="__parent_id" outPort="2" parentKey="__id" sequenceField="__id" xpath="items">
+    <Mapping cloverField="productId" trim="true" xpath="productId"/>
+    <Mapping cloverField="quantity" trim="true" xpath="quantity"/>
+  </Context>
+</Context>
+]]></attr>
+<attr name="_data_format"><![CDATA[JAVA]]></attr>
+<attr name="schema"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<schema-object>
+  <typed-object-ref type-ref="com.mulesoft.example.estore.util.Order"/>
+  <typed-object type="com.mulesoft.example.estore.util.OrderItem">
+    <typed-object-ref name="productId" type-ref="java.lang.String"/>
+    <typed-object-ref name="quantity" type-ref="int"/>
+  </typed-object>
+  <typed-object type="int"/>
+  <typed-object type="java.lang.String"/>
+  <typed-object type="com.mulesoft.example.estore.util.Order">
+    <typed-object-ref name="customerName" type-ref="java.lang.String"/>
+    <typed-object-ref name="deliveryAddress" type-ref="java.lang.String"/>
+    <schema-collection name="items" type="java.util.Collection">
+      <typed-object-ref type-ref="com.mulesoft.example.estore.util.OrderItem"/>
+    </schema-collection>
+    <typed-object-ref name="providerId" type-ref="java.lang.String"/>
+  </typed-object>
+</schema-object>
+]]></attr>
+</Node>
+<Node enabled="enabled" fileURL="dict:outputPayload" guiHeight="0" guiName="JAVA Writer" guiWidth="0" guiX="460" guiY="20" id="BEAN_WRITER0" type="BEAN_WRITER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<object xmlns:clover="http://www.cloveretl.com/ns/xmlmapping" clover:inPort="0">
+  <address>$0.address</address>
+  <name>$0.name</name>
+  <clover:collection clover:name="items">
+    <item clover:inPort="1" clover:key="__parent_id" clover:parentKey="__id">
+      <qty>$1.qty</qty>
+      <upc>$1.upc</upc>
+    </item>
+    <item clover:inPort="2" clover:key="__parent_id" clover:parentKey="__id">
+      <qty>$2.qty</qty>
+      <upc>$2.upc</upc>
+    </item>
+  </clover:collection>
+</object>]]></attr>
+<attr name="_data_format"><![CDATA[JAVA]]></attr>
+<attr name="schema"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<schema-object>
+  <typed-object-ref type-ref="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.DeliveryOrder"/>
+  <typed-object type="int"/>
+  <typed-object type="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.DeliveryOrder">
+    <typed-object-ref name="address" type-ref="java.lang.String"/>
+    <schema-collection name="items" type="java.util.List">
+      <typed-object-ref type-ref="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.DeliveryOrderItem"/>
+    </schema-collection>
+    <typed-object-ref name="name" type-ref="java.lang.String"/>
+  </typed-object>
+  <typed-object type="java.lang.String"/>
+  <typed-object type="com.mulesoft.example.estore.clients.provider.vangoghpaintstore.DeliveryOrderItem">
+    <typed-object-ref name="qty" type-ref="int"/>
+    <typed-object-ref name="upc" type-ref="java.lang.String"/>
+  </typed-object>
+</schema-object>
+]]></attr>
+</Node>
+<Node enabled="enabled" guiHeight="0" guiName="object_to_object" guiWidth="0" guiX="240" guiY="20" id="REFORMAT0" type="REFORMAT">
+<attr name="transform"><![CDATA[//#CTL2
+
+// Transforms input record into output record.
+function integer transform() {
+	$out.0.address = $in.0.deliveryAddress;
+	$out.0.name = $in.0.customerName;
+$out.0.__id=$in.0.__id;
+		return ALL;
+}
+
+// Called during component initialization.
+// function boolean init() {}
+
+// Called during each graph run before the transform is executed. May be used to allocate and initialize resources
+// required by the transform. All resources allocated within this method should be released
+// by the postExecute() method.
+// function void preExecute() {}
+
+// Called only if transform() throws an exception.
+// function integer transformOnError(string errorMessage, string stackTrace) {}
+
+// Called during each graph run after the entire transform was executed. Should be used to free any resources
+// allocated within the preExecute() method.
+// function void postExecute() {}
+
+// Called to return a user-defined error message when an error occurs.
+// function string getMessage() {}
+]]></attr>
+</Node>
+<Node enabled="enabled" guiHeight="0" guiName="items_to_items" guiWidth="0" guiX="240" guiY="120" id="REFORMAT1" type="REFORMAT">
+<attr name="transform"><![CDATA[//#CTL2
+
+// Transforms input record into output record.
+function integer transform() {
+$out.0.__id=$in.0.__id;
+	$out.0.__parent_id=$in.0.__parent_id;
+		return ALL;
+}
+
+// Called during component initialization.
+// function boolean init() {}
+
+// Called during each graph run before the transform is executed. May be used to allocate and initialize resources
+// required by the transform. All resources allocated within this method should be released
+// by the postExecute() method.
+// function void preExecute() {}
+
+// Called only if transform() throws an exception.
+// function integer transformOnError(string errorMessage, string stackTrace) {}
+
+// Called during each graph run after the entire transform was executed. Should be used to free any resources
+// allocated within the preExecute() method.
+// function void postExecute() {}
+
+// Called to return a user-defined error message when an error occurs.
+// function string getMessage() {}
+]]></attr>
+</Node>
+<Node enabled="enabled" guiHeight="0" guiName="items_to_items" guiWidth="0" guiX="240" guiY="220" id="REFORMAT2" type="REFORMAT">
+<attr name="transform"><![CDATA[//#CTL2
+
+// Transforms input record into output record.
+function integer transform() {
+	$out.0.qty = $in.0.quantity;
+	$out.0.upc = $in.0.productId;
+$out.0.__id=$in.0.__id;
+	$out.0.__parent_id=$in.0.__parent_id;
+		return ALL;
+}
+
+// Called during component initialization.
+// function boolean init() {}
+
+// Called during each graph run before the transform is executed. May be used to allocate and initialize resources
+// required by the transform. All resources allocated within this method should be released
+// by the postExecute() method.
+// function void preExecute() {}
+
+// Called only if transform() throws an exception.
+// function integer transformOnError(string errorMessage, string stackTrace) {}
+
+// Called during each graph run after the entire transform was executed. Should be used to free any resources
+// allocated within the preExecute() method.
+// function void postExecute() {}
+
+// Called to return a user-defined error message when an error occurs.
+// function string getMessage() {}
+]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="BEAN_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="Metadata0" outPort="Port 0 (out)" toNode="REFORMAT0:0"/>
+<Edge debugMode="true" fromNode="BEAN_READER0:1" guiBendpoints="" id="Edge2" inPort="Port 0 (in)" metadata="Metadata1" outPort="Port 1 (out)" toNode="REFORMAT1:0"/>
+<Edge debugMode="true" fromNode="BEAN_READER0:2" guiBendpoints="" id="Edge4" inPort="Port 0 (in)" metadata="Metadata1" outPort="Port 2 (out)" toNode="REFORMAT2:0"/>
+<Edge debugMode="true" fromNode="REFORMAT0:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="Metadata2" outPort="Port 0 (out)" toNode="BEAN_WRITER0:0"/>
+<Edge debugMode="true" fromNode="REFORMAT1:0" guiBendpoints="" id="Edge3" inPort="Port 1 (in)" metadata="Metadata3" outPort="Port 0 (out)" toNode="BEAN_WRITER0:1"/>
+<Edge debugMode="true" fromNode="REFORMAT2:0" guiBendpoints="" id="Edge5" inPort="Port 2 (in)" metadata="Metadata3" outPort="Port 0 (out)" toNode="BEAN_WRITER0:2"/>
+</Phase>
+</Graph>

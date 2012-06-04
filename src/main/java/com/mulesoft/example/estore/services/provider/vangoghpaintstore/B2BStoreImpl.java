@@ -40,7 +40,7 @@ public class B2BStoreImpl implements B2BStore {
 	}
 
 	@Override
-	public String orderProduct(String upc, int qty) {
+	public String placeOrder(DeliveryOrder order) {
 		return "VANGOGH-" + UUID.randomUUID().toString();
 	}
 	

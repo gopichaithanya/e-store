@@ -7,17 +7,16 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for orderProduct complex type.
+ * <p>Java class for placeOrder complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="orderProduct">
+ * &lt;complexType name="placeOrder">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="arg0" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="arg1" type="{http://www.w3.org/2001/XMLSchema}int"/>
+ *         &lt;element name="arg0" type="{http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/}deliveryOrder" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -27,24 +26,22 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "orderProduct", namespace = "http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", propOrder = {
-    "arg0",
-    "arg1"
+@XmlType(name = "placeOrder", namespace = "http://vangoghpaintstore.provider.services.estore.example.mulesoft.com/", propOrder = {
+    "arg0"
 })
-public class OrderProduct {
+public class PlaceOrder {
 
-    protected String arg0;
-    protected int arg1;
+    protected DeliveryOrder arg0;
 
     /**
      * Gets the value of the arg0 property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link DeliveryOrder }
      *     
      */
-    public String getArg0() {
+    public DeliveryOrder getArg0() {
         return arg0;
     }
 
@@ -53,27 +50,11 @@ public class OrderProduct {
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link DeliveryOrder }
      *     
      */
-    public void setArg0(String value) {
+    public void setArg0(DeliveryOrder value) {
         this.arg0 = value;
-    }
-
-    /**
-     * Gets the value of the arg1 property.
-     * 
-     */
-    public int getArg1() {
-        return arg1;
-    }
-
-    /**
-     * Sets the value of the arg1 property.
-     * 
-     */
-    public void setArg1(int value) {
-        this.arg1 = value;
     }
 
 }
