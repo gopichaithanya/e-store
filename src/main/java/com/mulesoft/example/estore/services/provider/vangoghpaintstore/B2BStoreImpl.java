@@ -1,9 +1,17 @@
 package com.mulesoft.example.estore.services.provider.vangoghpaintstore;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.List;
 
 import java.util.UUID;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 public class B2BStoreImpl implements B2BStore {
 
@@ -41,8 +49,31 @@ public class B2BStoreImpl implements B2BStore {
 
 	@Override
 	public String placeOrder(DeliveryOrder order) {
-		return "VANGOGH-" + UUID.randomUUID().toString();
+		String orderNumber = "VANGOGH-" + UUID.randomUUID().toString();
+		
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter("src/test/resources/orders/" + orderNumber + ".xml"));
+			JAXBContext context;
+			context = JAXBContext.newInstance(DeliveryOrder.class);
+			Marshaller m = context.createMarshaller();
+			m.marshal(order, writer);
+			writer.flush();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception e) {
+				
+			}
+		}
+		
+		return orderNumber;
 	}
+	
 	
 	
 

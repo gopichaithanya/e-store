@@ -30,12 +30,12 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
     <data-mapper:config name="vanGoghPaintToCanonicalJSON" transformationGraphPath="van_gogh_paint_to_canonical_json.grf" doc:name="Van Gogh Paint to canonical JSON"/>
     <data-mapper:config name="consolidateProductDetailsOnCart" transformationGraphPath="consolidateproductdetailsoncart.grf" doc:name="consolidateProductDetailsOnCart"/>
     <data-mapper:config name="checkoutRequestToPaymentAuthorization" transformationGraphPath="checkoutrequesttopaymentauthorization.grf" doc:name="checkoutRequestToPaymentAuthorization"/>
+    <data-mapper:config name="ordertodeliveryorder" transformationGraphPath="ordertodeliveryorder.grf" doc:name="ordertodeliveryorder"/>
+    <data-mapper:config name="ordertojsonorder" transformationGraphPath="ordertojsonorder.grf" doc:name="ordertojsonorder"/>
     <http:connector name="HttpConnector" enableCookies="true" keepAlive="true" doc:name="HTTP\HTTPS"/>
     <ee:object-store-caching-strategy name="fetchProductDetailsCachingStrategy" keyGenerationExpression="#[payload['PRODUCT_ID']]" doc:name="Caching Strategy"/>
     <ee:object-store-caching-strategy name="listProductsBarbersParadiseCachingStrategy" keyGenerationExpression="#[&quot;BARBERSPARADISE&quot;]" doc:name="Caching Strategy"/>
     <ee:object-store-caching-strategy name="listProductsVangoghPaintStoreCachingStrategy" keyGenerationExpression="#[&quot;VANGOGH&quot;]" doc:name="Caching Strategy"/>
-    <data-mapper:config name="ordertodeliveryorder" transformationGraphPath="ordertodeliveryorder.grf" doc:name="ordertodeliveryorder"/>
-    <data-mapper:config name="ordertojsonorder" transformationGraphPath="ordertojsonorder.grf" doc:name="ordertojsonorder"/>
     <flow name="listProducts" doc:name="listProducts">
         <jms:inbound-endpoint exchange-pattern="request-response" queue="estore.listProducts" connector-ref="Active_MQ2" doc:name="JMS"/>
         <set-variable variableName="allProducts" value="#[new java.util.LinkedList()]" doc:name="Initialize output list"/>
@@ -138,71 +138,11 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <core:flow-ref name="subflow-showCart" doc:name="subflow-showCart"/>
             <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
             <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
-            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
-            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
         </enricher>
         <enricher doc:name="Enrich message with payment authorization results">
             <core:flow-ref name="subflow-authorizePayment" doc:name="subflow-authorizePayment"/>
             <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
             <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
-            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
-            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
         </enricher>
         <choice doc:name="Choice">
             <when expression="#[header:paymentResult=APPROVED]">

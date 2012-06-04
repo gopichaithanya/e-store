@@ -1,5 +1,8 @@
 package com.mulesoft.example.estore.services.provider.vangoghpaintstore;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class DeliveryOrderItem {
 
 	private String upc;

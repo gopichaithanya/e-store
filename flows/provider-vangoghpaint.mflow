@@ -9,8 +9,8 @@
             <property name="USE_TRANSACTION_ID"/>
             <property name="tracking:transaction-id"/>
         </properties>
-        <lane hadOnlyOneElement="false" entity-id="7a385d9b-f232-4b7a-8b0f-0ac8715de2c3">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="3ab3efea-c4b9-4eec-afe3-bba049bade45">
+        <lane hadOnlyOneElement="false" entity-id="69242d25-b5ba-4b4c-a412-66027289f57f">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="1e8c5a44-955f-4641-b112-2b5ca2bae081">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
@@ -38,40 +38,24 @@
                     <property name="keep-alive"/>
                 </properties>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="2320420a-0d70-45f2-9661-b905b36c59b7">
+            <pattern type="http://www.mulesoft.org/schema/mule/cxf/soapComponent" name="Interpret SOAP request" entity-id="4eedfef6-4acd-4a79-9671-7b2d23011941">
                 <properties>
-                    <property value="80" name="port"/>
-                    <property value="" name="wsdlLocation"/>
-                    <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStore" name="serviceClass"/>
+                    <property name="configuration-ref"/>
                     <property value="http://www.mulesoft.org/schema/mule/cxf/jaxws-service" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                    <property value="jaxb-databinding" name="DATABINDING"/>
-                    <property value="" name="configuration-ref"/>
-                    <property value="" name="namespace"/>
-                    <property value="false" name="validationEnabled"/>
-                    <property value="" name="bindingId"/>
-                    <property value="" name="service"/>
-                    <property value="false" name="mtomEnabled"/>
-                    <property value="true" name="enableMuleSoapHeaders"/>
-                    <property value="" name="propertiesLabel"/>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/ws-security;707419587">
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/mule-security-manager;692317119"/>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/jaxb-databinding;1">
-                        <property value="jaxb-databinding" name="DATABINDING"/>
-                        <property value="" name="propertiesLabel"/>
-                    </property-collection>
-                    <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/ws-custom-validator;2089555874">
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/saml1-token-validator;1638813834"/>
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/timestamp-token-validator;1938709604"/>
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/saml2-token-validator;2066335263"/>
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/username-token-validator;1131528917"/>
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/signature-token-validator;122938497"/>
-                        <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/bst-token-validator;348050665"/>
-                    </property-collection>
+                    <property name="configuration-ref"/>
+                    <property name="bindingId"/>
+                    <property value="80" name="port"/>
+                    <property name="namespace"/>
+                    <property name="service"/>
+                    <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStore" name="serviceClass"/>
+                    <property name="validationEnabled"/>
+                    <property name="mtomEnabled"/>
+                    <property name="wsdlLocation"/>
+                    <property name="enableMuleSoapHeaders"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/cxf/jaxb-databinding;0"/>
                 </properties>
-                <description></description>
             </pattern>
-            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="d69d8558-c590-4b12-b090-944e30a86800">
+            <pattern type="http://www.mulesoft.org/schema/mule/core/component" name="Java" entity-id="cc460302-0133-4f03-867e-788f6eae05a1">
                 <properties>
                     <property value="com.mulesoft.example.estore.services.provider.vangoghpaintstore.B2BStoreImpl" name="class"/>
                 </properties>

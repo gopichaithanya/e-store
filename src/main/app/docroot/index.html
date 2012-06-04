@@ -280,6 +280,7 @@ function doCheckoutResponse(message) {
 			$("#checkoutResultDialog").append("<li>" + response.orders[i] + "</li>");
 		}	
 		$("#checkoutResultDialog").append("</ul><p>We just cleared your cart so you can continue shopping with us!</p>");
+		$("#checkoutResultDialog").append("<p>Check the placed orders on the providers on <tt>src/test/resources</tt> on Studio!</p>");
 		
 		tabs.tabs('select', 0);
 		mule.rpc("/estore/clearCart", "", null);

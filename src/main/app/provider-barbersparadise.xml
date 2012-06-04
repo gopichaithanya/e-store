@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" version="EE-3.3.0" xsi:schemaLocation="
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" version="EE-3.3.0" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd 
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd 
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd 
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
@@ -59,11 +60,14 @@ return json.toPrettyString();]]></scripting:text>
     </flow>
     <flow name="placeOrder" doc:name="placeOrder">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="HTTP"/>
-        <logger message="en provider: #[payload.toString()]" level="INFO" doc:name="Logger"/>
-        <scripting:component doc:name="Generate order number">
-            <scripting:script engine="Groovy">
-                <scripting:text><![CDATA[return "BARBERSPARADISE-" + java.util.UUID.randomUUID().toString();]]></scripting:text>
-            </scripting:script>
-        </scripting:component>
+        <enricher target="#[header:outbound:orderNumber]" doc:name="Enrich message with generated order number">
+            <scripting:component doc:name="Generate order number">
+                <scripting:script engine="Groovy">
+                    <scripting:text><![CDATA[return "BARBERSPARADISE-" + java.util.UUID.randomUUID().toString();]]></scripting:text>
+                </scripting:script>
+            </scripting:component>
+        </enricher>
+        <file:outbound-endpoint path="src/test/resources/orders" outputPattern="#[header:outbound:orderNumber].json" responseTimeout="10000" doc:name="Write order to filesystem"/>
+        <expression-transformer expression="#[header:outbound:orderNumber]" doc:name="Return order number"/>
     </flow>
 </mule>

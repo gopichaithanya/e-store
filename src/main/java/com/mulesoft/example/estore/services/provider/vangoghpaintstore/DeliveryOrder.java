@@ -2,11 +2,15 @@ package com.mulesoft.example.estore.services.provider.vangoghpaintstore;
 
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class DeliveryOrder {
 
 	private String address;
 	private String name;
-	private Collection<DeliveryOrderItem> items;
+	
+    private Collection<DeliveryOrderItem> items;
 	
 	public String getAddress() {
 		return address;
