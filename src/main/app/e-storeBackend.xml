@@ -101,9 +101,9 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <data-mapper:transform config-ref="consolidateProductDetailsOnCart" doc:name="Consolidate cart item info and subtotal">
                 <data-mapper:input-arguments>
                     <data-mapper:input-argument key="price">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).price]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="productDescription">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productDescription]</data-mapper:input-argument>
-                    <data-mapper:input-argument key="product_id">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productId]</data-mapper:input-argument>
                     <data-mapper:input-argument key="providerId">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).providerId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="product_id">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productId]</data-mapper:input-argument>
+                    <data-mapper:input-argument key="productDescription">#[(new groovy.json.JsonSlurper().parseText(message.outboundProperties['productDetails'].toString())).productDescription]</data-mapper:input-argument>
                 </data-mapper:input-arguments>
             </data-mapper:transform>
             <object-to-string-transformer doc:name="Object to String"/>
@@ -138,11 +138,15 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
             <core:flow-ref name="subflow-showCart" doc:name="subflow-showCart"/>
             <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"></enrich>
             <enrich source="#[payload]" target="#[header:outbound:cartContents]"></enrich>
+            <enrich source="#[message.outboundProperties['cartTotal'].toString()]" target="#[header:outbound:grandTotal]"/>
+            <enrich source="#[payload]" target="#[header:outbound:cartContents]"/>
         </enricher>
         <enricher doc:name="Enrich message with payment authorization results">
             <core:flow-ref name="subflow-authorizePayment" doc:name="subflow-authorizePayment"/>
             <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"></enrich>
             <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"></enrich>
+            <enrich source="#[xpath:/authorizationResponse/result]" target="#[header:outbound:paymentResult]"/>
+            <enrich source="#[xpath:/authorizationResponse/reason]" target="#[header:outbound:paymentReason]"/>
         </enricher>
         <choice doc:name="Choice">
             <when expression="#[header:paymentResult=APPROVED]">
@@ -153,11 +157,10 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
                         <expression-component doc:name="Classify item in orders sorter">#[flowVars['orderSorter'].sortOrderItem(payload.providerId, new com.mulesoft.example.estore.util.OrderItem(payload.productId, Integer.parseInt(payload.qty)))]</expression-component>
                     </foreach>
                     <foreach collection="#[flowVars['orderSorter'].getSortedOrders()]" doc:name="For each order">
-                        <logger message="Sorted order: #[payload.toString()]" level="INFO" doc:name="Logger"/>
                         <choice doc:name="Choice">
                             <when expression="#[payload.providerId == 'Barber\'s Paradise Store']">
                                 <processor-chain>
-                                    <data-mapper:transform config-ref="ordertojsonorder" doc:name="Data-mapper"/>
+                                    <data-mapper:transform config-ref="ordertojsonorder" doc:name="Transform internal order repr. to provider repr."/>
                                     <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="9080" path="barbersparadise/placeOrder" doc:name="Place order on Barber's Paradise Store"/>
                                 </processor-chain>
                             </when>
