@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" version="EE-3.3.0" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd  http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"> 
-    <mulexml:schema-validation-filter schemaLocations="requestToCharge.xsd" returnResult="true" name="sintacticValidationFilter" doc:name="sintacticValidationFilter"></mulexml:schema-validation-filter>  
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" version="EE-3.4" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd 
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd 
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd "> 
+    <mulexml:schema-validation-filter schemaLocations="requestToCharge.xsd" returnResult="true" name="sintacticValidationFilter" ></mulexml:schema-validation-filter>  
     <mulexml:namespace-manager includeConfigNamespaces="false"> 
         <mulexml:namespace prefix="ns0" uri="http://www.mulesoft.com/schema/estoreBank.xsd"></mulexml:namespace>  
     </mulexml:namespace-manager>  
-    <expression-filter expression="#[xpath:substring(/ns0:requestToCharge/ns0:creditCardNumber, 14, 16) = /ns0:requestToCharge/ns0:securityCode]" name="securityCodeValidationFilter" doc:name="Security code validation filter"></expression-filter>  
-    <expression-filter expression="#[xpath:/ns0:requestToCharge/ns0:amount &lt; 1000]" name="allowableAmountValidationFilter" doc:name="Allowable amount validation filter"></expression-filter>  
-    <flow name="bank" doc:name="bank"> 
-        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="10000" path="bank/authorizePayment" doc:name="HTTP"></http:inbound-endpoint>  
-        <message-filter throwOnUnaccepted="true" doc:name="Sintactic validation"> 
+    <expression-filter expression="#[xpath:substring(/ns0:requestToCharge/ns0:creditCardNumber, 14, 16) = /ns0:requestToCharge/ns0:securityCode]" name="securityCodeValidationFilter" ></expression-filter>  
+    <expression-filter expression="#[xpath:/ns0:requestToCharge/ns0:amount &lt; 1000]" name="allowableAmountValidationFilter" ></expression-filter>  
+    <flow name="bank" > 
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="10000" path="bank/authorizePayment" ></http:inbound-endpoint>  
+        <message-filter throwOnUnaccepted="true" > 
             <filter ref="sintacticValidationFilter"></filter>  
         </message-filter>  
-        <message-filter onUnaccepted="invalidSecurityCode" doc:name="Security code validation"> 
+        <message-filter onUnaccepted="invalidSecurityCode" > 
             <filter ref="securityCodeValidationFilter"></filter>  
         </message-filter>  
-        <message-filter onUnaccepted="allowableAmountExceeded" doc:name="Max allowable amount validation"> 
+        <message-filter onUnaccepted="allowableAmountExceeded" > 
             <filter ref="allowableAmountValidationFilter"></filter>  
         </message-filter>  
-        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;APPROVED&lt;/result&gt;&lt;reason/&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build response message"></expression-transformer>  
+        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;APPROVED&lt;/result&gt;&lt;reason/&gt;&lt;/authorizationResponse&gt;&quot;" ></expression-transformer>  
     </flow>  
-    <sub-flow name="invalidSecurityCode" doc:name="invalidSecurityCode"> 
-        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Invalid security code. Must match the last 3-digits of the credit card&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build REJECTED response message"></expression-transformer>  
+    <sub-flow name="invalidSecurityCode" > 
+        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Invalid security code. Must match the last 3-digits of the credit card&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" ></expression-transformer>  
     </sub-flow>  
-    <sub-flow name="allowableAmountExceeded" doc:name="allowableAmountExceeded"> 
-        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Max allowable amount exceeded. You're authorized to spend AT MOST $1.000 on each payment!&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" doc:name="Build REJECTED response message"></expression-transformer>  
+    <sub-flow name="allowableAmountExceeded" > 
+        <expression-transformer expression="&quot;&lt;authorizationResponse&gt;&lt;result&gt;FAILED&lt;/result&gt;&lt;reason&gt;Max allowable amount exceeded. You're authorized to spend AT MOST $1.000 on each payment!&lt;/reason&gt;&lt;/authorizationResponse&gt;&quot;" ></expression-transformer>  
     </sub-flow>  
 </mule>
